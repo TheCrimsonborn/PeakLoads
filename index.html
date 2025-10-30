@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>PeakLoad | Powerlifting Calculator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="background-accent"></div>
+    <header class="page-header">
+      <div class="branding">
+        <span class="logo-circle">PL</span>
+        <div>
+          <h1>PeakLoad</h1>
+          <p>Your modern command center for one-rep maxes and training percentages.</p>
+        </div>
+      </div>
+    </header>
+
+    <main class="layout-grid">
+      <section class="card">
+        <header class="card-header">
+          <h2>1RM Estimator</h2>
+          <p>Estimate your one-rep max using common formulas.</p>
+        </header>
+        <form id="one-rm-form" class="card-body" novalidate>
+          <div class="field">
+            <label for="weight-input">Weight Lifted</label>
+            <div class="input-group">
+              <input id="weight-input" name="weight" type="number" min="0" step="0.5" required />
+              <span class="suffix">kg</span>
+            </div>
+            <small>Enter the heaviest successful set.</small>
+          </div>
+
+          <div class="field">
+            <label for="reps-input">Repetitions</label>
+            <input id="reps-input" name="reps" type="number" min="1" max="20" required />
+          </div>
+
+          <div class="field">
+            <label for="formula-select">Formula</label>
+            <select id="formula-select" name="formula">
+              <option value="epley">Epley</option>
+              <option value="brzycki">Brzycki</option>
+              <option value="lombardi">Lombardi</option>
+            </select>
+          </div>
+
+          <button type="submit" class="primary-button">Calculate 1RM</button>
+
+          <output id="one-rm-output" class="result" for="weight-input reps-input formula-select"></output>
+        </form>
+      </section>
+
+      <section class="card">
+        <header class="card-header">
+          <h2>Percentage Chart</h2>
+          <p>Generate working sets from your max or a target weight.</p>
+        </header>
+        <form id="percent-form" class="card-body" novalidate>
+          <div class="field">
+            <label for="base-weight-input">Base Weight</label>
+            <div class="input-group">
+              <input
+                id="base-weight-input"
+                name="baseWeight"
+                type="number"
+                min="0"
+                step="0.5"
+                required
+              />
+              <span class="suffix">kg</span>
+            </div>
+            <small>Use your estimated 1RM or any anchor weight.</small>
+          </div>
+
+          <div class="field slider-field">
+            <label for="increment-input">Increment (%)</label>
+            <input
+              id="increment-input"
+              name="increment"
+              type="range"
+              min="1"
+              max="10"
+              step="1"
+              value="5"
+            />
+            <div class="slider-value">
+              <span id="increment-display">5%</span>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="start-percent-input">Range (%)</label>
+            <div class="range-fields">
+              <div>
+                <input
+                  id="start-percent-input"
+                  name="startPercent"
+                  type="number"
+                  min="40"
+                  max="100"
+                  value="50"
+                  required
+                />
+                <span class="suffix">start</span>
+              </div>
+              <div>
+                <input
+                  id="end-percent-input"
+                  name="endPercent"
+                  type="number"
+                  min="50"
+                  max="120"
+                  value="100"
+                  required
+                />
+                <span class="suffix">end</span>
+              </div>
+            </div>
+            <small>Common working sets fall between 60% and 90%.</small>
+          </div>
+
+          <button type="submit" class="primary-button">Build Table</button>
+        </form>
+
+        <div class="card-footer">
+          <table id="percent-table">
+            <thead>
+              <tr>
+                <th>Percentage</th>
+                <th>Weight (kg)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td colspan="2" class="placeholder">Enter a base weight to see your working sets.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <footer class="page-footer">
+      <p>PeakLoad keeps your training precise, intentional, and progressive.</p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
