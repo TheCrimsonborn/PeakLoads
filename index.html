@@ -148,6 +148,110 @@
           </table>
         </div>
       </section>
+
+      <section class="card">
+        <header class="card-header">
+          <h2>Warm-Up Planner</h2>
+          <p>Build smooth jumps leading into your top set.</p>
+        </header>
+        <form id="warmup-form" class="card-body" novalidate>
+          <div class="field">
+            <label for="top-weight-input">Top Set Weight</label>
+            <div class="input-group">
+              <input
+                id="top-weight-input"
+                name="topWeight"
+                type="number"
+                min="0"
+                step="0.5"
+                required
+              />
+              <span class="suffix">kg</span>
+            </div>
+            <small>Enter the heaviest set you plan to perform today.</small>
+          </div>
+
+          <div class="field-grid">
+            <div class="field">
+              <label for="top-reps-input">Top Set Reps</label>
+              <input
+                id="top-reps-input"
+                name="topReps"
+                type="number"
+                min="1"
+                max="12"
+                value="1"
+                required
+              />
+            </div>
+            <div class="field">
+              <label for="bar-weight-input">Bar Weight</label>
+              <div class="input-group">
+                <input
+                  id="bar-weight-input"
+                  name="barWeight"
+                  type="number"
+                  min="0"
+                  step="0.5"
+                  value="20"
+                  required
+                />
+                <span class="suffix">kg</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="warmup-template-select">Warm-Up Template</label>
+            <select id="warmup-template-select" name="template">
+              <option value="heavySingle">Heavy Single</option>
+              <option value="strengthTopSet">Strength Top Set</option>
+              <option value="volumeBuilder">Volume Builder</option>
+            </select>
+            <small id="warmup-template-description" class="muted">
+              Dial in a top single with focused ramp-up singles.
+            </small>
+          </div>
+
+          <div class="field">
+            <label for="warmup-increment-input">Plate Increment</label>
+            <input
+              id="warmup-increment-input"
+              name="increment"
+              type="number"
+              min="0.5"
+              max="10"
+              step="0.5"
+              value="2.5"
+              required
+            />
+            <small>Weights are rounded to the nearest plate jump.</small>
+          </div>
+
+          <button type="submit" class="primary-button">Plan Warm-Ups</button>
+        </form>
+
+        <div class="card-footer">
+          <table id="warmup-table">
+            <thead>
+              <tr>
+                <th>Set</th>
+                <th>Percentage</th>
+                <th>Weight (kg)</th>
+                <th>Reps</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td colspan="5" class="placeholder">
+                  Enter your top set to generate a warm-up plan.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
     </main>
 
     <footer class="page-footer">
