@@ -121,18 +121,6 @@ p {
   gap: 0.75rem;
 }
 
-.field-grid {
-  display: grid;
-  gap: 1.5rem;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-}
-
-@media (max-width: 480px) {
-  .field-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
 label {
   font-weight: 600;
   color: var(--text-primary);
@@ -265,10 +253,6 @@ small {
   margin-top: -0.5rem;
 }
 
-small.muted {
-  color: var(--text-secondary);
-}
-
 input[data-error],
 select[data-error] {
   border-color: var(--accent);
@@ -324,18 +308,6 @@ thead {
 
 tbody tr:not(:last-child) {
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-tbody td:nth-child(2),
-tbody td:nth-child(3),
-tbody td:nth-child(4) {
-  text-align: center;
-  white-space: nowrap;
-}
-
-.top-set-row td {
-  color: var(--accent);
-  font-weight: 600;
 }
 
 .placeholder {
