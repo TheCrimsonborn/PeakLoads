@@ -3,7 +3,49 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>PeakLoad | Powerlifting Calculator</title>
+    <title>PeakLoad | Powerlifting Calculator & Warm-Up Planner</title>
+    <meta
+      name="description"
+      content="PeakLoad is a powerlifting calculator that estimates your 1RM, builds training percentage tables, and plans warm-up sets in your preferred units and language."
+    />
+    <meta
+      name="keywords"
+      content="powerlifting calculator, 1RM calculator, warm-up planner, strength training, percentage table, kg to lb converter"
+    />
+    <meta name="author" content="PeakLoad" />
+    <link rel="canonical" href="https://peakload.netlify.app/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="PeakLoad | Powerlifting Calculator & Warm-Up Planner" />
+    <meta
+      property="og:description"
+      content="Estimate your one-rep max, build percentage charts, and map your warm-up sets with PeakLoad. Supports kg/lb and English, Turkish, and Russian."
+    />
+    <meta property="og:url" content="https://peakload.netlify.app/" />
+    <meta property="og:image" content="https://peakload.netlify.app/assets/social-preview.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="PeakLoad | Powerlifting Calculator & Warm-Up Planner" />
+    <meta
+      name="twitter:description"
+      content="A modern strength training companion for lifters: 1RM estimates, percentage tables, and warm-up planning."
+    />
+    <meta name="twitter:image" content="https://peakload.netlify.app/assets/social-preview.png" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "PeakLoad",
+        "url": "https://peakload.netlify.app/",
+        "description": "A powerlifting training companion featuring 1RM estimators, percentage tables, and warm-up planning.",
+        "applicationCategory": "FitnessApplication",
+        "operatingSystem": "Web",
+        "inLanguage": ["en", "tr", "ru"],
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        }
+      }
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -59,7 +101,7 @@
     </header>
 
     <main class="layout-grid">
-      <section class="card">
+      <section class="card" id="one-rm-estimator" aria-labelledby="one-rm-title">
         <header class="card-header">
           <h2 id="one-rm-title" data-i18n="oneRmTitle">1RM Estimator</h2>
           <p id="one-rm-description" data-i18n="oneRmDescription">
@@ -98,7 +140,7 @@
         </form>
       </section>
 
-      <section class="card">
+      <section class="card" id="percentage-chart" aria-labelledby="percent-title">
         <header class="card-header">
           <h2 id="percent-title" data-i18n="percentTitle">Percentage Chart</h2>
           <p id="percent-description" data-i18n="percentDescription">
@@ -201,7 +243,7 @@
         </div>
       </section>
 
-      <section class="card">
+      <section class="card" id="warmup-planner" aria-labelledby="warmup-title">
         <header class="card-header">
           <h2 id="warmup-title" data-i18n="warmupTitle">Warm-Up Planner</h2>
           <p id="warmup-description" data-i18n="warmupDescription">
