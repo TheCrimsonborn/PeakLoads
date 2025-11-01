@@ -56,22 +56,22 @@
   </head>
   <body>
     <a class="skip-link" href="#main-content">Skip to main content</a>
-    <div class="background-accent"></div>
+    <div class="background-accent" aria-hidden="true"></div>
     <header class="page-header">
-      <div class="header-inner">
-        <div class="branding">
-          <span class="logo-circle">PL</span>
-          <div class="branding-text">
-            <h1>PeakLoad</h1>
-            <p id="tagline" data-i18n="tagline">
+      <nav class="top-bar" aria-label="Primary">
+        <a class="brand" href="#main-content">
+          <span class="brand-mark">PL</span>
+          <span class="brand-text">
+            <span class="brand-title">PeakLoad</span>
+            <span class="brand-subtitle" id="tagline" data-i18n="tagline">
               Your modern command center for one-rep maxes and training percentages.
-            </p>
-          </div>
-        </div>
-        <div class="header-controls">
+            </span>
+          </span>
+        </a>
+        <div class="top-controls">
           <div class="toggle-group" data-toggle="units">
             <span class="toggle-label" id="units-label" data-i18n="unitsLabel">Units</span>
-            <div class="toggle-buttons">
+            <div class="toggle-buttons" role="group" aria-label="Units">
               <button
                 type="button"
                 class="toggle-button is-active"
@@ -86,11 +86,16 @@
             </div>
           </div>
           <div class="toggle-group" data-toggle="language">
-            <label class="toggle-label" id="language-label" for="language-select" data-i18n="languageLabel">
+            <label
+              class="toggle-label"
+              id="language-label"
+              for="language-select"
+              data-i18n="languageLabel"
+            >
               Language
             </label>
             <div class="toggle-select">
-              <select id="language-select" name="language">
+              <select id="language-select" name="language" aria-describedby="language-label">
                 <option value="en">English</option>
                 <option value="tr">Türkçe</option>
                 <option value="ru">Русский</option>
@@ -98,10 +103,76 @@
             </div>
           </div>
         </div>
-      </div>
+      </nav>
+
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-content">
+          <h1 id="hero-title" data-i18n="heroHeading">Plan Every Session With Confidence</h1>
+          <p class="hero-tagline" id="hero-tagline" data-i18n="heroTagline">
+            Estimate your 1RM, map working sets, and walk onto the platform with a
+            purpose-built warm-up sequence.
+          </p>
+          <div class="hero-actions">
+            <a
+              class="primary-button hero-button"
+              id="hero-primary-cta"
+              data-i18n="heroPrimaryCta"
+              href="#one-rm-estimator"
+            >
+              Start Calculating
+            </a>
+            <a
+              class="secondary-button hero-button"
+              id="hero-secondary-cta"
+              data-i18n="heroSecondaryCta"
+              href="#warmup-planner"
+            >
+              Plan Warm-Up
+            </a>
+          </div>
+          <ul class="hero-highlights">
+            <li id="hero-highlight-1" data-i18n="heroHighlightOne">
+              Trusted Epley, Brzycki, and Lombardi estimators
+            </li>
+            <li id="hero-highlight-2" data-i18n="heroHighlightTwo">
+              Auto-built warm-up templates for heavy singles or volume days
+            </li>
+            <li id="hero-highlight-3" data-i18n="heroHighlightThree">
+              Instant unit and language toggles for global lifters
+            </li>
+          </ul>
+        </div>
+        <div class="hero-card" aria-label="Quick reference">
+          <h2 id="hero-card-title" data-i18n="heroCardTitle">Session Snapshot</h2>
+          <dl>
+            <div>
+              <dt id="hero-snapshot-inputs-title" data-i18n="heroSnapshotInputsTitle">1RM Inputs</dt>
+              <dd id="hero-snapshot-inputs-desc" data-i18n="heroSnapshotInputsDesc">
+                Weight, reps, and formula of your choice
+              </dd>
+            </div>
+            <div>
+              <dt id="hero-snapshot-sets-title" data-i18n="heroSnapshotSetsTitle">Working Sets</dt>
+              <dd id="hero-snapshot-sets-desc" data-i18n="heroSnapshotSetsDesc">
+                Custom percent range with flexible increments
+              </dd>
+            </div>
+            <div>
+              <dt id="hero-snapshot-warmup-title" data-i18n="heroSnapshotWarmupTitle">
+                Warm-Up Flow
+              </dt>
+              <dd id="hero-snapshot-warmup-desc" data-i18n="heroSnapshotWarmupDesc">
+                Progressive sets tailored to your top weight
+              </dd>
+            </div>
+          </dl>
+        </div>
+      </section>
     </header>
 
-    <main id="main-content" class="layout-grid">
+    <main id="main-content" class="content-shell">
+      <div class="content-grid">
+        <div class="cards-column">
       <section class="card" id="one-rm-estimator" aria-labelledby="one-rm-title">
         <header class="card-header">
           <h2 id="one-rm-title" data-i18n="oneRmTitle">1RM Estimator</h2>
@@ -334,6 +405,43 @@
           </div>
         </div>
       </section>
+        </div>
+
+        <aside class="support-panel" aria-labelledby="support-panel-title">
+          <h2 id="support-panel-title">Session Checklist</h2>
+          <ul class="support-list">
+            <li>Confirm unit and language preferences before entering numbers.</li>
+            <li>Use the 1RM estimate to prefill working sets and warm-up anchors.</li>
+            <li>Dial in percent ranges based on the day's goal (strength, power, volume).</li>
+            <li>Export results or screenshot tables for the gym floor.</li>
+          </ul>
+
+          <section class="faq" aria-labelledby="faq-title">
+            <h3 id="faq-title">Quick Tips</h3>
+            <details>
+              <summary>How accurate are the 1RM formulas?</summary>
+              <p>
+                Each formula excels at different rep ranges. Try a couple and choose the one that
+                best matches your historical bests.
+              </p>
+            </details>
+            <details>
+              <summary>Can I edit warm-up templates?</summary>
+              <p>
+                Select a template that matches the session focus (heavy single, ramp, or volume).
+                Adjust the final percentages if you want more or fewer sets.
+              </p>
+            </details>
+            <details>
+              <summary>Why cap percentages at 120%?</summary>
+              <p>
+                Keeping the range realistic prevents accidental entries that result in unusable
+                loads. You can still use the warm-up planner for supra-maximal work.
+              </p>
+            </details>
+          </section>
+        </aside>
+      </div>
     </main>
 
     <footer class="page-footer">

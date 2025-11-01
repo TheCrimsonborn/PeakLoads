@@ -17,6 +17,20 @@ const warmupWeightHeader = document.getElementById("warmup-weight-header");
 
 const textElements = {
   tagline: document.getElementById("tagline"),
+  heroHeading: document.getElementById("hero-title"),
+  heroTagline: document.getElementById("hero-tagline"),
+  heroPrimaryCta: document.getElementById("hero-primary-cta"),
+  heroSecondaryCta: document.getElementById("hero-secondary-cta"),
+  heroHighlightOne: document.getElementById("hero-highlight-1"),
+  heroHighlightTwo: document.getElementById("hero-highlight-2"),
+  heroHighlightThree: document.getElementById("hero-highlight-3"),
+  heroCardTitle: document.getElementById("hero-card-title"),
+  heroSnapshotInputsTitle: document.getElementById("hero-snapshot-inputs-title"),
+  heroSnapshotInputsDesc: document.getElementById("hero-snapshot-inputs-desc"),
+  heroSnapshotSetsTitle: document.getElementById("hero-snapshot-sets-title"),
+  heroSnapshotSetsDesc: document.getElementById("hero-snapshot-sets-desc"),
+  heroSnapshotWarmupTitle: document.getElementById("hero-snapshot-warmup-title"),
+  heroSnapshotWarmupDesc: document.getElementById("hero-snapshot-warmup-desc"),
   unitsLabel: document.getElementById("units-label"),
   languageLabel: document.getElementById("language-label"),
   oneRmTitle: document.getElementById("one-rm-title"),
@@ -53,6 +67,21 @@ const textElements = {
 const COPY = {
   en: {
     tagline: "Your modern command center for one-rep maxes and training percentages.",
+    heroHeading: "Plan Every Session With Confidence",
+    heroTagline:
+      "Estimate your 1RM, map working sets, and walk onto the platform with a purpose-built warm-up sequence.",
+    heroPrimaryCta: "Start Calculating",
+    heroSecondaryCta: "Plan Warm-Up",
+    heroHighlightOne: "Trusted Epley, Brzycki, and Lombardi estimators",
+    heroHighlightTwo: "Auto-built warm-up templates for heavy singles or volume days",
+    heroHighlightThree: "Instant unit and language toggles for global lifters",
+    heroCardTitle: "Session Snapshot",
+    heroSnapshotInputsTitle: "1RM Inputs",
+    heroSnapshotInputsDesc: "Weight, reps, and formula of your choice",
+    heroSnapshotSetsTitle: "Working Sets",
+    heroSnapshotSetsDesc: "Custom percent range with flexible increments",
+    heroSnapshotWarmupTitle: "Warm-Up Flow",
+    heroSnapshotWarmupDesc: "Progressive sets tailored to your top weight",
     unitsLabel: "UNITS",
     languageLabel: "LANGUAGE",
     languageOptions: {
@@ -116,6 +145,21 @@ const COPY = {
   tr: {
     tagline:
       "Tek tekrar maksimumlarınızı ve antrenman yüzdelerinizi yönetmek için modern kontrol merkeziniz.",
+    heroHeading: "Her Antrenmanı Güvenle Planlayın",
+    heroTagline:
+      "1TM'inizi tahmin edin, çalışma setlerini planlayın ve amaca yönelik bir ısınmayla platforma çıkın.",
+    heroPrimaryCta: "Hesaplamaya Başla",
+    heroSecondaryCta: "Isınmayı Planla",
+    heroHighlightOne: "Epley, Brzycki ve Lombardi formüllerine güvenin",
+    heroHighlightTwo: "Ağır tekler veya hacim günleri için hazır ısınma şablonları",
+    heroHighlightThree: "Global sporcular için anında birim ve dil değişimi",
+    heroCardTitle: "Seans Özeti",
+    heroSnapshotInputsTitle: "1TM Girdileri",
+    heroSnapshotInputsDesc: "Seçtiğiniz ağırlık, tekrar ve formül",
+    heroSnapshotSetsTitle: "Çalışma Setleri",
+    heroSnapshotSetsDesc: "Esnek artışlarla özelleştirilebilir yüzdeler",
+    heroSnapshotWarmupTitle: "Isınma Akışı",
+    heroSnapshotWarmupDesc: "Üst setinize göre kademeli ısınma setleri",
     unitsLabel: "BİRİMLER",
     languageLabel: "DİL",
     languageOptions: {
@@ -179,6 +223,21 @@ const COPY = {
   ru: {
     tagline:
       "Современный центр управления для расчета 1ПМ и тренировочных процентов.",
+    heroHeading: "Планируйте каждую тренировку с уверенностью",
+    heroTagline:
+      "Оцените 1ПМ, распишите рабочие подходы и выходите на помост с продуманной разминкой.",
+    heroPrimaryCta: "Начать расчёт",
+    heroSecondaryCta: "Построить разминку",
+    heroHighlightOne: "Надёжные формулы Эпли, Бжицкого и Ломбарди",
+    heroHighlightTwo: "Готовые шаблоны разминки для тяжёлых одиночных и объёмных дней",
+    heroHighlightThree: "Мгновенное переключение единиц и языка для спортсменов по всему миру",
+    heroCardTitle: "Краткий обзор сессии",
+    heroSnapshotInputsTitle: "Данные 1ПМ",
+    heroSnapshotInputsDesc: "Вес, повторы и выбранная формула",
+    heroSnapshotSetsTitle: "Рабочие подходы",
+    heroSnapshotSetsDesc: "Гибкие диапазоны процентов с настраиваемым шагом",
+    heroSnapshotWarmupTitle: "Разминочный план",
+    heroSnapshotWarmupDesc: "Постепенные подходы, привязанные к основному весу",
     unitsLabel: "ЕДИНИЦЫ",
     languageLabel: "ЯЗЫК",
     languageOptions: {
@@ -378,6 +437,7 @@ const renderPercentTable = () => {
   }
 
   const { baseWeightKg, startPercent, endPercent, increment } = percentTableState;
+  const weightHeaderLabel = `${dict.tableWeightHeader} (${UNIT_CONFIG[currentUnit].label})`;
   const rows = [];
   for (let pct = startPercent; pct <= endPercent + 1e-9; pct += increment) {
     const percentLabel = `${Math.round(pct)}%`;
@@ -385,7 +445,7 @@ const renderPercentTable = () => {
     rows.push(`
       <tr>
         <td data-label="${dict.tablePercentHeader}">${percentLabel}</td>
-        <td data-label="${dict.tableWeightHeader}">${formatWeightForDisplay(weightKg)}</td>
+        <td data-label="${weightHeaderLabel}">${formatWeightForDisplay(weightKg)}</td>
       </tr>
     `.trim());
   }
@@ -447,6 +507,7 @@ const renderWarmupTable = () => {
     return;
   }
 
+  const warmupWeightHeaderLabel = `${dict.warmupWeightHeader} (${UNIT_CONFIG[currentUnit].label})`;
   const rows = template.sets.map((set, index) => {
     const percentValue = set.percent;
     const weightKg = warmupState.topWeightKg * (percentValue / 100);
@@ -458,7 +519,7 @@ const renderWarmupTable = () => {
       <tr>
         <td data-label="${dict.warmupStageHeader}">${dict.warmupSetLabel} ${index + 1}</td>
         <td data-label="${dict.warmupPercentHeader}">${percentLabel}</td>
-        <td data-label="${dict.warmupWeightHeader}">${weightLabel}</td>
+        <td data-label="${warmupWeightHeaderLabel}">${weightLabel}</td>
         <td data-label="${dict.warmupRepsHeader}">${repsLabel}</td>
       </tr>
     `.trim();
@@ -488,6 +549,20 @@ const prefillWarmupTopWeight = (weightKg, { allowOverwrite = false } = {}) => {
 const applyLocale = () => {
   const dict = getDictionary();
   textElements.tagline.textContent = dict.tagline;
+  textElements.heroHeading.textContent = dict.heroHeading;
+  textElements.heroTagline.textContent = dict.heroTagline;
+  textElements.heroPrimaryCta.textContent = dict.heroPrimaryCta;
+  textElements.heroSecondaryCta.textContent = dict.heroSecondaryCta;
+  textElements.heroHighlightOne.textContent = dict.heroHighlightOne;
+  textElements.heroHighlightTwo.textContent = dict.heroHighlightTwo;
+  textElements.heroHighlightThree.textContent = dict.heroHighlightThree;
+  textElements.heroCardTitle.textContent = dict.heroCardTitle;
+  textElements.heroSnapshotInputsTitle.textContent = dict.heroSnapshotInputsTitle;
+  textElements.heroSnapshotInputsDesc.textContent = dict.heroSnapshotInputsDesc;
+  textElements.heroSnapshotSetsTitle.textContent = dict.heroSnapshotSetsTitle;
+  textElements.heroSnapshotSetsDesc.textContent = dict.heroSnapshotSetsDesc;
+  textElements.heroSnapshotWarmupTitle.textContent = dict.heroSnapshotWarmupTitle;
+  textElements.heroSnapshotWarmupDesc.textContent = dict.heroSnapshotWarmupDesc;
   textElements.unitsLabel.textContent = dict.unitsLabel;
   textElements.languageLabel.textContent = dict.languageLabel;
   textElements.oneRmTitle.textContent = dict.oneRmTitle;
