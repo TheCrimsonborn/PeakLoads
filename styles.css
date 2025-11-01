@@ -83,6 +83,8 @@ body {
   flex-wrap: wrap;
   gap: 1rem;
   align-items: center;
+  justify-content: flex-end;
+  flex: 1 1 320px;
 }
 
 .toggle-group {
@@ -109,6 +111,7 @@ body {
 
 .toggle-select {
   position: relative;
+  min-width: 180px;
 }
 
 .toggle-select::after {
@@ -211,6 +214,7 @@ p {
 .card-footer {
   padding: 0 2rem 2rem;
   flex: 1;
+  overflow-x: auto;
 }
 
 .field {
@@ -386,6 +390,7 @@ table {
   border-collapse: collapse;
   margin-top: 1.5rem;
   background: rgba(255, 255, 255, 0.03);
+  min-width: 320px;
   border-radius: 1.25rem;
   overflow: hidden;
 }
@@ -462,5 +467,154 @@ tbody tr:not(:last-child) {
   .card-footer {
     padding-left: 1.25rem;
     padding-right: 1.25rem;
+  }
+}
+
+@media (max-width: 900px) {
+  .layout-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .header-inner {
+    gap: 1.5rem;
+  }
+
+  .header-controls {
+    justify-content: flex-start;
+  }
+
+  .toggle-group {
+    flex: 1 1 260px;
+  }
+}
+
+@media (max-width: 768px) {
+  body {
+    grid-template-rows: auto 1fr auto;
+  }
+
+  .page-header {
+    padding: 2rem 1.5rem 1.5rem;
+  }
+
+  .layout-grid {
+    padding: 0 1.5rem 2.5rem;
+  }
+
+  .card {
+    border-radius: 1.1rem;
+  }
+
+  .card-header,
+  .card-body,
+  .card-footer {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  .toggle-group {
+    flex: 1 1 220px;
+  }
+}
+
+@media (max-width: 540px) {
+  .branding {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.9rem;
+  }
+
+  .branding-text h1 {
+    font-size: 1.9rem;
+  }
+
+  .logo-circle {
+    width: 3rem;
+    height: 3rem;
+  }
+
+  .header-controls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  .toggle-group {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .toggle-buttons {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .toggle-button {
+    flex: 1;
+    text-align: center;
+  }
+
+  .toggle-select {
+    width: 100%;
+  }
+
+  .toggle-select select {
+    width: 100%;
+  }
+
+  .card-header,
+  .card-body,
+  .card-footer {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+
+  table {
+    font-size: 0.85rem;
+  }
+
+  th,
+  td {
+    padding: 0.7rem 0.8rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .page-header {
+    padding: 1.75rem 1.1rem 1.2rem;
+  }
+
+  .layout-grid {
+    padding: 0 1.1rem 2rem;
+  }
+
+  .card {
+    border-radius: 1rem;
+    box-shadow: 0 20px 45px rgba(8, 9, 12, 0.3);
+  }
+
+  .card-header,
+  .card-body,
+  .card-footer {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  input,
+  select,
+  .toggle-select select {
+    font-size: 0.95rem;
+  }
+
+  .result {
+    font-size: 1rem;
+  }
+
+  .slider-value {
+    font-size: 0.95rem;
+  }
+
+  table {
+    min-width: 300px;
   }
 }
