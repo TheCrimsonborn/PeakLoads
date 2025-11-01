@@ -384,8 +384,8 @@ const renderPercentTable = () => {
     const weightKg = baseWeightKg * (pct / 100);
     rows.push(`
       <tr>
-        <td>${percentLabel}</td>
-        <td>${formatWeightForDisplay(weightKg)}</td>
+        <td data-label="${dict.tablePercentHeader}">${percentLabel}</td>
+        <td data-label="${dict.tableWeightHeader}">${formatWeightForDisplay(weightKg)}</td>
       </tr>
     `.trim());
   }
@@ -456,10 +456,10 @@ const renderWarmupTable = () => {
 
     return `
       <tr>
-        <td>${dict.warmupSetLabel} ${index + 1}</td>
-        <td>${percentLabel}</td>
-        <td>${weightLabel}</td>
-        <td>${repsLabel}</td>
+        <td data-label="${dict.warmupStageHeader}">${dict.warmupSetLabel} ${index + 1}</td>
+        <td data-label="${dict.warmupPercentHeader}">${percentLabel}</td>
+        <td data-label="${dict.warmupWeightHeader}">${weightLabel}</td>
+        <td data-label="${dict.warmupRepsHeader}">${repsLabel}</td>
       </tr>
     `.trim();
   });

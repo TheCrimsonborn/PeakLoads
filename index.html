@@ -55,6 +55,7 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
     <div class="background-accent"></div>
     <header class="page-header">
       <div class="header-inner">
@@ -100,7 +101,7 @@
       </div>
     </header>
 
-    <main class="layout-grid">
+    <main id="main-content" class="layout-grid">
       <section class="card" id="one-rm-estimator" aria-labelledby="one-rm-title">
         <header class="card-header">
           <h2 id="one-rm-title" data-i18n="oneRmTitle">1RM Estimator</h2>
@@ -136,7 +137,13 @@
             Calculate 1RM
           </button>
 
-          <output id="one-rm-output" class="result" for="weight-input reps-input formula-select"></output>
+          <output
+            id="one-rm-output"
+            class="result"
+            for="weight-input reps-input formula-select"
+            role="status"
+            aria-live="polite"
+          ></output>
         </form>
       </section>
 
@@ -225,14 +232,15 @@
         </form>
 
         <div class="card-footer">
-          <table id="percent-table">
+          <div class="table-wrapper">
+            <table id="percent-table">
             <thead>
               <tr>
                 <th id="table-percent-header" data-i18n="tablePercentHeader">Percentage</th>
                 <th id="table-weight-header">Weight (kg)</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody aria-live="polite">
               <tr>
                 <td colspan="2" class="placeholder" id="table-placeholder" data-i18n="tablePlaceholder">
                   Enter a base weight to see your working sets.
@@ -240,6 +248,7 @@
               </tr>
             </tbody>
           </table>
+          </div>
         </div>
       </section>
 
@@ -304,7 +313,8 @@
         </form>
 
         <div class="card-footer">
-          <table id="warmup-table">
+          <div class="table-wrapper">
+            <table id="warmup-table">
             <thead>
               <tr>
                 <th id="warmup-stage-header" data-i18n="warmupStageHeader">Set</th>
@@ -313,7 +323,7 @@
                 <th id="warmup-reps-header" data-i18n="warmupRepsHeader">Reps</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody aria-live="polite">
               <tr>
                 <td colspan="4" class="placeholder" id="warmup-placeholder" data-i18n="warmupPlaceholder">
                   Set your top set to see suggested warm-up sets.
@@ -321,6 +331,7 @@
               </tr>
             </tbody>
           </table>
+          </div>
         </div>
       </section>
     </main>

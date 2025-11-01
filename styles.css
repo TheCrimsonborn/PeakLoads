@@ -42,6 +42,22 @@ body {
   filter: blur(120px);
 }
 
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 0;
+  background: var(--surface-contrast);
+  color: var(--text-primary);
+  padding: 0.75rem 1.25rem;
+  z-index: 1000;
+  border-radius: 0 0 0.75rem 0.75rem;
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
 .page-header {
   padding: 2.5rem clamp(1.5rem, 4vw, 5rem);
 }
@@ -215,6 +231,21 @@ p {
   padding: 0 2rem 2rem;
   flex: 1;
   overflow-x: auto;
+}
+
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.table-wrapper::-webkit-scrollbar {
+  height: 8px;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
 }
 
 .field {
@@ -493,6 +524,11 @@ tbody tr:not(:last-child) {
     grid-template-rows: auto 1fr auto;
   }
 
+  .background-accent {
+    opacity: 0.45;
+    filter: blur(90px);
+  }
+
   .page-header {
     padding: 2rem 1.5rem 1.5rem;
   }
@@ -514,6 +550,55 @@ tbody tr:not(:last-child) {
 
   .toggle-group {
     flex: 1 1 220px;
+  }
+}
+
+@media (max-width: 640px) {
+  thead {
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+  }
+
+  table,
+  tbody,
+  tr,
+  td {
+    display: block;
+    width: 100%;
+  }
+
+  tr {
+    margin-bottom: 1rem;
+    border-radius: 0.75rem;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 0.75rem 1rem;
+  }
+
+  td {
+    border: none;
+    padding: 0.35rem 0;
+    text-align: left;
+  }
+
+  td::before {
+    content: attr(data-label);
+    display: block;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-secondary);
+    margin-bottom: 0.2rem;
+  }
+
+  td.placeholder {
+    text-align: left;
+    color: var(--text-secondary);
+    padding: 0.5rem 0;
   }
 }
 
@@ -586,6 +671,10 @@ tbody tr:not(:last-child) {
 }
 
 @media (max-width: 420px) {
+  .background-accent {
+    display: none;
+  }
+
   .page-header {
     padding: 1.75rem 1.1rem 1.2rem;
   }
