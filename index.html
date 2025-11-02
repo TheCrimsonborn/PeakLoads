@@ -29,6 +29,7 @@
       content="A modern strength training companion for lifters: 1RM estimates, percentage tables, and warm-up planning."
     />
     <meta name="twitter:image" content="https://peakload.netlify.app/assets/social-preview.png" />
+    <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -129,6 +130,22 @@
             >
               Plan Warm-Up
             </a>
+            <a
+              class="secondary-button hero-button"
+              id="hero-percent-cta"
+              data-i18n="heroPercentCta"
+              href="#percentage-chart"
+            >
+              Build Percentages
+            </a>
+            <a
+              class="secondary-button hero-button"
+              id="hero-rir-cta"
+              data-i18n="heroRirCta"
+              href="#rir-calculator"
+            >
+              Translate RIR
+            </a>
           </div>
           <ul class="hero-highlights">
             <li id="hero-highlight-1" data-i18n="heroHighlightOne">
@@ -139,6 +156,9 @@
             </li>
             <li id="hero-highlight-3" data-i18n="heroHighlightThree">
               Instant unit and language toggles for global lifters
+            </li>
+            <li id="hero-highlight-4" data-i18n="heroHighlightFour">
+              RIR-based projections for autoregulated training
             </li>
           </ul>
         </div>
@@ -163,6 +183,12 @@
               </dt>
               <dd id="hero-snapshot-warmup-desc" data-i18n="heroSnapshotWarmupDesc">
                 Progressive sets tailored to your top weight
+              </dd>
+            </div>
+            <div>
+              <dt id="hero-snapshot-rir-title" data-i18n="heroSnapshotRirTitle">RIR Translator</dt>
+              <dd id="hero-snapshot-rir-desc" data-i18n="heroSnapshotRirDesc">
+                Convert last-set data into target weights for the next effort
               </dd>
             </div>
           </dl>
@@ -442,11 +468,131 @@
           </section>
         </aside>
       </div>
+
+      <section class="card rir-card" id="rir-calculator" aria-labelledby="rir-title">
+        <header class="card-header">
+          <h2 id="rir-title" data-i18n="rirTitle">RIR Translator</h2>
+          <p id="rir-description" data-i18n="rirDescription">
+            Convert last set data into estimated 1RM and target weights using Reps In Reserve.
+          </p>
+        </header>
+
+        <div class="rir-body card-body">
+          <div class="rir-last-set">
+            <h3 id="rir-last-title" data-i18n="rirLastTitle">Last Set</h3>
+            <form id="rir-last-form" class="rir-form" novalidate>
+              <div class="field">
+                <label for="rir-last-weight" id="rir-last-weight-label" data-i18n="rirLastWeightLabel">
+                  Weight
+                </label>
+                <div class="input-group">
+                  <input
+                    id="rir-last-weight"
+                    name="weight"
+                    type="number"
+                    min="0"
+                    step="0.5"
+                    required
+                  />
+                  <span class="suffix" data-unit-suffix>kg</span>
+                </div>
+              </div>
+              <div class="field">
+                <label for="rir-last-reps" id="rir-last-reps-label" data-i18n="rirLastRepsLabel">
+                  Reps
+                </label>
+                <input
+                  id="rir-last-reps"
+                  name="reps"
+                  type="number"
+                  min="1"
+                  max="30"
+                  required
+                />
+              </div>
+              <div class="field">
+                <label for="rir-last-rir" id="rir-last-rir-label" data-i18n="rirLastRirLabel">
+                  RIR
+                </label>
+                <input
+                  id="rir-last-rir"
+                  name="rir"
+                  type="number"
+                  min="0"
+                  max="10"
+                  required
+                />
+              </div>
+              <button type="submit" class="secondary-button rir-button" data-i18n="rirLastSubmit">
+                Translate Set
+              </button>
+            </form>
+            <output
+              id="rir-last-output"
+              class="result rir-result"
+              role="status"
+              aria-live="polite"
+            ></output>
+          </div>
+
+          <div class="rir-next-set">
+            <h3 id="rir-next-title" data-i18n="rirNextTitle">Next Set</h3>
+            <form id="rir-next-form" class="rir-form" novalidate>
+              <div class="field">
+                <label for="rir-next-reps" id="rir-next-reps-label" data-i18n="rirNextRepsLabel">
+                  Target Reps
+                </label>
+                <input
+                  id="rir-next-reps"
+                  name="reps"
+                  type="number"
+                  min="1"
+                  max="30"
+                  required
+                />
+              </div>
+              <div class="field">
+                <label for="rir-next-rir" id="rir-next-rir-label" data-i18n="rirNextRirLabel">
+                  Target RIR
+                </label>
+                <input
+                  id="rir-next-rir"
+                  name="rir"
+                  type="number"
+                  min="0"
+                  max="10"
+                  required
+                />
+              </div>
+              <button type="submit" class="primary-button rir-button" data-i18n="rirNextSubmit">
+                Calculate Weight
+              </button>
+            </form>
+            <output
+              id="rir-next-output"
+              class="result rir-result"
+              role="status"
+              aria-live="polite"
+            ></output>
+          </div>
+
+          <p class="rir-note" id="rir-note" data-i18n="rirNote">
+            RPE (Rate of Perceived Exertion) and RIR (Reps In Reserve) are autoregulation tools that
+            help you match training stress to daily readiness.
+          </p>
+        </div>
+      </section>
     </main>
 
     <footer class="page-footer">
       <p id="footer-text" data-i18n="footerText">
         PeakLoad keeps your training precise, intentional, and progressive.
+      </p>
+      <p class="footer-meta">
+        <span id="footer-rights" data-i18n="footerRights">All rights reserved</span>
+        <a href="https://www.instagram.com/unsettled.power/" target="_blank" rel="noopener">
+          Unsettled Power
+        </a>
       </p>
     </footer>
 

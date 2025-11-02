@@ -196,9 +196,19 @@ body {
 }
 
 .hero-actions {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(160px, 1fr));
   gap: 0.75rem;
+}
+
+.hero-actions .primary-button,
+.hero-actions .secondary-button {
+  width: 100%;
+}
+
+.hero-actions .primary-button,
+.hero-actions .secondary-button {
+  min-width: 160px;
 }
 
 .primary-button,
@@ -236,11 +246,12 @@ body {
 .hero-highlights {
   margin: 0;
   padding-left: 1.1rem;
+  list-style: disc;
+  list-style-position: inside;
   display: grid;
   gap: 0.5rem;
   color: var(--text-secondary);
   font-size: 0.95rem;
-  list-style: disc;
 }
 
 .hero-card {
@@ -335,6 +346,10 @@ p {
   gap: 2rem;
 }
 
+.cards-column > .card + .card {
+  margin-top: 0;
+}
+
 .support-panel {
   position: sticky;
   top: 2rem;
@@ -345,6 +360,10 @@ p {
   border: 1px solid var(--border);
   padding: 2rem;
   box-shadow: 0 24px 50px rgba(8, 9, 12, 0.28);
+}
+
+.rir-card {
+  margin-top: 2.5rem;
 }
 
 .support-panel h2 {
@@ -405,6 +424,43 @@ p {
   margin: 0.65rem 0 0;
   color: var(--text-secondary);
   font-size: 0.95rem;
+}
+
+.rir-card .card-body {
+  display: grid;
+  gap: 2rem;
+}
+
+.rir-body {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.75rem;
+}
+
+.rir-body h3 {
+  margin: 0 0 0.75rem;
+  font-size: 1.1rem;
+}
+
+.rir-form {
+  display: grid;
+  gap: 1rem;
+}
+
+.rir-button {
+  justify-self: start;
+}
+
+.rir-result {
+  margin-top: 0.5rem;
+  font-weight: 600;
+}
+
+.rir-note {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  grid-column: 1 / -1;
 }
 
 .card {
@@ -672,8 +728,29 @@ tbody tr:not(:last-child) {
   color: var(--text-secondary);
   text-align: center;
   font-size: 0.9rem;
+  display: grid;
+  gap: 0.35rem;
+  justify-items: center;
 }
 
+.page-footer a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.page-footer a:hover,
+.page-footer a:focus-visible {
+  text-decoration: underline;
+  outline: none;
+}
+
+.footer-meta {
+  margin: 0;
+  display: flex;
+  gap: 0.35rem;
+  align-items: center;
+  font-size: 0.85rem;
+}
 @media (max-width: 1200px) {
   .hero {
     grid-template-columns: minmax(0, 1fr);
@@ -681,6 +758,10 @@ tbody tr:not(:last-child) {
 
   .hero-card {
     order: -1;
+  }
+
+  .rir-body {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
@@ -691,6 +772,10 @@ tbody tr:not(:last-child) {
 
   .support-panel {
     position: static;
+  }
+
+  .rir-card {
+    margin-top: 2rem;
   }
 }
 
@@ -773,8 +858,13 @@ tbody tr:not(:last-child) {
   }
 
   .hero-actions {
-    flex-direction: column;
-    align-items: stretch;
+    grid-template-columns: repeat(2, minmax(140px, 1fr));
+    gap: 0.6rem;
+  }
+
+  .hero-actions .primary-button,
+  .hero-actions .secondary-button {
+    width: 100%;
   }
 
   .hero-card {
@@ -944,4 +1034,9 @@ tbody tr:not(:last-child) {
   table {
     min-width: 280px;
   }
+
+  .rir-card {
+    margin-top: 1.5rem;
+  }
 }
+

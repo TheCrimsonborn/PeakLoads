@@ -14,6 +14,15 @@ const warmupTopWeightInput = document.getElementById("warmup-top-weight-input");
 const warmupTemplateSelect = document.getElementById("warmup-template-select");
 const warmupTableBody = document.querySelector("#warmup-table tbody");
 const warmupWeightHeader = document.getElementById("warmup-weight-header");
+const rirLastForm = document.getElementById("rir-last-form");
+const rirLastWeightInput = document.getElementById("rir-last-weight");
+const rirLastRepsInput = document.getElementById("rir-last-reps");
+const rirLastRirInput = document.getElementById("rir-last-rir");
+const rirLastOutput = document.getElementById("rir-last-output");
+const rirNextForm = document.getElementById("rir-next-form");
+const rirNextRepsInput = document.getElementById("rir-next-reps");
+const rirNextRirInput = document.getElementById("rir-next-rir");
+const rirNextOutput = document.getElementById("rir-next-output");
 
 const textElements = {
   tagline: document.getElementById("tagline"),
@@ -21,9 +30,12 @@ const textElements = {
   heroTagline: document.getElementById("hero-tagline"),
   heroPrimaryCta: document.getElementById("hero-primary-cta"),
   heroSecondaryCta: document.getElementById("hero-secondary-cta"),
+  heroPercentCta: document.getElementById("hero-percent-cta"),
+  heroRirCta: document.getElementById("hero-rir-cta"),
   heroHighlightOne: document.getElementById("hero-highlight-1"),
   heroHighlightTwo: document.getElementById("hero-highlight-2"),
   heroHighlightThree: document.getElementById("hero-highlight-3"),
+  heroHighlightFour: document.getElementById("hero-highlight-4"),
   heroCardTitle: document.getElementById("hero-card-title"),
   heroSnapshotInputsTitle: document.getElementById("hero-snapshot-inputs-title"),
   heroSnapshotInputsDesc: document.getElementById("hero-snapshot-inputs-desc"),
@@ -31,6 +43,8 @@ const textElements = {
   heroSnapshotSetsDesc: document.getElementById("hero-snapshot-sets-desc"),
   heroSnapshotWarmupTitle: document.getElementById("hero-snapshot-warmup-title"),
   heroSnapshotWarmupDesc: document.getElementById("hero-snapshot-warmup-desc"),
+  heroSnapshotRirTitle: document.getElementById("hero-snapshot-rir-title"),
+  heroSnapshotRirDesc: document.getElementById("hero-snapshot-rir-desc"),
   unitsLabel: document.getElementById("units-label"),
   languageLabel: document.getElementById("language-label"),
   oneRmTitle: document.getElementById("one-rm-title"),
@@ -62,6 +76,19 @@ const textElements = {
   warmupStageHeader: document.getElementById("warmup-stage-header"),
   warmupPercentHeader: document.getElementById("warmup-percent-header"),
   warmupRepsHeader: document.getElementById("warmup-reps-header"),
+  rirTitle: document.getElementById("rir-title"),
+  rirDescription: document.getElementById("rir-description"),
+  rirLastTitle: document.getElementById("rir-last-title"),
+  rirLastWeightLabel: document.getElementById("rir-last-weight-label"),
+  rirLastRepsLabel: document.getElementById("rir-last-reps-label"),
+  rirLastRirLabel: document.getElementById("rir-last-rir-label"),
+  rirLastSubmit: document.querySelector('[data-i18n="rirLastSubmit"]'),
+  rirNextTitle: document.getElementById("rir-next-title"),
+  rirNextRepsLabel: document.getElementById("rir-next-reps-label"),
+  rirNextRirLabel: document.getElementById("rir-next-rir-label"),
+  rirNextSubmit: document.querySelector('[data-i18n="rirNextSubmit"]'),
+  rirNote: document.getElementById("rir-note"),
+  footerRights: document.getElementById("footer-rights"),
 };
 
 const COPY = {
@@ -72,16 +99,23 @@ const COPY = {
       "Estimate your 1RM, map working sets, and walk onto the platform with a purpose-built warm-up sequence.",
     heroPrimaryCta: "Start Calculating",
     heroSecondaryCta: "Plan Warm-Up",
+    heroPercentCta: "Build Percentages",
+    heroRirCta: "Translate RIR",
+
     heroHighlightOne: "Trusted Epley, Brzycki, and Lombardi estimators",
     heroHighlightTwo: "Auto-built warm-up templates for heavy singles or volume days",
     heroHighlightThree: "Instant unit and language toggles for global lifters",
+    heroHighlightFour: "RIR-based projections for autoregulated training",
     heroCardTitle: "Session Snapshot",
     heroSnapshotInputsTitle: "1RM Inputs",
+
     heroSnapshotInputsDesc: "Weight, reps, and formula of your choice",
     heroSnapshotSetsTitle: "Working Sets",
     heroSnapshotSetsDesc: "Custom percent range with flexible increments",
     heroSnapshotWarmupTitle: "Warm-Up Flow",
     heroSnapshotWarmupDesc: "Progressive sets tailored to your top weight",
+    heroSnapshotRirTitle: "RIR Translator",
+    heroSnapshotRirDesc: "Convert last-set data into target weights for the next effort",
     unitsLabel: "UNITS",
     languageLabel: "LANGUAGE",
     languageOptions: {
@@ -112,6 +146,7 @@ const COPY = {
     tableEmptyRange: "No values generated for that range.",
     oneRmResultPrefix: "Estimated 1RM",
     footerText: "PeakLoad keeps your training precise, intentional, and progressive.",
+    footerRights: "All rights reserved",
     warmupTitle: "Warm-Up Planner",
     warmupDescription: "Map out progressive sets before your heavy attempts.",
     warmupTopWeightLabel: "Top Set Weight",
@@ -130,6 +165,22 @@ const COPY = {
       topSingle: "Heavy Single Prep",
       volume: "Volume Builder",
     },
+    rirTitle: "RIR Translator",
+    rirDescription: "Convert last set data into estimated 1RM and target weights using Reps In Reserve.",
+    rirLastTitle: "Last Set",
+    rirLastWeightLabel: "Weight",
+    rirLastRepsLabel: "Reps",
+    rirLastRirLabel: "RIR",
+    rirLastSubmit: "Translate Set",
+    rirNextTitle: "Next Set",
+    rirNextRepsLabel: "Target Reps",
+    rirNextRirLabel: "Target RIR",
+    rirNextSubmit: "Calculate Weight",
+    rirNote:
+      "RPE (Rate of Perceived Exertion) and RIR (Reps In Reserve) help you autoregulate training stress based on how many reps you have left in the tank.",
+    rirLastResultPrefix: "Estimated e1RM: {value}",
+    rirNextResultPrefix: "Suggested working weight: {value}",
+    rirNeedLastSet: "Log your last set above to unlock the next set recommendation.",
     errors: {
       invalidWeight: "Enter a valid weight.",
       invalidReps: "Reps must be between 1 and 20.",
@@ -140,6 +191,7 @@ const COPY = {
       invalidIncrement: "Choose a positive increment.",
       invalidTopWeight: "Enter a valid top set weight.",
       invalidTemplate: "Select a warm-up template.",
+      invalidRir: "RIR must be between 0 and 10.",
     },
   },
   tr: {
@@ -150,9 +202,14 @@ const COPY = {
       "1TM'inizi tahmin edin, çalışma setlerini planlayın ve amaca yönelik bir ısınmayla platforma çıkın.",
     heroPrimaryCta: "Hesaplamaya Başla",
     heroSecondaryCta: "Isınmayı Planla",
+    heroPercentCta: "Yüzde Tablosu Oluştur",
+    heroRirCta: "RIR Çevir",
+
     heroHighlightOne: "Epley, Brzycki ve Lombardi formüllerine güvenin",
     heroHighlightTwo: "Ağır tekler veya hacim günleri için hazır ısınma şablonları",
     heroHighlightThree: "Global sporcular için anında birim ve dil değişimi",
+    heroHighlightFour: "RIR tabanlı hedef ağırlık önerileri",
+
     heroCardTitle: "Seans Özeti",
     heroSnapshotInputsTitle: "1TM Girdileri",
     heroSnapshotInputsDesc: "Seçtiğiniz ağırlık, tekrar ve formül",
@@ -160,6 +217,9 @@ const COPY = {
     heroSnapshotSetsDesc: "Esnek artışlarla özelleştirilebilir yüzdeler",
     heroSnapshotWarmupTitle: "Isınma Akışı",
     heroSnapshotWarmupDesc: "Üst setinize göre kademeli ısınma setleri",
+    heroSnapshotRirTitle: "RIR Çevirici",
+    heroSnapshotRirDesc: "Son set verilerini bir sonraki set için önerilen ağırlığa çevirin",
+
     unitsLabel: "BİRİMLER",
     languageLabel: "DİL",
     languageOptions: {
@@ -190,6 +250,7 @@ const COPY = {
     tableEmptyRange: "Bu aralık için değer oluşturulamadı.",
     oneRmResultPrefix: "Tahmini 1TM",
     footerText: "PeakLoad antrenmanınızı tutarlı, hedefli ve ilerlemeci tutar.",
+    footerRights: "Tüm hakları saklıdır",
     warmupTitle: "Isınma Planlayıcı",
     warmupDescription: "Ağır denemelerden önce kademeli setlerinizi planlayın.",
     warmupTopWeightLabel: "Üst Set Ağırlığı",
@@ -208,6 +269,22 @@ const COPY = {
       topSingle: "Ağır Tek Hazırlığı",
       volume: "Hacim Yapıcı",
     },
+    rirTitle: "RIR Çevirici",
+    rirDescription: "Son set verilerini RIR kullanarak tahmini 1TM ve hedef ağırlıklara dönüştürün.",
+    rirLastTitle: "Son Set",
+    rirLastWeightLabel: "Ağırlık",
+    rirLastRepsLabel: "Tekrar",
+    rirLastRirLabel: "RIR",
+    rirLastSubmit: "Seti Çevir",
+    rirNextTitle: "Sonraki Set",
+    rirNextRepsLabel: "Hedef Tekrar",
+    rirNextRirLabel: "Hedef RIR",
+    rirNextSubmit: "Ağırlığı Hesapla",
+    rirNote:
+      "RPE (Algılanan Zorluk Derecesi) ve RIR (Rezerve Tekrar) günlük performansınıza göre antrenman yükünü ayarlamaya yardımcı olur.",
+    rirLastResultPrefix: "Tahmini 1TM: {value}",
+    rirNextResultPrefix: "Önerilen çalışma ağırlığı: {value}",
+    rirNeedLastSet: "Sonraki set önerisi için önce son setinizi girin.",
     errors: {
       invalidWeight: "Geçerli bir ağırlık girin.",
       invalidReps: "Tekrar sayısı 1 ile 20 arasında olmalıdır.",
@@ -218,6 +295,7 @@ const COPY = {
       invalidIncrement: "Pozitif bir artış seçin.",
       invalidTopWeight: "Geçerli bir üst set ağırlığı girin.",
       invalidTemplate: "Bir ısınma şablonu seçin.",
+      invalidRir: "RIR 0 ile 10 arasında olmalıdır.",
     },
   },
   ru: {
@@ -228,9 +306,14 @@ const COPY = {
       "Оцените 1ПМ, распишите рабочие подходы и выходите на помост с продуманной разминкой.",
     heroPrimaryCta: "Начать расчёт",
     heroSecondaryCta: "Построить разминку",
+    heroPercentCta: "Построить проценты",
+    heroRirCta: "Перевести RIR",
+
     heroHighlightOne: "Надёжные формулы Эпли, Бжицкого и Ломбарди",
     heroHighlightTwo: "Готовые шаблоны разминки для тяжёлых одиночных и объёмных дней",
     heroHighlightThree: "Мгновенное переключение единиц и языка для спортсменов по всему миру",
+    heroHighlightFour: "RIR-проекции для авторегулируемых тренировок",
+
     heroCardTitle: "Краткий обзор сессии",
     heroSnapshotInputsTitle: "Данные 1ПМ",
     heroSnapshotInputsDesc: "Вес, повторы и выбранная формула",
@@ -238,6 +321,9 @@ const COPY = {
     heroSnapshotSetsDesc: "Гибкие диапазоны процентов с настраиваемым шагом",
     heroSnapshotWarmupTitle: "Разминочный план",
     heroSnapshotWarmupDesc: "Постепенные подходы, привязанные к основному весу",
+    heroSnapshotRirTitle: "Переводчик RIR",
+    heroSnapshotRirDesc: "Переводит данные последнего подхода в рекомендуемый вес следующего",
+
     unitsLabel: "ЕДИНИЦЫ",
     languageLabel: "ЯЗЫК",
     languageOptions: {
@@ -268,6 +354,7 @@ const COPY = {
     tableEmptyRange: "Для указанного диапазона значения не получены.",
     oneRmResultPrefix: "Оценочный 1ПМ",
     footerText: "PeakLoad помогает тренироваться точно, осознанно и прогрессивно.",
+    footerRights: "Все права защищены",
     warmupTitle: "Планировщик разминки",
     warmupDescription: "Составьте последовательность подходов перед тяжелыми попытками.",
     warmupTopWeightLabel: "Вес основного подхода",
@@ -286,6 +373,22 @@ const COPY = {
       topSingle: "Выход на одиночный",
       volume: "Объемная подготовка",
     },
+    rirTitle: "Переводчик RIR",
+    rirDescription: "Переведите данные последнего подхода в оценочный 1ПМ и рабочие веса с помощью RIR.",
+    rirLastTitle: "Последний подход",
+    rirLastWeightLabel: "Вес",
+    rirLastRepsLabel: "Повторы",
+    rirLastRirLabel: "RIR",
+    rirLastSubmit: "Перевести подход",
+    rirNextTitle: "Следующий подход",
+    rirNextRepsLabel: "Целевые повторы",
+    rirNextRirLabel: "Целевой RIR",
+    rirNextSubmit: "Рассчитать вес",
+    rirNote:
+      "RPE (Rate of Perceived Exertion) и RIR (Reps In Reserve) позволяют регулировать нагрузку в зависимости от того, сколько повторов осталось в запасе.",
+    rirLastResultPrefix: "Оценочный 1ПМ: {value}",
+    rirNextResultPrefix: "Рекомендуемый рабочий вес: {value}",
+    rirNeedLastSet: "Сначала внесите данные последнего подхода, чтобы получить рекомендацию.",
     errors: {
       invalidWeight: "Введите корректный вес.",
       invalidReps: "Количество повторений должно быть от 1 до 20.",
@@ -296,6 +399,7 @@ const COPY = {
       invalidIncrement: "Выберите положительный шаг.",
       invalidTopWeight: "Введите корректный вес основного подхода.",
       invalidTemplate: "Выберите шаблон разминки.",
+      invalidRir: "Введите корректный RIR от 0 до 10.",
     },
   },
 };
@@ -348,11 +452,19 @@ const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 const toKg = (value, unit) => (unit === "kg" ? value : value / KG_TO_LB);
 const fromKg = (valueKg, unit) => (unit === "kg" ? valueKg : valueKg * KG_TO_LB);
 
+const formatTemplateWithValue = (template, value) => {
+  if (typeof template !== "string") {
+    return String(value);
+  }
+  return template.includes("{value}") ? template.replace("{value}", value) : `${template} ${value}`;
+};
+
 let currentUnit = "kg";
 let currentLang = "en";
 let lastOneRmKg = null;
 let percentTableState = null;
 let warmupState = null;
+let rirState = { last: null, next: null, nextMessageKey: null };
 
 const getDictionary = () => COPY[currentLang] || COPY.en;
 
@@ -384,6 +496,9 @@ const applyUnitToInputs = () => {
   baseWeightInput.step = step;
   if (warmupTopWeightInput) {
     warmupTopWeightInput.step = step;
+  }
+  if (rirLastWeightInput) {
+    rirLastWeightInput.step = step;
   }
 };
 
@@ -528,6 +643,40 @@ const renderWarmupTable = () => {
   warmupTableBody.innerHTML = rows.join("");
 };
 
+const calculateE1rmFromRir = (weightKg, reps, rir) => {
+  const repsToFailure = reps + rir;
+  return weightKg * (1 + repsToFailure / 30);
+};
+
+const calculateWeightFromRir = (e1rmKg, reps, rir) => {
+  const repsToFailure = reps + rir;
+  return e1rmKg / (1 + repsToFailure / 30);
+};
+
+const renderRirOutputs = () => {
+  if (!rirLastOutput || !rirNextOutput) {
+    return;
+  }
+
+  const dict = getDictionary();
+
+  if (rirState.last) {
+    const displayValue = formatWeightForDisplay(rirState.last.e1rmKg);
+    rirLastOutput.textContent = formatTemplateWithValue(dict.rirLastResultPrefix, displayValue);
+  } else {
+    rirLastOutput.textContent = "";
+  }
+
+  if (rirState.next) {
+    const displayValue = formatWeightForDisplay(rirState.next.weightKg);
+    rirNextOutput.textContent = formatTemplateWithValue(dict.rirNextResultPrefix, displayValue);
+  } else if (rirState.nextMessageKey === "needLastSet") {
+    rirNextOutput.textContent = dict.rirNeedLastSet;
+  } else {
+    rirNextOutput.textContent = "";
+  }
+};
+
 const prefillWarmupTopWeight = (weightKg, { allowOverwrite = false } = {}) => {
   if (!warmupTopWeightInput || !Number.isFinite(weightKg)) {
     return;
@@ -553,9 +702,12 @@ const applyLocale = () => {
   textElements.heroTagline.textContent = dict.heroTagline;
   textElements.heroPrimaryCta.textContent = dict.heroPrimaryCta;
   textElements.heroSecondaryCta.textContent = dict.heroSecondaryCta;
+  textElements.heroPercentCta.textContent = dict.heroPercentCta;
+  textElements.heroRirCta.textContent = dict.heroRirCta;
   textElements.heroHighlightOne.textContent = dict.heroHighlightOne;
   textElements.heroHighlightTwo.textContent = dict.heroHighlightTwo;
   textElements.heroHighlightThree.textContent = dict.heroHighlightThree;
+  textElements.heroHighlightFour.textContent = dict.heroHighlightFour;
   textElements.heroCardTitle.textContent = dict.heroCardTitle;
   textElements.heroSnapshotInputsTitle.textContent = dict.heroSnapshotInputsTitle;
   textElements.heroSnapshotInputsDesc.textContent = dict.heroSnapshotInputsDesc;
@@ -563,6 +715,21 @@ const applyLocale = () => {
   textElements.heroSnapshotSetsDesc.textContent = dict.heroSnapshotSetsDesc;
   textElements.heroSnapshotWarmupTitle.textContent = dict.heroSnapshotWarmupTitle;
   textElements.heroSnapshotWarmupDesc.textContent = dict.heroSnapshotWarmupDesc;
+  textElements.heroSnapshotRirTitle.textContent = dict.heroSnapshotRirTitle;
+  textElements.heroSnapshotRirDesc.textContent = dict.heroSnapshotRirDesc;
+  textElements.rirTitle.textContent = dict.rirTitle;
+  textElements.rirDescription.textContent = dict.rirDescription;
+  textElements.rirLastTitle.textContent = dict.rirLastTitle;
+  textElements.rirLastWeightLabel.textContent = dict.rirLastWeightLabel;
+  textElements.rirLastRepsLabel.textContent = dict.rirLastRepsLabel;
+  textElements.rirLastRirLabel.textContent = dict.rirLastRirLabel;
+  textElements.rirLastSubmit.textContent = dict.rirLastSubmit;
+  textElements.rirNextTitle.textContent = dict.rirNextTitle;
+  textElements.rirNextRepsLabel.textContent = dict.rirNextRepsLabel;
+  textElements.rirNextRirLabel.textContent = dict.rirNextRirLabel;
+  textElements.rirNextSubmit.textContent = dict.rirNextSubmit;
+  textElements.rirNote.textContent = dict.rirNote;
+  textElements.footerRights.textContent = dict.footerRights;
   textElements.unitsLabel.textContent = dict.unitsLabel;
   textElements.languageLabel.textContent = dict.languageLabel;
   textElements.oneRmTitle.textContent = dict.oneRmTitle;
@@ -605,6 +772,7 @@ const applyLocale = () => {
   renderOneRmOutput();
   renderPercentTable();
   renderWarmupTable();
+  renderRirOutputs();
 };
 
 const setError = (field, messageKey) => {
@@ -665,6 +833,9 @@ const handleUnitChange = (nextUnit) => {
   if (warmupTopWeightInput) {
     convertInputValue(warmupTopWeightInput, previousUnit, nextUnit);
   }
+  if (rirLastWeightInput) {
+    convertInputValue(rirLastWeightInput, previousUnit, nextUnit);
+  }
   currentUnit = nextUnit;
   setActiveToggle(unitToggleButtons, "unit", currentUnit);
   applyUnitToInputs();
@@ -672,6 +843,7 @@ const handleUnitChange = (nextUnit) => {
   renderOneRmOutput();
   renderPercentTable();
   renderWarmupTable();
+  renderRirOutputs();
 };
 
 const handleLanguageChange = (nextLang) => {
@@ -892,6 +1064,109 @@ if (warmupTopWeightInput) {
     }
     warmupState = { ...warmupState, topWeightKg: toKg(topWeightValue, currentUnit) };
     renderWarmupTable();
+  });
+}
+
+if (rirLastForm) {
+  rirLastForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const weightValue = Number(rirLastWeightInput.value);
+    const repsValue = Number(rirLastRepsInput.value);
+    const rirValue = Number(rirLastRirInput.value);
+
+    let hasError = false;
+
+    if (!Number.isFinite(weightValue) || weightValue <= 0) {
+      hasError = true;
+      setError(rirLastWeightInput, "invalidWeight");
+    } else {
+      setError(rirLastWeightInput);
+    }
+
+    if (!Number.isFinite(repsValue) || repsValue < 1 || repsValue > 30) {
+      hasError = true;
+      setError(rirLastRepsInput, "invalidReps");
+    } else {
+      setError(rirLastRepsInput);
+    }
+
+    if (!Number.isFinite(rirValue) || rirValue < 0 || rirValue > 10) {
+      hasError = true;
+      setError(rirLastRirInput, "invalidRir");
+    } else {
+      setError(rirLastRirInput);
+    }
+
+    if (hasError) {
+      rirState = { last: null, next: null, nextMessageKey: null };
+      renderRirOutputs();
+      return;
+    }
+
+    const weightKg = toKg(weightValue, currentUnit);
+    const repsToFailure = repsValue + rirValue;
+
+    if (!Number.isFinite(repsToFailure) || repsToFailure <= 0) {
+      setError(rirLastRirInput, "invalidRir");
+      rirState = { last: null, next: null, nextMessageKey: null };
+      renderRirOutputs();
+      return;
+    }
+
+    const e1rmKg = calculateE1rmFromRir(weightKg, repsValue, rirValue);
+
+    rirState = {
+      last: { weightKg, reps: repsValue, rir: rirValue, e1rmKg },
+      next: null,
+      nextMessageKey: null,
+    };
+
+    renderRirOutputs();
+  });
+}
+
+if (rirNextForm) {
+  rirNextForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const repsValue = Number(rirNextRepsInput.value);
+    const rirValue = Number(rirNextRirInput.value);
+
+    let hasError = false;
+
+    if (!Number.isFinite(repsValue) || repsValue < 1 || repsValue > 30) {
+      hasError = true;
+      setError(rirNextRepsInput, "invalidReps");
+    } else {
+      setError(rirNextRepsInput);
+    }
+
+    if (!Number.isFinite(rirValue) || rirValue < 0 || rirValue > 10) {
+      hasError = true;
+      setError(rirNextRirInput, "invalidRir");
+    } else {
+      setError(rirNextRirInput);
+    }
+
+    if (!rirState.last) {
+      rirState = { ...rirState, next: null, nextMessageKey: "needLastSet" };
+      renderRirOutputs();
+      return;
+    }
+
+    if (hasError) {
+      return;
+    }
+
+    const weightKg = calculateWeightFromRir(rirState.last.e1rmKg, repsValue, rirValue);
+    rirState = {
+      ...rirState,
+      next: { reps: repsValue, rir: rirValue, weightKg },
+      nextMessageKey: null,
+    };
+
+    renderRirOutputs();
   });
 }
 
