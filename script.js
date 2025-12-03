@@ -38,6 +38,7 @@ const textElements = {
   heroPrimaryCta: document.getElementById("hero-primary-cta"),
   heroSecondaryCta: document.getElementById("hero-secondary-cta"),
   heroPercentCta: document.getElementById("hero-percent-cta"),
+  heroAdvWarmupCta: document.getElementById("hero-adv-warmup-cta"),
   heroRirCta: document.getElementById("hero-rir-cta"),
   heroHighlightOne: document.getElementById("hero-highlight-1"),
   heroHighlightTwo: document.getElementById("hero-highlight-2"),
@@ -120,6 +121,7 @@ const COPY = {
     heroPrimaryCta: "Start Calculating",
     heroSecondaryCta: "Plan Warm-Up",
     heroPercentCta: "Build Percentages",
+    heroAdvWarmupCta: "Advanced Warm Up",
     heroRirCta: "Translate RIR",
 
     heroHighlightOne: "Trusted Epley, Brzycki, and Lombardi estimators",
@@ -281,6 +283,7 @@ const COPY = {
     heroPrimaryCta: "Hesaplamaya Başla",
     heroSecondaryCta: "Isınmayı Planla",
     heroPercentCta: "Yüzde Tablosu Oluştur",
+    heroAdvWarmupCta: "Gelişmiş Isınma",
     heroRirCta: "RIR Çevir",
 
     heroHighlightOne: "Epley, Brzycki ve Lombardi formüllerine güvenin",
@@ -443,6 +446,7 @@ const COPY = {
     heroPrimaryCta: "Начать расчёт",
     heroSecondaryCta: "Построить разминку",
     heroPercentCta: "Построить проценты",
+    heroAdvWarmupCta: "Продвинутая разминка",
     heroRirCta: "Перевести RIR",
 
     heroHighlightOne: "Надёжные формулы Эпли, Бжицкого и Ломбарди",
@@ -958,6 +962,7 @@ const applyLocale = () => {
   textElements.heroPrimaryCta.textContent = dict.heroPrimaryCta;
   textElements.heroSecondaryCta.textContent = dict.heroSecondaryCta;
   textElements.heroPercentCta.textContent = dict.heroPercentCta;
+  textElements.heroAdvWarmupCta.textContent = dict.heroAdvWarmupCta;
   textElements.heroRirCta.textContent = dict.heroRirCta;
   textElements.heroHighlightOne.textContent = dict.heroHighlightOne;
   textElements.heroHighlightTwo.textContent = dict.heroHighlightTwo;
