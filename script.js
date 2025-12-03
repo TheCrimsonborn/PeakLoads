@@ -24,6 +24,13 @@ const rirNextRepsInput = document.getElementById("rir-next-reps");
 const rirNextRirInput = document.getElementById("rir-next-rir");
 const rirNextOutput = document.getElementById("rir-next-output");
 
+const advWarmupForm = document.getElementById("adv-warmup-form");
+const advLiftSelect = document.getElementById("adv-lift-select");
+const advWeightInput = document.getElementById("adv-weight-input");
+const advRepsInput = document.getElementById("adv-reps-input");
+const advTableBody = document.querySelector("#adv-warmup-table tbody");
+const advWeightHeader = document.getElementById("adv-weight-header");
+
 const textElements = {
   tagline: document.getElementById("tagline"),
   heroHeading: document.getElementById("hero-title"),
@@ -88,7 +95,20 @@ const textElements = {
   rirNextRirLabel: document.getElementById("rir-next-rir-label"),
   rirNextSubmit: document.querySelector('[data-i18n="rirNextSubmit"]'),
   rirNote: document.getElementById("rir-note"),
+  rirNextSubmit: document.querySelector('[data-i18n="rirNextSubmit"]'),
+  rirNote: document.getElementById("rir-note"),
   footerRights: document.getElementById("footer-rights"),
+  advWarmupTitle: document.getElementById("adv-warmup-title"),
+  advWarmupDescription: document.getElementById("adv-warmup-description"),
+  advLiftLabel: document.getElementById("adv-lift-label"),
+  advWeightLabel: document.getElementById("adv-weight-label"),
+  advRepsLabel: document.getElementById("adv-reps-label"),
+  advBuildButton: document.getElementById("adv-build-button"),
+  advStageHeader: document.getElementById("adv-stage-header"),
+  advPurposeHeader: document.getElementById("adv-purpose-header"),
+  advPercentHeader: document.getElementById("adv-percent-header"),
+  advRepsHeader: document.getElementById("adv-reps-header"),
+  advNotesHeader: document.getElementById("adv-notes-header"),
 };
 
 const COPY = {
@@ -191,7 +211,65 @@ const COPY = {
       invalidIncrement: "Choose a positive increment.",
       invalidTopWeight: "Enter a valid top set weight.",
       invalidTemplate: "Select a warm-up template.",
+      invalidTemplate: "Select a warm-up template.",
       invalidRir: "RIR must be between 0 and 10.",
+    },
+    advWarmupTitle: "Advanced Warm Up",
+    advWarmupDescription: "Generate a specific warm-up plan based on your main set.",
+    advLiftLabel: "Lift",
+    advWeightLabel: "Main Set Weight",
+    advRepsLabel: "Main Set Reps",
+    advBuildButton: "Generate Plan",
+    advStageHeader: "Set",
+    advPurposeHeader: "Purpose",
+    advPercentHeader: "Percent",
+    advRepsHeader: "Reps",
+    advNotesHeader: "Notes",
+    advPlaceholder: "Enter main set details to generate a plan.",
+    advSetLabel: "Set",
+    advPurposes: {
+      jointPrep: "Joint Prep",
+      activation: "Activation",
+      skill: "Skill & Speed",
+      acclimatization: "Acclimatization",
+      potentiation: "Potentiation",
+    },
+    advCues: {
+      squat: {
+        jointPrep: "Pause at bottom, check stance",
+        activation: "Explosive concentric",
+        skill: "Perfect technique, fast bar",
+        acclimatization: "Brace core hard",
+        potentiation: "Walkout only or heavy single",
+      },
+      bench: {
+        jointPrep: "Full ROM, control descent",
+        activation: "Drive with legs",
+        skill: "Squeeze bar hard",
+        acclimatization: "Settle scapula",
+        potentiation: "Unrack and hold",
+      },
+      deadlift: {
+        jointPrep: "Hinge pattern focus",
+        activation: "Engage lats",
+        skill: "Pull slack out",
+        acclimatization: "Push floor away",
+        potentiation: "Heavy single pull",
+      },
+      ohp: {
+        jointPrep: "Full extension",
+        activation: "Tight core",
+        skill: "Head through",
+        acclimatization: "Explode up",
+        potentiation: "Heavy single",
+      },
+      other: {
+        jointPrep: "Full ROM",
+        activation: "Controlled rep",
+        skill: "Quality movement",
+        acclimatization: "Focus on form",
+        potentiation: "Prime CNS",
+      },
     },
   },
   tr: {
@@ -295,7 +373,65 @@ const COPY = {
       invalidIncrement: "Pozitif bir artış seçin.",
       invalidTopWeight: "Geçerli bir üst set ağırlığı girin.",
       invalidTemplate: "Bir ısınma şablonu seçin.",
+      invalidTemplate: "Bir ısınma şablonu seçin.",
       invalidRir: "RIR 0 ile 10 arasında olmalıdır.",
+    },
+    advWarmupTitle: "Gelişmiş Isınma",
+    advWarmupDescription: "Ana setinize dayalı özel bir ısınma planı oluşturun.",
+    advLiftLabel: "Hareket",
+    advWeightLabel: "Ana Set Ağırlığı",
+    advRepsLabel: "Ana Set Tekrarı",
+    advBuildButton: "Plan Oluştur",
+    advStageHeader: "Set",
+    advPurposeHeader: "Amaç",
+    advPercentHeader: "Yüzde",
+    advRepsHeader: "Tekrar",
+    advNotesHeader: "Notlar",
+    advPlaceholder: "Plan oluşturmak için ana set detaylarını girin.",
+    advSetLabel: "Set",
+    advPurposes: {
+      jointPrep: "Eklem Hazırlığı",
+      activation: "Aktivasyon",
+      skill: "Beceri ve Hız",
+      acclimatization: "Adaptasyon",
+      potentiation: "Potansiyelizasyon",
+    },
+    advCues: {
+      squat: {
+        jointPrep: "Dipte bekle, duruşunu kontrol et",
+        activation: "Patlayıcı kalkış",
+        skill: "Mükemmel teknik, hızlı bar",
+        acclimatization: "Merkez bölgeyi (core) kilitle",
+        potentiation: "Sadece walkout veya ağır tek",
+      },
+      bench: {
+        jointPrep: "Tam hareket aralığı, kontrollü iniş",
+        activation: "Bacaklardan güç al",
+        skill: "Barı sıkı kavra",
+        acclimatization: "Kürek kemiklerini yerleştir",
+        potentiation: "Unrack yap ve bekle",
+      },
+      deadlift: {
+        jointPrep: "Kalça menteşesi (hinge) odaklı",
+        activation: "Latları devreye sok",
+        skill: "Boşluğu al (Slack pull)",
+        acclimatization: "Yeri it",
+        potentiation: "Ağır tek çekiş",
+      },
+      ohp: {
+        jointPrep: "Tam uzama",
+        activation: "Sıkı merkez bölge",
+        skill: "Baş ileri",
+        acclimatization: "Patlayıcı itiş",
+        potentiation: "Ağır tek",
+      },
+      other: {
+        jointPrep: "Tam hareket aralığı",
+        activation: "Kontrollü tekrar",
+        skill: "Kaliteli hareket",
+        acclimatization: "Forma odaklan",
+        potentiation: "Sinir sistemini hazırla",
+      },
     },
   },
   ru: {
@@ -401,6 +537,63 @@ const COPY = {
       invalidTemplate: "Выберите шаблон разминки.",
       invalidRir: "Введите корректный RIR от 0 до 10.",
     },
+    advWarmupTitle: "Продвинутая разминка",
+    advWarmupDescription: "Создайте план разминки на основе основного подхода.",
+    advLiftLabel: "Упражнение",
+    advWeightLabel: "Вес основного подхода",
+    advRepsLabel: "Повторы основного подхода",
+    advBuildButton: "Создать план",
+    advStageHeader: "Подход",
+    advPurposeHeader: "Цель",
+    advPercentHeader: "Процент",
+    advRepsHeader: "Повторы",
+    advNotesHeader: "Заметки",
+    advPlaceholder: "Введите данные основного подхода для создания плана.",
+    advSetLabel: "Подход",
+    advPurposes: {
+      jointPrep: "Суставная разминка",
+      activation: "Активация",
+      skill: "Навык и скорость",
+      acclimatization: "Адаптация",
+      potentiation: "Потенциация",
+    },
+    advCues: {
+      squat: {
+        jointPrep: "Пауза внизу, проверка стойки",
+        activation: "Взрывной подъем",
+        skill: "Идеальная техника, быстрая штанга",
+        acclimatization: "Жесткий кор",
+        potentiation: "Только отход или тяжелый сингл",
+      },
+      bench: {
+        jointPrep: "Полная амплитуда, контроль",
+        activation: "Драйв ногами",
+        skill: "Сжимай гриф",
+        acclimatization: "Сведи лопатки",
+        potentiation: "Съем и удержание",
+      },
+      deadlift: {
+        jointPrep: "Фокус на тазобедренном суставе",
+        activation: "Включи широчайшие",
+        skill: "Выбери люфт грифа",
+        acclimatization: "Толкай пол",
+        potentiation: "Тяжелая тяга",
+      },
+      ohp: {
+        jointPrep: "Полное выпрямление",
+        activation: "Жесткий кор",
+        skill: "Голова вперед",
+        acclimatization: "Взрывной жим",
+        potentiation: "Тяжелый сингл",
+      },
+      other: {
+        jointPrep: "Полная амплитуда",
+        activation: "Контролируемый повтор",
+        skill: "Качественное движение",
+        acclimatization: "Фокус на форме",
+        potentiation: "Активация ЦНС",
+      },
+    },
   },
 };
 
@@ -464,6 +657,7 @@ let currentLang = "en";
 let lastOneRmKg = null;
 let percentTableState = null;
 let warmupState = null;
+let advWarmupState = null;
 let rirState = { last: null, next: null, nextMessageKey: null };
 
 const getDictionary = () => COPY[currentLang] || COPY.en;
@@ -500,6 +694,9 @@ const applyUnitToInputs = () => {
   if (rirLastWeightInput) {
     rirLastWeightInput.step = step;
   }
+  if (advWeightInput) {
+    advWeightInput.step = step;
+  }
 };
 
 const updateUnitMarkers = () => {
@@ -513,6 +710,9 @@ const updateUnitMarkers = () => {
   }
   if (warmupWeightHeader) {
     warmupWeightHeader.textContent = `${dict.warmupWeightHeader} (${unitLabel})`;
+  }
+  if (advWeightHeader) {
+    advWeightHeader.textContent = `${dict.advWeightHeader || "Weight"} (${unitLabel})`;
   }
 };
 
@@ -643,6 +843,61 @@ const renderWarmupTable = () => {
   warmupTableBody.innerHTML = rows.join("");
 };
 
+const renderAdvWarmupTable = () => {
+  if (!advTableBody) return;
+  const dict = getDictionary();
+
+  if (!advWarmupState) {
+    advTableBody.innerHTML = `
+      <tr>
+        <td colspan="4" class="placeholder">${dict.advPlaceholder}</td>
+      </tr>
+    `.trim();
+    return;
+  }
+
+  const { weightKg, reps, lift } = advWarmupState;
+  const advWeightHeaderLabel = `${dict.advWeightHeader || "Weight"} (${UNIT_CONFIG[currentUnit].label})`;
+
+  // Scientific 5-Phase Logic
+  const sets = [
+    { percent: 0, reps: "10-15", purposeKey: "jointPrep" }, // Bar only (handled below)
+    { percent: 45, reps: Math.min(reps + 2, 8), purposeKey: "activation" },
+    { percent: 65, reps: Math.min(reps, 5), purposeKey: "skill" },
+    { percent: 80, reps: Math.ceil(reps / 2), purposeKey: "acclimatization" },
+    { percent: 90, reps: 1, purposeKey: "potentiation" },
+  ];
+
+  const rows = sets.map((set, index) => {
+    let setWeightKg = weightKg * (set.percent / 100);
+    let weightLabel = formatWeightForDisplay(setWeightKg);
+    let percentLabel = `${set.percent}%`;
+
+    // Handle Empty Bar / Very Light
+    if (set.percent === 0) {
+      setWeightKg = 20; // Standard bar
+      weightLabel = "Bar / Light";
+      percentLabel = "-";
+    }
+
+    const purpose = dict.advPurposes[set.purposeKey];
+    const cue = dict.advCues[lift][set.purposeKey];
+
+    return `
+      <tr>
+        <td data-label="${dict.advStageHeader}">${dict.advSetLabel} ${index + 1}</td>
+        <td data-label="${dict.advPurposeHeader}">${purpose}</td>
+        <td data-label="${dict.advPercentHeader}">${percentLabel}</td>
+        <td data-label="${advWeightHeaderLabel}">${weightLabel}</td>
+        <td data-label="${dict.advRepsHeader}">${set.reps}</td>
+        <td data-label="${dict.advNotesHeader}" class="adv-note">${cue}</td>
+      </tr>
+    `.trim();
+  });
+
+  advTableBody.innerHTML = rows.join("");
+};
+
 const calculateE1rmFromRir = (weightKg, reps, rir) => {
   const repsToFailure = reps + rir;
   return weightKg * (1 + repsToFailure / 30);
@@ -761,6 +1016,17 @@ const applyLocale = () => {
   textElements.warmupStageHeader.textContent = dict.warmupStageHeader;
   textElements.warmupPercentHeader.textContent = dict.warmupPercentHeader;
   textElements.warmupRepsHeader.textContent = dict.warmupRepsHeader;
+  textElements.advWarmupTitle.textContent = dict.advWarmupTitle;
+  textElements.advWarmupDescription.textContent = dict.advWarmupDescription;
+  textElements.advLiftLabel.textContent = dict.advLiftLabel;
+  textElements.advWeightLabel.textContent = dict.advWeightLabel;
+  textElements.advRepsLabel.textContent = dict.advRepsLabel;
+  textElements.advBuildButton.textContent = dict.advBuildButton;
+  textElements.advStageHeader.textContent = dict.advStageHeader;
+  textElements.advPurposeHeader.textContent = dict.advPurposeHeader;
+  textElements.advPercentHeader.textContent = dict.advPercentHeader;
+  textElements.advRepsHeader.textContent = dict.advRepsHeader;
+  textElements.advNotesHeader.textContent = dict.advNotesHeader;
 
   updateLanguageOptions(dict);
   updateWarmupTemplateOptions(dict);
@@ -835,6 +1101,9 @@ const handleUnitChange = (nextUnit) => {
   }
   if (rirLastWeightInput) {
     convertInputValue(rirLastWeightInput, previousUnit, nextUnit);
+  }
+  if (advWeightInput) {
+    convertInputValue(advWeightInput, previousUnit, nextUnit);
   }
   currentUnit = nextUnit;
   setActiveToggle(unitToggleButtons, "unit", currentUnit);
@@ -1183,6 +1452,46 @@ document.addEventListener("change", (event) => {
     setError(field);
   }
 });
+
+if (advWarmupForm) {
+  advWarmupForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const weightValue = Number(advWeightInput.value);
+    const repsValue = Number(advRepsInput.value);
+    const liftValue = advLiftSelect.value;
+
+    let hasError = false;
+
+    if (!Number.isFinite(weightValue) || weightValue <= 0) {
+      hasError = true;
+      setError(advWeightInput, "invalidWeight");
+    } else {
+      setError(advWeightInput);
+    }
+
+    if (!Number.isFinite(repsValue) || repsValue < 1 || repsValue > 50) {
+      hasError = true;
+      setError(advRepsInput, "invalidReps");
+    } else {
+      setError(advRepsInput);
+    }
+
+    if (hasError) {
+      return;
+    }
+
+    const weightKg = toKg(weightValue, currentUnit);
+
+    advWarmupState = {
+      weightKg,
+      reps: repsValue,
+      lift: liftValue,
+    };
+
+    renderAdvWarmupTable();
+  });
+}
 
 const init = () => {
   setActiveToggle(unitToggleButtons, "unit", currentUnit);
