@@ -237,11 +237,18 @@ const COPY = {
       potentiation: "Potentiation",
     },
     advCues: {
-      squat: {
+      squatHighBar: {
         jointPrep: "Pause at bottom, check stance",
         activation: "Explosive concentric",
-        skill: "Perfect technique, fast bar",
+        skill: "Vertical torso, knees forward",
         acclimatization: "Brace core hard",
+        potentiation: "Walkout only or heavy single",
+      },
+      squatLowBar: {
+        jointPrep: "Pause at bottom, check stance",
+        activation: "Explosive concentric",
+        skill: "Hip drive, back angle",
+        acclimatization: "Master the shelf",
         potentiation: "Walkout only or heavy single",
       },
       bench: {
@@ -251,11 +258,18 @@ const COPY = {
         acclimatization: "Settle scapula",
         potentiation: "Unrack and hold",
       },
-      deadlift: {
+      deadliftConv: {
         jointPrep: "Hinge pattern focus",
         activation: "Engage lats",
         skill: "Pull slack out",
         acclimatization: "Push floor away",
+        potentiation: "Heavy single pull",
+      },
+      deadliftSumo: {
+        jointPrep: "Open hips, patience",
+        activation: "Engage lats",
+        skill: "Wedge in tight",
+        acclimatization: "Spread the floor",
         potentiation: "Heavy single pull",
       },
       ohp: {
@@ -400,11 +414,18 @@ const COPY = {
       potentiation: "Potansiyelizasyon",
     },
     advCues: {
-      squat: {
+      squatHighBar: {
         jointPrep: "Dipte bekle, duruşunu kontrol et",
         activation: "Patlayıcı kalkış",
-        skill: "Mükemmel teknik, hızlı bar",
-        acclimatization: "Merkez bölgeyi (core) kilitle",
+        skill: "Dik gövde, dizler ileri",
+        acclimatization: "Merkez bölgeyi kilitle",
+        potentiation: "Sadece walkout veya ağır tek",
+      },
+      squatLowBar: {
+        jointPrep: "Dipte bekle, duruşunu kontrol et",
+        activation: "Patlayıcı kalkış",
+        skill: "Kalça sürüşü, sırt açısı",
+        acclimatization: "Barı sırtına göm",
         potentiation: "Sadece walkout veya ağır tek",
       },
       bench: {
@@ -414,11 +435,18 @@ const COPY = {
         acclimatization: "Kürek kemiklerini yerleştir",
         potentiation: "Unrack yap ve bekle",
       },
-      deadlift: {
+      deadliftConv: {
         jointPrep: "Kalça menteşesi (hinge) odaklı",
         activation: "Latları devreye sok",
         skill: "Boşluğu al (Slack pull)",
         acclimatization: "Yeri it",
+        potentiation: "Ağır tek çekiş",
+      },
+      deadliftSumo: {
+        jointPrep: "Kalçaları aç, sabırlı ol",
+        activation: "Latları devreye sok",
+        skill: "İyice sıkış (Wedge)",
+        acclimatization: "Yeri ikiye ayır",
         potentiation: "Ağır tek çekiş",
       },
       ohp: {
@@ -562,11 +590,18 @@ const COPY = {
       potentiation: "Потенциация",
     },
     advCues: {
-      squat: {
+      squatHighBar: {
         jointPrep: "Пауза внизу, проверка стойки",
         activation: "Взрывной подъем",
-        skill: "Идеальная техника, быстрая штанга",
+        skill: "Вертикальный корпус, колени вперед",
         acclimatization: "Жесткий кор",
+        potentiation: "Только отход или тяжелый сингл",
+      },
+      squatLowBar: {
+        jointPrep: "Пауза внизу, проверка стойки",
+        activation: "Взрывной подъем",
+        skill: "Движение тазом, угол спины",
+        acclimatization: "Жесткая полка на спине",
         potentiation: "Только отход или тяжелый сингл",
       },
       bench: {
@@ -576,11 +611,18 @@ const COPY = {
         acclimatization: "Сведи лопатки",
         potentiation: "Съем и удержание",
       },
-      deadlift: {
+      deadliftConv: {
         jointPrep: "Фокус на тазобедренном суставе",
         activation: "Включи широчайшие",
         skill: "Выбери люфт грифа",
         acclimatization: "Толкай пол",
+        potentiation: "Тяжелая тяга",
+      },
+      deadliftSumo: {
+        jointPrep: "Раскрой таз, терпение",
+        activation: "Включи широчайшие",
+        skill: "Вклинивайся жестко",
+        acclimatization: "Разрывай пол",
         potentiation: "Тяжелая тяга",
       },
       ohp: {
@@ -864,13 +906,29 @@ const renderAdvWarmupTable = () => {
   const advWeightHeaderLabel = `${dict.advWeightHeader || "Weight"} (${UNIT_CONFIG[currentUnit].label})`;
 
   // Scientific 5-Phase Logic
-  const sets = [
-    { percent: 0, reps: "10-15", purposeKey: "jointPrep" }, // Bar only (handled below)
-    { percent: 45, reps: Math.min(reps + 2, 8), purposeKey: "activation" },
-    { percent: 65, reps: Math.min(reps, 5), purposeKey: "skill" },
-    { percent: 80, reps: Math.ceil(reps / 2), purposeKey: "acclimatization" },
-    { percent: 90, reps: 1, purposeKey: "potentiation" },
-  ];
+  let sets;
+
+  if (reps < 6) {
+    // Strength / Power Strategy (1-5 reps)
+    // Focus: Priming CNS, low fatigue, ramping up intensity
+    sets = [
+      { percent: 0, reps: "10-15", purposeKey: "jointPrep" },
+      { percent: 45, reps: 5, purposeKey: "activation" },
+      { percent: 65, reps: 3, purposeKey: "skill" },
+      { percent: 80, reps: 2, purposeKey: "acclimatization" },
+      { percent: 90, reps: 1, purposeKey: "potentiation" },
+    ];
+  } else {
+    // Hypertrophy / Volume Strategy (6+ reps)
+    // Focus: Volume accumulation, blood flow, saving energy for high rep working set
+    sets = [
+      { percent: 0, reps: "10-15", purposeKey: "jointPrep" },
+      { percent: 45, reps: 8, purposeKey: "activation" },
+      { percent: 65, reps: 5, purposeKey: "skill" },
+      { percent: 80, reps: 3, purposeKey: "acclimatization" }, // Capped at 3 to avoid pre-fatigue
+      { percent: 90, reps: 1, purposeKey: "potentiation" },
+    ];
+  }
 
   const rows = sets.map((set, index) => {
     let setWeightKg = weightKg * (set.percent / 100);
