@@ -244,6 +244,7 @@ label {
 
 input,
 select {
+    width: 100%;
     background: var(--input-bg);
     border: 1px solid var(--card-border);
     color: var(--text-main);
