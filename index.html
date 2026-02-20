@@ -2,534 +2,293 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>PeakLoad | Powerlifting Calculator & Warm-Up Planner</title>
-  <meta name="description"
-    content="PeakLoad is a powerlifting calculator that estimates your 1RM, builds training percentage tables, and plans warm-up sets in your preferred units and language." />
-  <meta name="keywords"
-    content="powerlifting calculator, 1RM calculator, warm-up planner, strength training, percentage table, kg to lb converter" />
-  <meta name="author" content="PeakLoad" />
-  <link rel="canonical" href="https://peakload.netlify.app/" />
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content="PeakLoad | Powerlifting Calculator & Warm-Up Planner" />
-  <meta property="og:description"
-    content="Estimate your one-rep max, build percentage charts, and map your warm-up sets with PeakLoad. Supports kg/lb and English, Turkish, and Russian." />
-  <meta property="og:url" content="https://peakload.netlify.app/" />
-  <meta property="og:image" content="https://peakload.netlify.app/assets/social-preview.png" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="PeakLoad | Powerlifting Calculator & Warm-Up Planner" />
-  <meta name="twitter:description"
-    content="A modern strength training companion for lifters: 1RM estimates, percentage tables, and warm-up planning." />
-  <meta name="twitter:image" content="https://peakload.netlify.app/assets/social-preview.png" />
-  <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />
-  <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "WebApplication",
-        "name": "PeakLoad",
-        "url": "https://peakload.netlify.app/",
-        "description": "A powerlifting training companion featuring 1RM estimators, percentage tables, and warm-up planning.",
-        "applicationCategory": "FitnessApplication",
-        "operatingSystem": "Web",
-        "inLanguage": ["en", "tr", "ru"],
-        "offers": {
-          "@type": "Offer",
-          "price": "0",
-          "priceCurrency": "USD"
-        }
-      }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PeakLoad | Powerlifting Calculator & Warm-Up Planner</title>
+    <meta name="description"
+        content="Powerlifting Calculator & Warm-Up Planner. 1RM Estimator, Percentage Chart, Warm-Up Planner, and RIR Translator.">
+    <meta name="theme-color" content="#dc2626">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://peakload.netlify.app/">
+    <meta property="og:title" content="PeakLoad | Powerlifting Calculator & Warm-Up Planner">
+    <meta property="og:description"
+        content="Powerlifting Calculator & Warm-Up Planner. 1RM Estimator, Percentage Chart, Warm-Up Planner, and RIR Translator.">
+    <meta property="og:image" content="assets/icons/icon-512.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://peakload.netlify.app/">
+    <meta property="twitter:title" content="PeakLoad | Powerlifting Calculator & Warm-Up Planner">
+    <meta property="twitter:description"
+        content="Powerlifting Calculator & Warm-Up Planner. 1RM Estimator, Percentage Chart, Warm-Up Planner, and RIR Translator.">
+    <meta property="twitter:image" content="assets/icons/icon-512.png">
+
+    <!-- PWA -->
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
+    <link rel="canonical" href="https://peakload.netlify.app/" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@400;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Styles (Cache busted for development) -->
+    <script>
+        document.write('<link rel="stylesheet" href="css/style.css?v=' + new Date().getTime() + '">');
     </script>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
 </head>
 
 <body>
-  <a class="skip-link" href="#main-content">Skip to main content</a>
-  <div class="background-accent" aria-hidden="true"></div>
-  <header class="page-header">
-    <nav class="top-bar" aria-label="Primary">
-      <a class="brand" href="#main-content">
-        <span class="brand-mark">PL</span>
-        <span class="brand-text">
-          <span class="brand-title">PeakLoad</span>
-          <span class="brand-subtitle" id="tagline" data-i18n="tagline">
-            Your modern command center for one-rep maxes and training percentages.
-          </span>
-        </span>
-      </a>
-      <div class="top-controls">
-        <div class="toggle-group" data-toggle="units">
-          <span class="toggle-label" id="units-label" data-i18n="unitsLabel">Units</span>
-          <div class="toggle-buttons" role="group" aria-label="Units">
-            <button type="button" class="toggle-button is-active" data-unit="kg" aria-pressed="true">
-              kg
-            </button>
-            <button type="button" class="toggle-button" data-unit="lb" aria-pressed="false">
-              lb
-            </button>
-          </div>
-        </div>
-        <div class="toggle-group" data-toggle="language">
-          <label class="toggle-label" id="language-label" for="language-select" data-i18n="languageLabel">
-            Language
-          </label>
-          <div class="toggle-select">
-            <select id="language-select" name="language" aria-describedby="language-label">
-              <option value="en">English</option>
-              <option value="tr">Türkçe</option>
-              <option value="ru">Русский</option>
-            </select>
-          </div>
-        </div>
-      </div>
-    </nav>
-
-    <section class="hero" aria-labelledby="hero-title">
-      <div class="hero-content">
-        <h1 id="hero-title" data-i18n="heroHeading">Plan Every Session With Confidence</h1>
-        <p class="hero-tagline" id="hero-tagline" data-i18n="heroTagline">
-          Estimate your 1RM, map working sets, and walk onto the platform with a
-          purpose-built warm-up sequence.
-        </p>
-        <div class="hero-actions">
-          <a class="primary-button hero-button" id="hero-primary-cta" data-i18n="heroPrimaryCta"
-            href="#one-rm-estimator">
-            Start Calculating
-          </a>
-          <a class="secondary-button hero-button" id="hero-percent-cta" data-i18n="heroPercentCta"
-            href="#percentage-chart">
-            Build Percentages
-          </a>
-          <a class="secondary-button hero-button" id="hero-secondary-cta" data-i18n="heroSecondaryCta"
-            href="#warmup-planner">
-            Plan Warm-Up
-          </a>
-          <a class="secondary-button hero-button" id="hero-adv-warmup-cta" data-i18n="heroAdvWarmupCta"
-            href="#advanced-warmup">
-            Advanced Warm Up
-          </a>
-          <a class="secondary-button hero-button" id="hero-rir-cta" data-i18n="heroRirCta" href="#rir-calculator">
-            Translate RIR
-          </a>
-        </div>
-        <ul class="hero-highlights">
-          <li id="hero-highlight-1" data-i18n="heroHighlightOne">
-            Trusted Epley, Brzycki, and Lombardi estimators
-          </li>
-          <li id="hero-highlight-2" data-i18n="heroHighlightTwo">
-            Auto-built warm-up templates for heavy singles or volume days
-          </li>
-          <li id="hero-highlight-3" data-i18n="heroHighlightThree">
-            Instant unit and language toggles for global lifters
-          </li>
-          <li id="hero-highlight-4" data-i18n="heroHighlightFour">
-            RIR-based projections for autoregulated training
-          </li>
-        </ul>
-      </div>
-      <div class="hero-card" aria-label="Quick reference">
-        <h2 id="hero-card-title" data-i18n="heroCardTitle">Session Snapshot</h2>
-        <dl>
-          <div>
-            <dt id="hero-snapshot-inputs-title" data-i18n="heroSnapshotInputsTitle">1RM Inputs</dt>
-            <dd id="hero-snapshot-inputs-desc" data-i18n="heroSnapshotInputsDesc">
-              Weight, reps, and formula of your choice
-            </dd>
-          </div>
-          <div>
-            <dt id="hero-snapshot-sets-title" data-i18n="heroSnapshotSetsTitle">Working Sets</dt>
-            <dd id="hero-snapshot-sets-desc" data-i18n="heroSnapshotSetsDesc">
-              Custom percent range with flexible increments
-            </dd>
-          </div>
-          <div>
-            <dt id="hero-snapshot-warmup-title" data-i18n="heroSnapshotWarmupTitle">
-              Warm-Up Flow
-            </dt>
-            <dd id="hero-snapshot-warmup-desc" data-i18n="heroSnapshotWarmupDesc">
-              Progressive sets tailored to your top weight
-            </dd>
-          </div>
-          <div>
-            <dt id="hero-snapshot-rir-title" data-i18n="heroSnapshotRirTitle">RIR Translator</dt>
-            <dd id="hero-snapshot-rir-desc" data-i18n="heroSnapshotRirDesc">
-              Convert last-set data into target weights for the next effort
-            </dd>
-          </div>
-        </dl>
-      </div>
-    </section>
-  </header>
-
-  <main id="main-content" class="content-shell">
-    <div class="content-grid">
-      <div class="cards-column">
-        <section class="card" id="one-rm-estimator" aria-labelledby="one-rm-title">
-          <header class="card-header">
-            <h2 id="one-rm-title" data-i18n="oneRmTitle">1RM Estimator</h2>
-            <p id="one-rm-description" data-i18n="oneRmDescription">
-              Estimate your one-rep max using common formulas.
-            </p>
-          </header>
-          <form id="one-rm-form" class="card-body" novalidate>
-            <div class="field">
-              <label for="weight-input" id="weight-label" data-i18n="weightLabel">Weight Lifted</label>
-              <div class="input-group">
-                <input id="weight-input" name="weight" type="number" min="0" step="0.5" required />
-                <span class="suffix" data-unit-suffix>kg</span>
-              </div>
-              <small id="weight-help" data-i18n="weightHelp">Enter the heaviest successful set.</small>
+    <div class="app-container">
+        <header class="main-header">
+            <div class="logo">
+                <h1>PeakLoad</h1>
+                <span class="subtitle" data-i18n="subtitle">Powerlifting Command Center</span>
             </div>
-
-            <div class="field">
-              <label for="reps-input" id="reps-label" data-i18n="repsLabel">Repetitions</label>
-              <input id="reps-input" name="reps" type="number" min="1" max="20" required />
-            </div>
-
-            <div class="field">
-              <label for="formula-select" id="formula-label" data-i18n="formulaLabel">Formula</label>
-              <select id="formula-select" name="formula">
-                <option value="epley">Epley</option>
-                <option value="brzycki">Brzycki</option>
-                <option value="lombardi">Lombardi</option>
-              </select>
-            </div>
-
-            <button type="submit" id="calculate-button" class="primary-button" data-i18n="calculateButton">
-              Calculate 1RM
-            </button>
-
-            <output id="one-rm-output" class="result" for="weight-input reps-input formula-select" role="status"
-              aria-live="polite"></output>
-          </form>
-        </section>
-
-        <section class="card" id="percentage-chart" aria-labelledby="percent-title">
-          <header class="card-header">
-            <h2 id="percent-title" data-i18n="percentTitle">Percentage Chart</h2>
-            <p id="percent-description" data-i18n="percentDescription">
-              Generate working sets from your max or a target weight.
-            </p>
-          </header>
-          <form id="percent-form" class="card-body" novalidate>
-            <div class="field">
-              <label for="base-weight-input" id="base-weight-label" data-i18n="baseWeightLabel">
-                Base Weight
-              </label>
-              <div class="input-group">
-                <input id="base-weight-input" name="baseWeight" type="number" min="0" step="0.5" required />
-                <span class="suffix" data-unit-suffix>kg</span>
-              </div>
-              <small id="base-weight-help" data-i18n="baseWeightHelp">
-                Use your estimated 1RM or any anchor weight.
-              </small>
-            </div>
-
-            <div class="field slider-field">
-              <label for="increment-input" id="increment-label" data-i18n="incrementLabel">
-                Increment (%)
-              </label>
-              <input id="increment-input" name="increment" type="range" min="1" max="10" step="1" value="5" />
-              <div class="slider-value">
-                <span id="increment-display">5%</span>
-              </div>
-            </div>
-
-            <div class="field">
-              <label for="start-percent-input" id="range-label" data-i18n="rangeLabel">Range (%)</label>
-              <div class="range-fields">
-                <div>
-                  <input id="start-percent-input" name="startPercent" type="number" min="40" max="100" value="50"
-                    required />
-                  <span class="suffix" id="start-suffix" data-i18n="startSuffix">start</span>
+            <div class="settings-bar">
+                <div class="unit-toggle">
+                    <button id="btn-kg" class="unit-btn active">KG</button>
+                    <button id="btn-lb" class="unit-btn">LB</button>
                 </div>
-                <div>
-                  <input id="end-percent-input" name="endPercent" type="number" min="50" max="120" value="100"
-                    required />
-                  <span class="suffix" id="end-suffix" data-i18n="endSuffix">end</span>
+                <select id="lang-select" class="lang-select">
+                    <option value="en">English</option>
+                    <option value="tr">Türkçe</option>
+                    <option value="ru">Русский</option>
+                </select>
+                <a href="./legacy/index.html" class="legacy-btn">Legacy</a>
+            </div>
+        </header>
+
+        <nav class="main-nav">
+            <button class="nav-btn active" data-target="section-1rm" data-i18n="nav_1rm">1RM Estimator</button>
+            <button class="nav-btn" data-target="section-percentage" data-i18n="nav_percentage">Percentage
+                Chart</button>
+            <button class="nav-btn" data-target="section-warmup" data-i18n="nav_warmup">Warm-Up</button>
+            <button class="nav-btn" data-target="section-adv-warmup" data-i18n="nav_adv_warmup">Advanced Warm
+                Up</button>
+            <button class="nav-btn" data-target="section-rir" data-i18n="nav_rir">RIR Translator</button>
+        </nav>
+
+        <main class="content-area">
+            <!-- 1RM Estimator Section -->
+            <section id="section-1rm" class="tool-section active">
+                <h2 data-i18n="title_1rm">1RM Estimator</h2>
+                <div class="input-group">
+                    <label for="weight-1rm" data-i18n="label_weight">Weight Lifted</label>
+                    <input type="number" id="weight-1rm" placeholder="e.g. 140">
                 </div>
-              </div>
-              <small id="range-help" data-i18n="rangeHelp">
-                Common working sets fall between 60% and 90%.
-              </small>
-            </div>
+                <div class="input-group">
+                    <label for="reps-1rm" data-i18n="label_reps">Reps</label>
+                    <input type="number" id="reps-1rm" placeholder="e.g. 5">
+                </div>
+                <div class="input-group">
+                    <label for="formula-1rm" data-i18n="label_formula">Formula</label>
+                    <select id="formula-1rm">
+                        <option value="epley">Epley</option>
+                        <option value="brzycki">Brzycki</option>
+                        <option value="lombardi">Lombardi</option>
+                    </select>
+                </div>
+                <button id="btn-calc-1rm" class="action-btn" data-i18n="btn_calculate">Calculate</button>
 
-            <button type="submit" id="build-button" class="primary-button" data-i18n="buildButton">
-              Build Table
-            </button>
-          </form>
+                <div class="result-card hidden" id="result-1rm">
+                    <h3 data-i18n="result_estimated_1rm">Estimated 1RM</h3>
+                    <div class="big-number"><span id="val-1rm">0</span> <span class="unit-display">kg</span></div>
+                </div>
+            </section>
 
-          <div class="card-footer">
-            <div class="table-wrapper">
-              <table id="percent-table">
-                <thead>
-                  <tr>
-                    <th id="table-percent-header" data-i18n="tablePercentHeader">Percentage</th>
-                    <th id="table-weight-header">Weight (kg)</th>
-                  </tr>
-                </thead>
-                <tbody aria-live="polite">
-                  <tr>
-                    <td colspan="2" class="placeholder" id="table-placeholder" data-i18n="tablePlaceholder">
-                      Enter a base weight to see your working sets.
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </section>
+            <!-- Percentage Chart Section -->
+            <section id="section-percentage" class="tool-section">
+                <h2 data-i18n="title_percentage">Percentage Chart</h2>
+                <div class="input-group">
+                    <label for="base-weight-pct" data-i18n="label_base_weight">Base Weight (1RM)</label>
+                    <input type="number" id="base-weight-pct" placeholder="e.g. 200">
+                </div>
+                <div class="row">
+                    <div class="input-group half">
+                        <label for="increment-pct" data-i18n="label_increment">Increment (%)</label>
+                        <input type="number" id="increment-pct" value="5" step="1">
+                    </div>
+                    <div class="input-group half">
+                        <label for="range-min-pct" data-i18n="label_range">Range (%)</label>
+                        <div class="range-inputs">
+                            <input type="number" id="range-min-pct" value="60" placeholder="Min">
+                            <span>-</span>
+                            <input type="number" id="range-max-pct" value="90" placeholder="Max">
+                        </div>
+                    </div>
+                </div>
+                <button id="btn-gen-pct" class="action-btn" data-i18n="btn_generate">Generate Table</button>
 
-        <section class="card" id="warmup-planner" aria-labelledby="warmup-title">
-          <header class="card-header">
-            <h2 id="warmup-title" data-i18n="warmupTitle">Warm-Up Planner</h2>
-            <p id="warmup-description" data-i18n="warmupDescription">
-              Map out progressive sets before your heavy attempts.
-            </p>
-          </header>
-          <form id="warmup-form" class="card-body" novalidate>
-            <div class="field">
-              <label for="warmup-top-weight-input" id="warmup-top-weight-label" data-i18n="warmupTopWeightLabel">
-                Top Set Weight
-              </label>
-              <div class="input-group">
-                <input id="warmup-top-weight-input" name="topWeight" type="number" min="0" step="0.5" required />
-                <span class="suffix" data-unit-suffix>kg</span>
-              </div>
-              <small id="warmup-top-weight-help" data-i18n="warmupTopWeightHelp">
-                Usually today's heaviest working weight or second-to-last single.
-              </small>
-            </div>
+                <div class="result-card hidden" id="result-pct">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>%</th>
+                                <th data-i18n="col_weight">Weight</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body-pct">
+                            <!-- Rows generated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
 
-            <div class="field">
-              <label for="warmup-template-select" id="warmup-template-label" data-i18n="warmupTemplateLabel">
-                Template
-              </label>
-              <select id="warmup-template-select" name="template">
-                <option value="classic">Classic Ramp</option>
-                <option value="topSingle">Heavy Single Prep</option>
-                <option value="volume">Volume Builder</option>
-              </select>
-              <small id="warmup-template-help" data-i18n="warmupTemplateHelp">
-                Pick the pattern that fits the day's focus. You can tweak weights afterward.
-              </small>
-            </div>
+            <!-- Warm-Up Planner Section -->
+            <section id="section-warmup" class="tool-section">
+                <h2 data-i18n="title_warmup">Warm-Up Planner</h2>
+                <div class="input-group">
+                    <label for="top-set-warmup" data-i18n="label_top_set">Top Set Weight</label>
+                    <input type="number" id="top-set-warmup" placeholder="e.g. 180">
+                </div>
+                <div class="input-group">
+                    <label for="template-warmup" data-i18n="label_template">Template</label>
+                    <select id="template-warmup">
+                        <option value="classic" data-i18n="opt_classic">Classic Ramp</option>
+                        <option value="heavy" data-i18n="opt_heavy">Heavy Single Prep</option>
+                        <option value="volume" data-i18n="opt_volume">Volume Builder</option>
+                    </select>
+                </div>
+                <button id="btn-gen-warmup" class="action-btn" data-i18n="btn_build_warmup">Build Warm-Up</button>
 
-            <button type="submit" id="warmup-build-button" class="primary-button" data-i18n="warmupBuildButton">
-              Build Warm-Up
-            </button>
-          </form>
+                <div class="result-card hidden" id="result-warmup">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>%</th>
+                                <th data-i18n="col_weight">Weight</th>
+                                <th data-i18n="col_reps">Reps</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body-warmup">
+                            <!-- Rows generated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
 
-          <div class="card-footer">
-            <div class="table-wrapper">
-              <table id="warmup-table">
-                <thead>
-                  <tr>
-                    <th id="warmup-stage-header" data-i18n="warmupStageHeader">Set</th>
-                    <th id="warmup-percent-header" data-i18n="warmupPercentHeader">Percent</th>
-                    <th id="warmup-weight-header">Weight (kg)</th>
-                    <th id="warmup-reps-header" data-i18n="warmupRepsHeader">Reps</th>
-                  </tr>
-                </thead>
-                <tbody aria-live="polite">
-                  <tr>
-                    <td colspan="4" class="placeholder" id="warmup-placeholder" data-i18n="warmupPlaceholder">
-                      Set your top set to see suggested warm-up sets.
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </section>
+            <!-- Advanced Warm-Up Section -->
+            <section id="section-adv-warmup" class="tool-section">
+                <h2 data-i18n="title_adv_warmup">Advanced Warm Up</h2>
+                <div class="intro-text" data-i18n="desc_adv_warmup">Generate a specific warm-up plan based on your main
+                    set.</div>
 
-        <section class="card" id="advanced-warmup" aria-labelledby="adv-warmup-title">
-          <header class="card-header">
-            <h2 id="adv-warmup-title" data-i18n="advWarmupTitle">Advanced Warm Up</h2>
-            <p id="adv-warmup-description" data-i18n="advWarmupDescription">
-              Generate a specific warm-up plan based on your main set.
-            </p>
-          </header>
-          <form id="adv-warmup-form" class="card-body" novalidate>
-            <div class="field">
-              <label for="adv-lift-select" id="adv-lift-label" data-i18n="advLiftLabel">Lift</label>
-              <select id="adv-lift-select" name="lift">
-                <option value="squatHighBar">Squat (High Bar)</option>
-                <option value="squatLowBar">Squat (Low Bar)</option>
-                <option value="bench">Bench Press</option>
-                <option value="deadliftConv">Deadlift (Conventional)</option>
-                <option value="deadliftSumo">Deadlift (Sumo)</option>
-                <option value="ohp">Overhead Press</option>
-                <option value="other">Other</option>
-              </select>
-            </div>
+                <div class="input-group">
+                    <label for="adv-lift-select" data-i18n="label_adv_lift">Lift</label>
+                    <select id="adv-lift-select">
+                        <option value="squatHighBar">Squat (High Bar)</option>
+                        <option value="squatLowBar">Squat (Low Bar)</option>
+                        <option value="bench">Bench Press</option>
+                        <option value="deadliftConv">Deadlift (Conventional)</option>
+                        <option value="deadliftSumo">Deadlift (Sumo)</option>
+                        <option value="ohp">Overhead Press</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
 
-            <div class="field">
-              <label for="adv-weight-input" id="adv-weight-label" data-i18n="advWeightLabel">Main Set Weight</label>
-              <div class="input-group">
-                <input id="adv-weight-input" name="weight" type="number" min="0" step="0.5" required />
-                <span class="suffix" data-unit-suffix>kg</span>
-              </div>
-            </div>
+                <div class="row">
+                    <div class="input-group half">
+                        <label for="adv-weight-input" data-i18n="label_adv_weight">Main Set Weight</label>
+                        <input type="number" id="adv-weight-input" placeholder="e.g. 150">
+                    </div>
+                    <div class="input-group half">
+                        <label for="adv-reps-input" data-i18n="label_adv_reps">Main Set Reps</label>
+                        <input type="number" id="adv-reps-input" placeholder="e.g. 3">
+                    </div>
+                </div>
 
-            <div class="field">
-              <label for="adv-reps-input" id="adv-reps-label" data-i18n="advRepsLabel">Main Set Reps</label>
-              <input id="adv-reps-input" name="reps" type="number" min="1" max="50" required />
-            </div>
+                <button id="btn-gen-adv-warmup" class="action-btn" data-i18n="btn_build_adv_warmup">Generate
+                    Plan</button>
 
-            <button type="submit" id="adv-build-button" class="primary-button" data-i18n="advBuildButton">
-              Generate Plan
-            </button>
-          </form>
+                <div class="result-card hidden" id="result-adv-warmup">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Set</th>
+                                <th data-i18n="col_purpose">Purpose</th>
+                                <th>%</th>
+                                <th data-i18n="col_weight">Weight</th>
+                                <th data-i18n="col_reps">Reps</th>
+                                <th data-i18n="col_notes">Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body-adv-warmup">
+                            <!-- Rows generated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
 
-          <div class="card-footer">
-            <div class="table-wrapper">
-              <table id="adv-warmup-table">
-                <thead>
-                  <tr>
-                    <th id="adv-stage-header" data-i18n="advStageHeader">Set</th>
-                    <th id="adv-purpose-header" data-i18n="advPurposeHeader">Purpose</th>
-                    <th id="adv-percent-header" data-i18n="advPercentHeader">Percent</th>
-                    <th id="adv-weight-header">Weight (kg)</th>
-                    <th id="adv-reps-header" data-i18n="advRepsHeader">Reps</th>
-                    <th id="adv-notes-header" data-i18n="advNotesHeader">Notes</th>
-                  </tr>
-                </thead>
-                <tbody aria-live="polite">
-                  <tr>
-                    <td colspan="6" class="placeholder" id="adv-placeholder" data-i18n="advPlaceholder">
-                      Enter main set details to generate a plan.
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </section>
-      </div>
+            <!-- RIR Translator Section -->
+            <section id="section-rir" class="tool-section">
+                <h2 data-i18n="title_rir">RIR Translator</h2>
+                <div class="intro-text" data-i18n="desc_rir">Input your last set details to estimate 1RM and plan the
+                    next set.</div>
 
-      <aside class="support-panel" aria-labelledby="support-panel-title">
-        <h2 id="support-panel-title">Session Checklist</h2>
-        <ul class="support-list">
-          <li>Confirm unit and language preferences before entering numbers.</li>
-          <li>Use the 1RM estimate to prefill working sets and warm-up anchors.</li>
-          <li>Dial in percent ranges based on the day's goal (strength, power, volume).</li>
-          <li>Export results or screenshot tables for the gym floor.</li>
-        </ul>
+                <div class="row">
+                    <div class="input-group third">
+                        <label for="weight-rir" data-i18n="label_weight">Weight</label>
+                        <input type="number" id="weight-rir">
+                    </div>
+                    <div class="input-group third">
+                        <label for="reps-rir" data-i18n="label_reps">Reps</label>
+                        <input type="number" id="reps-rir">
+                    </div>
+                    <div class="input-group third">
+                        <label for="rir-rir" data-i18n="label_rir">RIR</label>
+                        <input type="number" id="rir-rir" placeholder="e.g. 2">
+                    </div>
+                </div>
 
-        <section class="faq" aria-labelledby="faq-title">
-          <h3 id="faq-title">Quick Tips</h3>
-          <details>
-            <summary>How accurate are the 1RM formulas?</summary>
-            <p>
-              Each formula excels at different rep ranges. Try a couple and choose the one that
-              best matches your historical bests.
-            </p>
-          </details>
-          <details>
-            <summary>Can I edit warm-up templates?</summary>
-            <p>
-              Select a template that matches the session focus (heavy single, ramp, or volume).
-              Adjust the final percentages if you want more or fewer sets.
-            </p>
-          </details>
-          <details>
-            <summary>Why cap percentages at 120%?</summary>
-            <p>
-              Keeping the range realistic prevents accidental entries that result in unusable
-              loads. You can still use the warm-up planner for supra-maximal work.
-            </p>
-          </details>
-        </section>
-      </aside>
+                <div class="divider"></div>
+                <h4 data-i18n="subtitle_next_set">Next Set Target</h4>
+
+                <div class="row">
+                    <div class="input-group half">
+                        <label for="target-reps-rir" data-i18n="label_target_reps">Target Reps</label>
+                        <input type="number" id="target-reps-rir" value="5">
+                    </div>
+                    <div class="input-group half">
+                        <label for="target-rir-rir" data-i18n="label_target_rir">Target RIR</label>
+                        <input type="number" id="target-rir-rir" value="1">
+                    </div>
+                </div>
+
+                <button id="btn-calc-rir" class="action-btn" data-i18n="btn_calculate">Calculate</button>
+
+                <div class="result-card hidden" id="result-rir">
+                    <div class="rir-results">
+                        <div class="rir-item">
+                            <span class="label" data-i18n="result_est_1rm">Est. 1RM</span>
+                            <span class="value"><span id="val-rir-1rm">0</span> <span
+                                    class="unit-display">kg</span></span>
+                        </div>
+                        <div class="rir-item highlight">
+                            <span class="label" data-i18n="result_next_weight">Next Weight</span>
+                            <span class="value"><span id="val-rir-next">0</span> <span
+                                    class="unit-display">kg</span></span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="main-footer">
+            <p>&copy; 2025 PeakLoad. <span data-i18n="footer_text">Built for strength.</span></p>
+        </footer>
     </div>
 
-    <section class="card rir-card" id="rir-calculator" aria-labelledby="rir-title">
-      <header class="card-header">
-        <h2 id="rir-title" data-i18n="rirTitle">RIR Translator</h2>
-        <p id="rir-description" data-i18n="rirDescription">
-          Convert last set data into estimated 1RM and target weights using Reps In Reserve.
-        </p>
-      </header>
-
-      <div class="rir-body card-body">
-        <div class="rir-last-set">
-          <h3 id="rir-last-title" data-i18n="rirLastTitle">Last Set</h3>
-          <form id="rir-last-form" class="rir-form" novalidate>
-            <div class="field">
-              <label for="rir-last-weight" id="rir-last-weight-label" data-i18n="rirLastWeightLabel">
-                Weight
-              </label>
-              <div class="input-group">
-                <input id="rir-last-weight" name="weight" type="number" min="0" step="0.5" required />
-                <span class="suffix" data-unit-suffix>kg</span>
-              </div>
-            </div>
-            <div class="field">
-              <label for="rir-last-reps" id="rir-last-reps-label" data-i18n="rirLastRepsLabel">
-                Reps
-              </label>
-              <input id="rir-last-reps" name="reps" type="number" min="1" max="30" required />
-            </div>
-            <div class="field">
-              <label for="rir-last-rir" id="rir-last-rir-label" data-i18n="rirLastRirLabel">
-                RIR
-              </label>
-              <input id="rir-last-rir" name="rir" type="number" min="0" max="10" required />
-            </div>
-            <button type="submit" class="secondary-button rir-button" data-i18n="rirLastSubmit">
-              Translate Set
-            </button>
-          </form>
-          <output id="rir-last-output" class="result rir-result" role="status" aria-live="polite"></output>
-        </div>
-
-        <div class="rir-next-set">
-          <h3 id="rir-next-title" data-i18n="rirNextTitle">Next Set</h3>
-          <form id="rir-next-form" class="rir-form" novalidate>
-            <div class="field">
-              <label for="rir-next-reps" id="rir-next-reps-label" data-i18n="rirNextRepsLabel">
-                Target Reps
-              </label>
-              <input id="rir-next-reps" name="reps" type="number" min="1" max="30" required />
-            </div>
-            <div class="field">
-              <label for="rir-next-rir" id="rir-next-rir-label" data-i18n="rirNextRirLabel">
-                Target RIR
-              </label>
-              <input id="rir-next-rir" name="rir" type="number" min="0" max="10" required />
-            </div>
-            <button type="submit" class="primary-button rir-button" data-i18n="rirNextSubmit">
-              Calculate Weight
-            </button>
-          </form>
-          <output id="rir-next-output" class="result rir-result" role="status" aria-live="polite"></output>
-        </div>
-
-        <p class="rir-note" id="rir-note" data-i18n="rirNote">
-          RPE (Rate of Perceived Exertion) and RIR (Reps In Reserve) are autoregulation tools that
-          help you match training stress to daily readiness.
-        </p>
-      </div>
-    </section>
-  </main>
-
-  <footer class="page-footer">
-    <p id="footer-text" data-i18n="footerText">
-      PeakLoad keeps your training precise, intentional, and progressive.
-    </p>
-    <p class="footer-meta">
-      <span id="footer-rights" data-i18n="footerRights">All rights reserved</span>
-      <a href="https://www.instagram.com/unsettled.power/" target="_blank" rel="noopener">
-        Unsettled Power
-      </a>
-    </p>
-  </footer>
-
-  <script src="script.js"></script>
+    <script defer src="js/i18n.js"></script>
+    <script defer src="js/calculator.js"></script>
+    <script defer src="js/main.js"></script>
 </body>
 
 </html>
