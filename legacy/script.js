@@ -109,7 +109,9 @@ const textElements = {
   advPurposeHeader: document.getElementById("adv-purpose-header"),
   advPercentHeader: document.getElementById("adv-percent-header"),
   advRepsHeader: document.getElementById("adv-reps-header"),
+  advRepsHeader: document.getElementById("adv-reps-header"),
   advNotesHeader: document.getElementById("adv-notes-header"),
+  modernThemeCta: document.getElementById("modern-theme-cta"),
 };
 
 const COPY = {
@@ -123,6 +125,7 @@ const COPY = {
     heroPercentCta: "Build Percentages",
     heroAdvWarmupCta: "Advanced Warm Up",
     heroRirCta: "Translate RIR",
+    modernThemeCta: "Modern Theme",
 
     heroHighlightOne: "Trusted Epley, Brzycki, and Lombardi estimators",
     heroHighlightTwo: "Auto-built warm-up templates for heavy singles or volume days",
@@ -299,6 +302,7 @@ const COPY = {
     heroPercentCta: "Yüzde Tablosu Oluştur",
     heroAdvWarmupCta: "Gelişmiş Isınma",
     heroRirCta: "RIR Çevir",
+    modernThemeCta: "Yeni Versiyon",
 
     heroHighlightOne: "Epley, Brzycki ve Lombardi formüllerine güvenin",
     heroHighlightTwo: "Ağır tekler veya hacim günleri için hazır ısınma şablonları",
@@ -476,6 +480,7 @@ const COPY = {
     heroPercentCta: "Построить проценты",
     heroAdvWarmupCta: "Продвинутая разминка",
     heroRirCta: "Перевести RIR",
+    modernThemeCta: "Новая Версия",
 
     heroHighlightOne: "Надёжные формулы Эпли, Бжицкого и Ломбарди",
     heroHighlightTwo: "Готовые шаблоны разминки для тяжёлых одиночных и объёмных дней",
@@ -1090,6 +1095,7 @@ const applyLocale = () => {
   textElements.advPercentHeader.textContent = dict.advPercentHeader;
   textElements.advRepsHeader.textContent = dict.advRepsHeader;
   textElements.advNotesHeader.textContent = dict.advNotesHeader;
+  textElements.modernThemeCta.textContent = dict.modernThemeCta;
 
   updateLanguageOptions(dict);
   updateWarmupTemplateOptions(dict);

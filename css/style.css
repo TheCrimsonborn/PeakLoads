@@ -413,60 +413,64 @@ h4 {
 @media (max-width: 768px) {
     .main-header {
         flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
+        align-items: center;
+        text-align: center;
+        gap: 15px;
     }
 
     .settings-bar {
         width: 100%;
-        justify-content: space-between;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 10px;
     }
 
     .unit-btn,
-    .lang-select {
+    .lang-select,
+    .legacy-btn {
         min-height: 44px;
-        /* Touch target size */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .main-nav {
+        justify-content: flex-start;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none; /* Firefox */
+    }
+
+    .main-nav::-webkit-scrollbar {
+        display: none; /* Chrome, Safari */
+    }
+
+    .nav-btn {
+        flex: 0 0 auto;
     }
 }
 
 @media (max-width: 480px) {
     body {
-        padding: 15px;
-        padding-top: calc(15px + env(safe-area-inset-top));
-    }
-
-    .main-nav {
-        flex-wrap: wrap;
-        justify-content: center;
-        padding-bottom: 5px;
-        gap: 8px;
-    }
-
-    .nav-btn {
-        flex: 1 0 45%;
-        /* 2 per row */
-        min-width: auto;
         padding: 12px;
-        text-align: center;
+        padding-top: calc(12px + env(safe-area-inset-top));
     }
 
     .big-number {
-        font-size: 2.5rem;
+        font-size: 2.2rem;
     }
 
     .row {
         flex-direction: column;
-        gap: 10px;
+        gap: 12px;
     }
 
     .input-group {
-        margin-bottom: 10px;
+        margin-bottom: 12px;
     }
 
     input,
     select,
-    button {
-        min-height: 48px;
-        /* larger touch targets */
+    .action-btn {
+        min-height: 48px; /* larger touch targets */
     }
 }
