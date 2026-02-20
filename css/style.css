@@ -341,10 +341,27 @@ select:focus {
 }
 
 /* Tables */
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-top: 10px;
+}
+
+.table-responsive::-webkit-scrollbar {
+    height: 6px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb {
+    background: rgba(220, 38, 38, 0.4);
+    border-radius: 4px;
+}
+
 .data-table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 10px;
+    min-width: 500px;
+    /* Ensures table doesn't collapse too small */
 }
 
 .data-table th {
@@ -353,12 +370,14 @@ select:focus {
     padding: 10px;
     border-bottom: 1px solid var(--card-border);
     font-weight: 600;
+    white-space: nowrap;
 }
 
 .data-table td {
     padding: 12px 10px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     font-variant-numeric: tabular-nums;
+    text-align: left;
 }
 
 .data-table tr:last-child td {
@@ -437,11 +456,13 @@ h4 {
     .main-nav {
         justify-content: flex-start;
         -webkit-overflow-scrolling: touch;
-        scrollbar-width: none; /* Firefox */
+        scrollbar-width: none;
+        /* Firefox */
     }
 
     .main-nav::-webkit-scrollbar {
-        display: none; /* Chrome, Safari */
+        display: none;
+        /* Chrome, Safari */
     }
 
     .nav-btn {
@@ -471,6 +492,7 @@ h4 {
     input,
     select,
     .action-btn {
-        min-height: 48px; /* larger touch targets */
+        min-height: 48px;
+        /* larger touch targets */
     }
 }
