@@ -102,6 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
             btn.classList.remove('active');
             if (btn.getAttribute('href') === `#${targetId}`) {
                 btn.classList.add('active');
+                btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
             }
         });
 
