@@ -161,16 +161,18 @@ body {
 }
 
 .main-nav::-webkit-scrollbar {
-    display: none;
-    /* Chrome, Safari, Opera */
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    -webkit-appearance: none;
 }
 
 .nav-btn {
-    flex: 1;
+    flex: 1 1 auto;
     background: transparent;
     border: none;
     color: var(--text-muted);
-    padding: 10px;
+    padding: 10px 2px;
     border-radius: 8px;
     cursor: pointer;
     font-weight: 500;
