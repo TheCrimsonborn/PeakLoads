@@ -249,8 +249,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
                 }
 
-                if (state.hash && !window.location.hash) {
-                    window.location.hash = state.hash;
+                if (state.hash) {
+                    if (!window.location.hash || window.location.hash !== state.hash) {
+                        window.location.hash = state.hash;
+                    }
+                    activateSection(state.hash.substring(1));
                 }
 
                 // Trigger calculations to restore UI tables silently safely
