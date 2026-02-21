@@ -87,23 +87,48 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Navigation
-    navBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            // Update Nav
-            navBtns.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
+    // Navigation (Hash Routing)
+    function activateSection(targetId) {
+        if (!targetId) targetId = 'section-1rm'; // Default
 
-            // Show Section
-            const targetId = btn.getAttribute('data-target');
-            sections.forEach(sec => {
-                sec.classList.remove('active');
-                if (sec.id === targetId) {
-                    sec.classList.add('active');
-                }
-            });
+        // Update Nav
+        navBtns.forEach(btn => {
+            btn.classList.remove('active');
+            if (btn.getAttribute('href') === `#${targetId}`) {
+                btn.classList.add('active');
+            }
+        });
+
+        // Show Section
+        sections.forEach(sec => {
+            sec.classList.remove('active');
+            if (sec.id === targetId) {
+                sec.classList.add('active');
+            }
+        });
+    }
+
+    // Handle clicks on nav links
+    navBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault(); // Prevent jumpy scrolling
+            const targetHash = btn.getAttribute('href');
+            window.location.hash = targetHash; // Let hashchange event handle the UI update
         });
     });
+
+    // Handle hash changes (back/forward buttons, direct links)
+    window.addEventListener('hashchange', () => {
+        const hash = window.location.hash.substring(1);
+        activateSection(hash || 'section-1rm');
+    });
+
+    // Initial load: Check if there's a hash in the URL
+    if (window.location.hash) {
+        activateSection(window.location.hash.substring(1));
+    } else {
+        activateSection('section-1rm');
+    }
 
     // 1RM Calculator
     btnCalc1rm.addEventListener('click', () => {

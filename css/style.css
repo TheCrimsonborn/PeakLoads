@@ -168,6 +168,8 @@ body {
     font-weight: 500;
     white-space: nowrap;
     transition: all 0.3s ease;
+    text-decoration: none;
+    text-align: center;
 }
 
 .nav-btn:hover {
@@ -260,6 +262,15 @@ select:focus {
     outline: none;
     border-color: var(--primary-color);
     box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.2);
+}
+
+/* Accessibility Focus States */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
 }
 
 .range-inputs {
