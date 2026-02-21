@@ -55,7 +55,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const valRirNext = document.getElementById('val-rir-next');
 
     // --- Initialization ---
+    loadState();
     updateUnitDisplays();
+
+    // Auto-save state on user input
+    document.addEventListener('input', saveState);
+    document.addEventListener('change', saveState);
 
     // --- Event Listeners ---
 
@@ -73,6 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
             btn.classList.add('active');
             currentUnit = newUnit;
             updateUnitDisplays();
+            saveState();
 
             // Recalculate any open results
             recalculateOpenResults();
@@ -121,6 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('hashchange', () => {
         const hash = window.location.hash.substring(1);
         activateSection(hash || 'section-1rm');
+        saveState();
     });
 
     // Initial load: Check if there's a hash in the URL
@@ -201,6 +208,65 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // --- Helper Functions ---
+
+    function saveState() {
+        const state = {
+            unit: currentUnit,
+            language: langSelect.value,
+            hash: window.location.hash || '#section-1rm',
+            inputs: {}
+        };
+
+        document.querySelectorAll('input, select').forEach(el => {
+            if (el.id) state.inputs[el.id] = el.value;
+        });
+
+        localStorage.setItem('peakload_state', JSON.stringify(state));
+    }
+
+    function loadState() {
+        const saved = localStorage.getItem('peakload_state');
+        if (saved) {
+            try {
+                const state = JSON.parse(saved);
+
+                if (state.language) {
+                    langSelect.value = state.language;
+                    I18n.setLanguage(state.language);
+                }
+
+                if (state.unit) {
+                    currentUnit = state.unit;
+                    unitBtns.forEach(btn => {
+                        btn.classList.toggle('active', btn.id === `btn-${currentUnit}`);
+                    });
+                }
+
+                if (state.inputs) {
+                    Object.entries(state.inputs).forEach(([id, value]) => {
+                        const el = document.getElementById(id);
+                        if (el) el.value = value;
+                    });
+                }
+
+                if (state.hash && !window.location.hash) {
+                    window.location.hash = state.hash;
+                }
+
+                // Trigger calculations to restore UI tables silently safely
+                setTimeout(() => {
+                    if (weight1rmInput.value && reps1rmInput.value) btnCalc1rm.click();
+                    if (baseWeightPctInput.value) btnGenPct.click();
+                    if (topSetWarmupInput.value) btnGenWarmup.click();
+                    if (advWeightInput.value && advRepsInput.value) btnGenAdvWarmup.click();
+                    if (weightRirInput.value && repsRirInput.value) btnCalcRir.click();
+                }, 50);
+
+            } catch (e) {
+                console.error("Failed to restore state", e);
+            }
+        }
+    }
 
     function updateUnitDisplays() {
         const displays = document.querySelectorAll('.unit-display');
