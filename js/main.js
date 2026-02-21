@@ -1,3 +1,6 @@
+import Calculator from './calculator.js';
+import I18n from './i18n.js';
+
 document.addEventListener('DOMContentLoaded', () => {
     // State
     let currentUnit = 'kg'; // 'kg' or 'lb'

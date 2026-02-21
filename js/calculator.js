@@ -8,7 +8,7 @@ const Calculator = {
     // Unit Conversion
     toKg: (value, unit) => (unit === 'kg' ? value : value / KG_TO_LB),
     fromKg: (valueKg, unit) => (unit === 'kg' ? valueKg : valueKg * KG_TO_LB),
-    
+
     // Rounding logic based on unit (2.5kg or 5lb steps)
     roundWeight: (weight, unit) => {
         if (unit === 'kg') {
@@ -39,9 +39,9 @@ const Calculator = {
                 oneRM = weight * (1 + reps / 30);
                 break;
         }
-        
+
         // Return rounded value (not necessarily plate rounded for 1RM estimate, just integer or 1 decimal)
-        return Math.round(oneRM * 10) / 10; 
+        return Math.round(oneRM * 10) / 10;
     },
 
     // Percentage Chart Generator (Base weight in current unit)
@@ -181,5 +181,4 @@ const Calculator = {
     }
 };
 
-// Expose to global scope
-window.Calculator = Calculator;
+export default Calculator;
