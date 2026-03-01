@@ -1,6 +1,6 @@
-# PeakLoad
+# peakloads
 
-PeakLoad is a sleek powerlifting companion that helps you plan training sessions with confidence. Estimate your one-rep max using the Epley, Brzycki, or Lombardi formulas, then convert those numbers into ready-to-use percentage tables for programming.
+peakloads is a sleek powerlifting companion that helps you plan training sessions with confidence. Estimate your one-rep max using the Epley, Brzycki, or Lombardi formulas, then convert those numbers into ready-to-use percentage tables for programming.
 
 ## Features
 
@@ -28,7 +28,7 @@ PeakLoad is a sleek powerlifting companion that helps you plan training sessions
 
 ### Legacy Version
 
-If you prefer the classic, single-page scrolling layout of the original PeakLoad application, it is fully preserved! You can access it by opening `legacy/index.html` or clicking the "Legacy" button in the header.
+If you prefer the classic, single-page scrolling layout of the original peakloads application, it is fully preserved! You can access it by opening `legacy/index.html` or clicking the "Legacy" button in the header.
 
 ## License
 

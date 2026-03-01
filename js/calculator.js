@@ -1,5 +1,5 @@
 /**
- * PeakLoad Calculator Logic
+ * peakloads Calculator Logic
  */
 
 const KG_TO_LB = 2.2046226218;

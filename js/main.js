@@ -222,11 +222,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if (el.id) state.inputs[el.id] = el.value;
         });
 
-        localStorage.setItem('peakload_state', JSON.stringify(state));
+        localStorage.setItem('peakloads_state', JSON.stringify(state));
     }
 
     function loadState() {
-        const saved = localStorage.getItem('peakload_state');
+        const saved = localStorage.getItem('peakloads_state');
         if (saved) {
             try {
                 const state = JSON.parse(saved);

@@ -1,6 +1,6 @@
 {
-  "name": "PeakLoad",
-  "short_name": "PeakLoad",
+  "name": "peakloads",
+  "short_name": "peakloads",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#050505",
