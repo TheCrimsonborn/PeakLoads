@@ -1,0 +1,6 @@
+docker-compose.yml
+Dockerfile
+.git
+node_modules
+# Varsa diğer hassas dosyalar
+.env
