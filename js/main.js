@@ -310,10 +310,19 @@ document.addEventListener('DOMContentLoaded', () => {
         tableBodyPct.innerHTML = '';
         data.forEach(row => {
             const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td>${row.percent}%</td>
-                <td>${row.weight} <span class="unit-display">${currentUnit}</span></td>
-            `;
+            
+            const tdPercent = document.createElement('td');
+            tdPercent.textContent = `${row.percent}%`;
+            
+            const tdWeight = document.createElement('td');
+            tdWeight.textContent = `${row.weight} `;
+            const spanUnit = document.createElement('span');
+            spanUnit.className = 'unit-display';
+            spanUnit.textContent = currentUnit;
+            tdWeight.appendChild(spanUnit);
+
+            tr.appendChild(tdPercent);
+            tr.appendChild(tdWeight);
             tableBodyPct.appendChild(tr);
         });
     }
@@ -322,11 +331,23 @@ document.addEventListener('DOMContentLoaded', () => {
         tableBodyWarmup.innerHTML = '';
         data.forEach(row => {
             const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td>${row.percent}%</td>
-                <td>${row.weight} <span class="unit-display">${currentUnit}</span></td>
-                <td>${row.reps}</td>
-            `;
+
+            const tdPercent = document.createElement('td');
+            tdPercent.textContent = `${row.percent}%`;
+
+            const tdWeight = document.createElement('td');
+            tdWeight.textContent = `${row.weight} `;
+            const spanUnit = document.createElement('span');
+            spanUnit.className = 'unit-display';
+            spanUnit.textContent = currentUnit;
+            tdWeight.appendChild(spanUnit);
+
+            const tdReps = document.createElement('td');
+            tdReps.textContent = row.reps;
+
+            tr.appendChild(tdPercent);
+            tr.appendChild(tdWeight);
+            tr.appendChild(tdReps);
             tableBodyWarmup.appendChild(tr);
         });
     }
@@ -335,14 +356,39 @@ document.addEventListener('DOMContentLoaded', () => {
         tableBodyAdvWarmup.innerHTML = '';
         data.forEach(row => {
             const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td>${row.stage}</td>
-                <td>${row.purposeStr}</td>
-                <td>${row.percent}${row.percent !== '-' ? '%' : ''}</td>
-                <td>${row.weight} ${row.percent !== '-' ? `<span class="unit-display">${currentUnit}</span>` : ''}</td>
-                <td>${row.reps}</td>
-                <td style="font-size: 0.9em; opacity: 0.8">${row.notes}</td>
-            `;
+
+            const tdStage = document.createElement('td');
+            tdStage.textContent = row.stage;
+
+            const tdPurpose = document.createElement('td');
+            tdPurpose.textContent = row.purposeStr;
+
+            const tdPercent = document.createElement('td');
+            tdPercent.textContent = row.percent !== '-' ? `${row.percent}%` : '-';
+
+            const tdWeight = document.createElement('td');
+            tdWeight.textContent = `${row.weight} `;
+            if (row.percent !== '-') {
+                const spanUnit = document.createElement('span');
+                spanUnit.className = 'unit-display';
+                spanUnit.textContent = currentUnit;
+                tdWeight.appendChild(spanUnit);
+            }
+
+            const tdReps = document.createElement('td');
+            tdReps.textContent = row.reps;
+
+            const tdNotes = document.createElement('td');
+            tdNotes.style.fontSize = '0.9em';
+            tdNotes.style.opacity = '0.8';
+            tdNotes.textContent = row.notes;
+
+            tr.appendChild(tdStage);
+            tr.appendChild(tdPurpose);
+            tr.appendChild(tdPercent);
+            tr.appendChild(tdWeight);
+            tr.appendChild(tdReps);
+            tr.appendChild(tdNotes);
             tableBodyAdvWarmup.appendChild(tr);
         });
     }
