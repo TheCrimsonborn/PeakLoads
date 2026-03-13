@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Not Found | PeakLoad</title>
+    <!-- Meta Tags for SEO -->
+    <meta name="description"
+        content="PeakLoad is a comprehensive powerlifting command center. Use our tools to estimate your 1RM, plan warm-ups, and calculate RIR for your lifts.">
+    <!-- Open Graph for Social Sharing -->
+    <meta property="og:title" content="Page Not Found | PeakLoad">
+    <meta property="og:description"
+        content="PeakLoad is a comprehensive powerlifting command center. Use our tools to estimate your 1RM, plan warm-ups, and calculate RIR for your lifts.">
+    <meta property="og:type" content="website">
+
+    <!-- Styles and Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    
+    <style>
+        .error-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            height: 60vh;
+            color: var(--text-main);
+        }
+
+        .error-code {
+            font-size: 8rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin: 0;
+            line-height: 1;
+            text-shadow: 0px 4px 15px rgba(220, 38, 38, 0.4);
+        }
+
+        .error-message {
+            font-size: 1.5rem;
+            font-weight: 500;
+            margin: 20px 0;
+            color: var(--text-muted);
+        }
+
+        .error-home-btn {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            font-family: var(--font-main);
+            font-weight: 600;
+            border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3);
+            margin-top: 20px;
+        }
+
+        .error-home-btn:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(220, 38, 38, 0.4);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="logo">
+                <h1>PeakLoad</h1>
+                <p>Powerlifting Command Center</p>
+            </div>
+            <div class="header-actions">
+                <a href="/" class="btn-legacy" style="text-decoration: none;">Legacy</a>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="content-area">
+            <div class="error-container">
+                <h1 class="error-code">404</h1>
+                <p class="error-message">Looks like this lift was a miss.</p>
+                <p style="color: var(--text-muted); max-width: 400px; line-height: 1.6;">
+                    The page you are looking for might have been removed, had its weight stripped, or is temporarily unavailable. 
+                </p>
+                <a href="/" class="error-home-btn">Return to Basecamp</a>
+            </div>
+        </main>
+
+        <footer class="app-footer">
+            <p>&copy; 2026 PeakLoad. Built for strength. | <a href="/privacy.html" class="footer-link">Privacy</a> &middot; <a href="/terms.html" class="footer-link">Terms</a></p>
+        </footer>
+    </div>
+</body>
+
+</html>
