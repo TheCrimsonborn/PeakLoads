@@ -1,4 +1,4 @@
-const CACHE_NAME = 'peakload-cache-v7';
+const CACHE_NAME = 'peakload-cache-v8';
 const urlsToCache = [
     '/',
     '/index.html',
@@ -8,6 +8,8 @@ const urlsToCache = [
     '/js/i18n.js',
     '/manifest.json',
     '/404.html',
+    '/privacy',
+    '/terms',
     '/assets/icons/icon-192.png',
     '/assets/icons/icon-512.png'
 ];
