@@ -4,3 +4,4 @@ Dockerfile
 node_modules
 # Varsa diğer hassas dosyalar
 .env
+.tar
