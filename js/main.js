@@ -131,8 +131,19 @@ document.addEventListener('DOMContentLoaded', () => {
         saveState();
     });
 
-    // Initial load: Check if there's a hash in the URL
-    if (window.location.hash) {
+    // Programmatic SEO Routes Map
+    const seoRoutes = {
+        '/squat-1rm-calculator': 'section-1rm',
+        '/bench-press-warm-up-planner': 'section-adv-warmup',
+        '/rpe-rir-translator': 'section-rir'
+    };
+
+    const currentPath = window.location.pathname;
+
+    // Initial load: Check if there's an SEO path or a hash in the URL
+    if (seoRoutes[currentPath]) {
+        activateSection(seoRoutes[currentPath]);
+    } else if (window.location.hash) {
         activateSection(window.location.hash.substring(1));
     } else {
         activateSection('section-1rm');
@@ -250,7 +261,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
                 }
 
-                if (state.hash) {
+                // Prioritize explicit SEO URL over saved local state hash
+                if (seoRoutes[window.location.pathname]) {
+                    activateSection(seoRoutes[window.location.pathname]);
+                } else if (state.hash) {
                     if (!window.location.hash || window.location.hash !== state.hash) {
                         window.location.hash = state.hash;
                     }

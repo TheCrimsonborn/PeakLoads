@@ -1,4 +1,4 @@
-const CACHE_NAME = 'peakload-cache-v9';
+const CACHE_NAME = 'peakload-cache-v10';
 const urlsToCache = [
     '/',
     '/index.html',
@@ -10,6 +10,9 @@ const urlsToCache = [
     '/404.html',
     '/privacy',
     '/terms',
+    '/squat-1rm-calculator',
+    '/bench-press-warm-up-planner',
+    '/rpe-rir-translator',
     '/assets/icons/icon-192.png',
     '/assets/icons/icon-512.png'
 ];
