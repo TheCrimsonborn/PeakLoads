@@ -164,10 +164,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Percentage Chart
     btnGenPct.addEventListener('click', () => {
-        const base = parseFloat(baseWeightPctInput.value);
-        const inc = parseFloat(incrementPctInput.value);
-        const min = parseFloat(rangeMinPctInput.value);
-        const max = parseFloat(rangeMaxPctInput.value);
+        const base = Number.parseFloat(baseWeightPctInput.value);
+        const inc = Number.parseFloat(incrementPctInput.value);
+        const min = Number.parseFloat(rangeMinPctInput.value);
+        const max = Number.parseFloat(rangeMaxPctInput.value);
 
         if (base && inc && min && max) {
             const data = Calculator.generatePercentageTable(base, inc, min, max, currentUnit);
@@ -178,7 +178,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Warm-Up Planner
     btnGenWarmup.addEventListener('click', () => {
-        const topSet = parseFloat(topSetWarmupInput.value);
+        const topSet = Number.parseFloat(topSetWarmupInput.value);
         const template = templateSelect.value;
 
         if (topSet) {
@@ -191,8 +191,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Advanced Warm-Up Planner
     btnGenAdvWarmup.addEventListener('click', () => {
         const liftType = advLiftSelect.value;
-        const weight = parseFloat(advWeightInput.value);
-        const reps = parseInt(advRepsInput.value);
+        const weight = Number.parseFloat(advWeightInput.value);
+        const reps = Number.parseInt(advRepsInput.value);
 
         if (weight && reps) {
             const cuesObj = I18n.getAdvCues()[liftType];
@@ -205,11 +205,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // RIR Translator
     btnCalcRir.addEventListener('click', () => {
-        const weight = parseFloat(weightRirInput.value);
-        const reps = parseInt(repsRirInput.value);
-        const rir = parseFloat(rirRirInput.value) || 0;
-        const tReps = parseInt(targetRepsRirInput.value) || 1;
-        const tRir = parseFloat(targetRirRirInput.value) || 0;
+        const weight = Number.parseFloat(weightRirInput.value);
+        const reps = Number.parseInt(repsRirInput.value);
+        const rir = Number.parseFloat(rirRirInput.value) || 0;
+        const tReps = Number.parseInt(targetRepsRirInput.value) || 1;
+        const tRir = Number.parseFloat(targetRirRirInput.value) || 0;
 
         if (weight && reps) {
             const result = Calculator.calculateRIR(weight, reps, rir, tReps, tRir, currentUnit);
@@ -302,7 +302,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         weightInputs.forEach(input => {
             if (input.value) {
-                let kgValue = Calculator.toKg(parseFloat(input.value), oldUnit);
+                let kgValue = Calculator.toKg(Number.parseFloat(input.value), oldUnit);
                 let newValue = Calculator.fromKg(kgValue, newUnit);
                 // Depending on the unit, step precision changes
                 let step = newUnit === 'kg' ? 0.5 : 1;

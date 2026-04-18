@@ -20,8 +20,8 @@ const Calculator = {
 
     // 1RM Formulas (Expects input in current unit, returns in current unit)
     calculate1RM: (weight, reps, formula = 'epley') => {
-        weight = parseFloat(weight);
-        reps = parseInt(reps);
+        weight = Number.parseFloat(weight);
+        reps = Number.parseInt(reps);
 
         if (!weight || !reps) return 0;
         if (reps === 1) return weight;
@@ -32,7 +32,7 @@ const Calculator = {
                 oneRM = weight * (36 / (37 - reps));
                 break;
             case 'lombardi':
-                oneRM = weight * Math.pow(reps, 0.10);
+                oneRM = weight * Math.pow(reps, 0.1);
                 break;
             case 'epley':
             default:
@@ -46,10 +46,10 @@ const Calculator = {
 
     // Percentage Chart Generator (Base weight in current unit)
     generatePercentageTable: (baseWeight, increment, min, max, unit) => {
-        baseWeight = parseFloat(baseWeight);
-        increment = parseFloat(increment);
-        min = parseFloat(min);
-        max = parseFloat(max);
+        baseWeight = Number.parseFloat(baseWeight);
+        increment = Number.parseFloat(increment);
+        min = Number.parseFloat(min);
+        max = Number.parseFloat(max);
 
         if (!baseWeight) return [];
 
@@ -64,7 +64,7 @@ const Calculator = {
 
     // Warm-Up Planner (Top set in current unit)
     generateWarmUp: (topSet, template, unit) => {
-        topSet = parseFloat(topSet);
+        topSet = Number.parseFloat(topSet);
         if (!topSet) return [];
 
         const sets = [];
@@ -109,8 +109,8 @@ const Calculator = {
 
     // Advanced Warm Up Generator
     generateAdvancedWarmUp: (liftType, mainWeight, mainReps, cuesObj, purposesObj, unit) => {
-        mainWeight = parseFloat(mainWeight);
-        mainReps = parseInt(mainReps);
+        mainWeight = Number.parseFloat(mainWeight);
+        mainReps = Number.parseInt(mainReps);
         if (!mainWeight || !mainReps) return [];
 
         let sets = [];
@@ -158,11 +158,11 @@ const Calculator = {
 
     // RIR Translator
     calculateRIR: (weight, reps, rir, targetReps, targetRIR, unit) => {
-        weight = parseFloat(weight);
-        reps = parseInt(reps);
-        rir = parseFloat(rir);
-        targetReps = parseInt(targetReps);
-        targetRIR = parseFloat(targetRIR);
+        weight = Number.parseFloat(weight);
+        reps = Number.parseInt(reps);
+        rir = Number.parseFloat(rir);
+        targetReps = Number.parseInt(targetReps);
+        targetRIR = Number.parseFloat(targetRIR);
 
         if (!weight || !reps) return { est1RM: 0, nextWeight: 0 };
 
