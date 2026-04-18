@@ -1,0 +1,6 @@
+{
+    "sonarlint.connectedMode.project": {
+        "connectionId": "thecrimsonborn",
+        "projectKey": "TheCrimsonborn_PeakLoad"
+    }
+}
