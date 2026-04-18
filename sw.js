@@ -1,4 +1,4 @@
-const CACHE_NAME = 'peakload-cache-v11';
+const CACHE_NAME = 'peakload-cache-v12';
 const urlsToCache = [
     '/',
     '/index.html',
@@ -47,7 +47,7 @@ self.addEventListener('activate', event => {
         caches.keys().then(cacheNames => {
             return Promise.all(
                 cacheNames.map(cacheName => {
-                    if (cacheWhitelist.indexOf(cacheName) === -1) {
+                    if (!cacheWhitelist.includes(cacheName)) {
                         return caches.delete(cacheName);
                     }
                 })
