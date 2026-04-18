@@ -137,7 +137,7 @@ body {
 
 .legacy-btn {
   background: linear-gradient(135deg, #ff6b6b, #ff3b3b);
-  color: white;
+  color: var(--bg-color);
   border: none;
   padding: 6px 15px;
   border-radius: 8px;
