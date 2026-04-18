@@ -206,7 +206,7 @@ const I18n = {
     updateDOM: () => {
         const elements = document.querySelectorAll('[data-i18n]');
         elements.forEach(el => {
-            const key = el.getAttribute('data-i18n');
+            const key = el.dataset.i18n;
             if (translations[I18n.currentLang][key]) {
                 el.textContent = translations[I18n.currentLang][key];
             }

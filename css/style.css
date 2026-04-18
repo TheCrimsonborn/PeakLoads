@@ -4,6 +4,8 @@
   --card-border: rgba(220, 38, 38, 0.2);
   --primary-color: #dc2626;
   /* Red 600 */
+  --primary-text: #ef4444;
+  /* Red 500 for text contrast */
   --accent-color: #991b1b;
   /* Red 800 */
   --text-main: #f8fafc;
@@ -156,8 +158,8 @@ body {
 
 .guide-btn {
   background: transparent;
-  color: var(--primary-color);
-  border: 1px solid var(--primary-color);
+  color: var(--primary-text);
+  border: 1px solid var(--primary-text);
   padding: 6px 15px;
   border-radius: 8px;
   font-size: 0.85rem;
@@ -388,7 +390,7 @@ select:focus-visible {
 .big-number {
   font-size: 3rem;
   font-weight: 800;
-  color: var(--primary-color);
+  color: var(--primary-text);
   font-family: var(--font-display);
   margin-top: 10px;
   text-shadow: 0 0 20px rgba(220, 38, 38, 0.2);
@@ -426,7 +428,7 @@ select:focus-visible {
 
 .data-table th {
   text-align: left;
-  color: var(--primary-color);
+  color: var(--primary-text);
   padding: 10px;
   border-bottom: 1px solid var(--card-border);
   font-weight: 600;
@@ -488,7 +490,7 @@ h4 {
 
 .guide-block h4 {
   margin-bottom: 8px;
-  color: var(--primary-color);
+  color: var(--primary-text);
   font-family: var(--font-display);
   font-size: 1.1rem;
 }
@@ -514,7 +516,7 @@ h4 {
 }
 
 .footer-link:hover {
-    color: var(--primary-color);
+    color: var(--primary-text);
 }
 
 /* Responsive */
