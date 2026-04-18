@@ -5,3 +5,6 @@ node_modules
 # Varsa diğer hassas dosyalar
 .env
 .tar
+.github
+.vscode
+.idea
