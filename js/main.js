@@ -120,13 +120,13 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.addEventListener('click', (e) => {
             e.preventDefault(); // Prevent jumpy scrolling
             const targetHash = btn.getAttribute('href');
-            window.location.hash = targetHash; // Let hashchange event handle the UI update
+            globalThis.location.hash = targetHash; // Let hashchange event handle the UI update
         });
     });
 
     // Handle hash changes (back/forward buttons, direct links)
-    window.addEventListener('hashchange', () => {
-        const hash = window.location.hash.substring(1);
+    globalThis.addEventListener('hashchange', () => {
+        const hash = globalThis.location.hash.substring(1);
         activateSection(hash || 'section-1rm');
         saveState();
     });
@@ -138,13 +138,13 @@ document.addEventListener('DOMContentLoaded', () => {
         '/rpe-rir-translator': 'section-rir'
     };
 
-    const currentPath = window.location.pathname;
+    const currentPath = globalThis.location.pathname;
 
     // Initial load: Check if there's an SEO path or a hash in the URL
     if (seoRoutes[currentPath]) {
         activateSection(seoRoutes[currentPath]);
-    } else if (window.location.hash) {
-        activateSection(window.location.hash.substring(1));
+    } else if (globalThis.location.hash) {
+        activateSection(globalThis.location.hash.substring(1));
     } else {
         activateSection('section-1rm');
     }
@@ -225,7 +225,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const state = {
             unit: currentUnit,
             language: langSelect.value,
-            hash: window.location.hash || '#section-1rm',
+            hash: globalThis.location.hash || '#section-1rm',
             inputs: {}
         };
 
@@ -262,11 +262,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 // Prioritize explicit SEO URL over saved local state hash
-                if (seoRoutes[window.location.pathname]) {
-                    activateSection(seoRoutes[window.location.pathname]);
+                if (seoRoutes[globalThis.location.pathname]) {
+                    activateSection(seoRoutes[globalThis.location.pathname]);
                 } else if (state.hash) {
-                    if (!window.location.hash || window.location.hash !== state.hash) {
-                        window.location.hash = state.hash;
+                    if (!globalThis.location.hash || globalThis.location.hash !== state.hash) {
+                        globalThis.location.hash = state.hash;
                     }
                     activateSection(state.hash.substring(1));
                 }
@@ -378,7 +378,7 @@ document.addEventListener('DOMContentLoaded', () => {
             tdPurpose.textContent = row.purposeStr;
 
             const tdPercent = document.createElement('td');
-            tdPercent.textContent = row.percent !== '-' ? `${row.percent}%` : '-';
+            tdPercent.textContent = row.percent === '-' ? '-' : `${row.percent}%`;
 
             const tdWeight = document.createElement('td');
             tdWeight.textContent = `${row.weight} `;
@@ -415,7 +415,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Register Service Worker
     if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
+        globalThis.addEventListener('load', () => {
             navigator.serviceWorker.register('/sw.js').then(registration => {
                 console.log('ServiceWorker registration successful with scope: ', registration.scope);
             }, err => {
