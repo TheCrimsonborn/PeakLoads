@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentUnit = 'kg'; // 'kg' or 'lb'
 
     // DOM Elements
+    const cachedUnitDisplays = document.getElementsByClassName('unit-display');
     const unitBtns = document.querySelectorAll('.unit-btn');
     const langSelect = document.getElementById('lang-select');
     const navBtns = document.querySelectorAll('.nav-btn');
@@ -287,8 +288,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateUnitDisplays() {
-        const displays = document.querySelectorAll('.unit-display');
-        displays.forEach(el => el.textContent = currentUnit);
+        for (let i = 0; i < cachedUnitDisplays.length; i++) {
+            cachedUnitDisplays[i].textContent = currentUnit;
+        }
     }
 
     function convertAllInputs(oldUnit, newUnit) {
