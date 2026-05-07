@@ -794,36 +794,51 @@ const renderOneRmOutput = () => {
 const renderPercentTable = () => {
   const dict = getDictionary();
   if (!percentTableState) {
-    percentTableBody.innerHTML = `
-      <tr>
-        <td colspan="2" class="placeholder">${dict.tablePlaceholder}</td>
-      </tr>
-    `.trim();
+    const tr = document.createElement('tr');
+    const td = document.createElement('td');
+    td.colSpan = 2;
+    td.className = 'placeholder';
+    td.textContent = dict.tablePlaceholder;
+    tr.appendChild(td);
+    percentTableBody.replaceChildren(tr);
     return;
   }
 
   const { baseWeightKg, startPercent, endPercent, increment } = percentTableState;
   const weightHeaderLabel = `${dict.tableWeightHeader} (${UNIT_CONFIG[currentUnit].label})`;
-  const rows = [];
+
+  const fragments = document.createDocumentFragment();
+
   for (let pct = startPercent; pct <= endPercent + 1e-9; pct += increment) {
     const percentLabel = `${Math.round(pct)}%`;
     const weightKg = baseWeightKg * (pct / 100);
-    rows.push(`
-      <tr>
-        <td data-label="${dict.tablePercentHeader}">${percentLabel}</td>
-        <td data-label="${weightHeaderLabel}">${formatWeightForDisplay(weightKg)}</td>
-      </tr>
-    `.trim());
+
+    const tr = document.createElement('tr');
+
+    const tdPct = document.createElement('td');
+    tdPct.setAttribute('data-label', dict.tablePercentHeader);
+    tdPct.textContent = percentLabel;
+
+    const tdWeight = document.createElement('td');
+    tdWeight.setAttribute('data-label', weightHeaderLabel);
+    tdWeight.textContent = formatWeightForDisplay(weightKg);
+
+    tr.appendChild(tdPct);
+    tr.appendChild(tdWeight);
+    fragments.appendChild(tr);
   }
 
-  percentTableBody.innerHTML =
-    rows.length > 0
-      ? rows.join("")
-      : `
-      <tr>
-        <td colspan="2" class="placeholder">${dict.tableEmptyRange}</td>
-      </tr>
-      `.trim();
+  if (fragments.childNodes.length > 0) {
+    percentTableBody.replaceChildren(fragments);
+  } else {
+    const tr = document.createElement('tr');
+    const td = document.createElement('td');
+    td.colSpan = 2;
+    td.className = 'placeholder';
+    td.textContent = dict.tableEmptyRange;
+    tr.appendChild(td);
+    percentTableBody.replaceChildren(tr);
+  }
 };
 
 const updateLanguageOptions = (dict) => {
@@ -858,11 +873,13 @@ const renderWarmupTable = () => {
   const dict = getDictionary();
 
   if (!warmupState) {
-    warmupTableBody.innerHTML = `
-      <tr>
-        <td colspan="4" class="placeholder">${dict.warmupPlaceholder}</td>
-      </tr>
-    `.trim();
+    const tr = document.createElement('tr');
+    const td = document.createElement('td');
+    td.colSpan = 4;
+    td.className = 'placeholder';
+    td.textContent = dict.warmupPlaceholder;
+    tr.appendChild(td);
+    warmupTableBody.replaceChildren(tr);
     return;
   }
 
@@ -874,24 +891,42 @@ const renderWarmupTable = () => {
   }
 
   const warmupWeightHeaderLabel = `${dict.warmupWeightHeader} (${UNIT_CONFIG[currentUnit].label})`;
-  const rows = template.sets.map((set, index) => {
+
+  const fragments = document.createDocumentFragment();
+
+  template.sets.forEach((set, index) => {
     const percentValue = set.percent;
     const weightKg = warmupState.topWeightKg * (percentValue / 100);
     const weightLabel = formatWeightForDisplay(weightKg);
     const percentLabel = `${percentValue.toFixed(0)}%`;
     const repsLabel = `${set.reps}`;
 
-    return `
-      <tr>
-        <td data-label="${dict.warmupStageHeader}">${dict.warmupSetLabel} ${index + 1}</td>
-        <td data-label="${dict.warmupPercentHeader}">${percentLabel}</td>
-        <td data-label="${warmupWeightHeaderLabel}">${weightLabel}</td>
-        <td data-label="${dict.warmupRepsHeader}">${repsLabel}</td>
-      </tr>
-    `.trim();
+    const tr = document.createElement('tr');
+
+    const tdStage = document.createElement('td');
+    tdStage.setAttribute('data-label', dict.warmupStageHeader);
+    tdStage.textContent = `${dict.warmupSetLabel} ${index + 1}`;
+
+    const tdPct = document.createElement('td');
+    tdPct.setAttribute('data-label', dict.warmupPercentHeader);
+    tdPct.textContent = percentLabel;
+
+    const tdWeight = document.createElement('td');
+    tdWeight.setAttribute('data-label', warmupWeightHeaderLabel);
+    tdWeight.textContent = weightLabel;
+
+    const tdReps = document.createElement('td');
+    tdReps.setAttribute('data-label', dict.warmupRepsHeader);
+    tdReps.textContent = repsLabel;
+
+    tr.appendChild(tdStage);
+    tr.appendChild(tdPct);
+    tr.appendChild(tdWeight);
+    tr.appendChild(tdReps);
+    fragments.appendChild(tr);
   });
 
-  warmupTableBody.innerHTML = rows.join("");
+  warmupTableBody.replaceChildren(fragments);
 };
 
 const renderAdvWarmupTable = () => {
@@ -899,11 +934,13 @@ const renderAdvWarmupTable = () => {
   const dict = getDictionary();
 
   if (!advWarmupState) {
-    advTableBody.innerHTML = `
-      <tr>
-        <td colspan="4" class="placeholder">${dict.advPlaceholder}</td>
-      </tr>
-    `.trim();
+    const tr = document.createElement('tr');
+    const td = document.createElement('td');
+    td.colSpan = 4;
+    td.className = 'placeholder';
+    td.textContent = dict.advPlaceholder;
+    tr.appendChild(td);
+    advTableBody.replaceChildren(tr);
     return;
   }
 
@@ -935,7 +972,9 @@ const renderAdvWarmupTable = () => {
     ];
   }
 
-  const rows = sets.map((set, index) => {
+  const fragments = document.createDocumentFragment();
+
+  sets.forEach((set, index) => {
     let setWeightKg = weightKg * (set.percent / 100);
     let weightLabel = formatWeightForDisplay(setWeightKg);
     let percentLabel = `${set.percent}%`;
@@ -950,19 +989,43 @@ const renderAdvWarmupTable = () => {
     const purpose = dict.advPurposes[set.purposeKey];
     const cue = dict.advCues[lift][set.purposeKey];
 
-    return `
-      <tr>
-        <td data-label="${dict.advStageHeader}">${dict.advSetLabel} ${index + 1}</td>
-        <td data-label="${dict.advPurposeHeader}">${purpose}</td>
-        <td data-label="${dict.advPercentHeader}">${percentLabel}</td>
-        <td data-label="${advWeightHeaderLabel}">${weightLabel}</td>
-        <td data-label="${dict.advRepsHeader}">${set.reps}</td>
-        <td data-label="${dict.advNotesHeader}" class="adv-note">${cue}</td>
-      </tr>
-    `.trim();
+    const tr = document.createElement('tr');
+
+    const tdStage = document.createElement('td');
+    tdStage.setAttribute('data-label', dict.advStageHeader);
+    tdStage.textContent = `${dict.advSetLabel} ${index + 1}`;
+
+    const tdPurpose = document.createElement('td');
+    tdPurpose.setAttribute('data-label', dict.advPurposeHeader);
+    tdPurpose.textContent = purpose;
+
+    const tdPct = document.createElement('td');
+    tdPct.setAttribute('data-label', dict.advPercentHeader);
+    tdPct.textContent = percentLabel;
+
+    const tdWeight = document.createElement('td');
+    tdWeight.setAttribute('data-label', advWeightHeaderLabel);
+    tdWeight.textContent = weightLabel;
+
+    const tdReps = document.createElement('td');
+    tdReps.setAttribute('data-label', dict.advRepsHeader);
+    tdReps.textContent = set.reps;
+
+    const tdNotes = document.createElement('td');
+    tdNotes.setAttribute('data-label', dict.advNotesHeader);
+    tdNotes.className = 'adv-note';
+    tdNotes.textContent = cue;
+
+    tr.appendChild(tdStage);
+    tr.appendChild(tdPurpose);
+    tr.appendChild(tdPct);
+    tr.appendChild(tdWeight);
+    tr.appendChild(tdReps);
+    tr.appendChild(tdNotes);
+    fragments.appendChild(tr);
   });
 
-  advTableBody.innerHTML = rows.join("");
+  advTableBody.replaceChildren(fragments);
 };
 
 const calculateE1rmFromRir = (weightKg, reps, rir) => {
