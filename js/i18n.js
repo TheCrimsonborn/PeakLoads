@@ -195,6 +195,7 @@ const translations = {
 
 const I18n = {
     currentLang: 'en',
+    _elementsCache: null,
 
     setLanguage: (lang) => {
         if (translations[lang]) {
@@ -203,9 +204,20 @@ const I18n = {
         }
     },
 
+    /**
+     * Clears the element cache, forcing the next updateDOM()
+     * to perform a fresh document.querySelectorAll().
+     */
+    refreshCache: () => {
+        I18n._elementsCache = null;
+    },
+
     updateDOM: () => {
-        const elements = document.querySelectorAll('[data-i18n]');
-        elements.forEach(el => {
+        if (!I18n._elementsCache) {
+            I18n._elementsCache = document.querySelectorAll('[data-i18n]');
+        }
+
+        I18n._elementsCache.forEach(el => {
             const key = el.dataset.i18n;
             if (translations[I18n.currentLang][key]) {
                 el.textContent = translations[I18n.currentLang][key];
