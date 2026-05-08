@@ -288,8 +288,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateUnitDisplays() {
-        for (let i = 0; i < cachedUnitDisplays.length; i++) {
-            cachedUnitDisplays[i].textContent = currentUnit;
+        for (const display of cachedUnitDisplays) {
+            display.textContent = currentUnit;
         }
     }
 
