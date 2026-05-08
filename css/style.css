@@ -135,27 +135,6 @@ body {
   border-color: var(--primary-color);
 }
 
-.legacy-btn {
-  background: linear-gradient(135deg, #ff6b6b, #ff3b3b);
-  color: var(--bg-color);
-  border: none;
-  padding: 6px 15px;
-  border-radius: 8px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
-}
-
-.legacy-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(255, 107, 107, 0.5);
-}
-
 .guide-btn {
   background: transparent;
   color: var(--primary-text);
@@ -537,7 +516,6 @@ h4 {
 
   .unit-btn,
   .lang-select,
-  .legacy-btn,
   .guide-btn {
     min-height: 44px;
     display: flex;
