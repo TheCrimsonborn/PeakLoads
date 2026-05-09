@@ -60,8 +60,13 @@ document.addEventListener('DOMContentLoaded', () => {
     updateUnitDisplays();
 
     // Auto-save state on user input
-    document.addEventListener('input', saveState);
-    document.addEventListener('change', saveState);
+    let saveStateTimeout;
+    const debouncedSaveState = () => {
+        clearTimeout(saveStateTimeout);
+        saveStateTimeout = setTimeout(saveState, 300);
+    };
+    document.addEventListener('input', debouncedSaveState);
+    document.addEventListener('change', debouncedSaveState);
 
     // --- Event Listeners ---
 
