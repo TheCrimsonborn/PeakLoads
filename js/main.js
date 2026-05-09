@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentUnit = 'kg'; // 'kg' or 'lb'
 
     // DOM Elements
+    const cachedStateInputs = Array.from(document.querySelectorAll('input, select')).filter(el => el.id);
     const cachedUnitDisplays = document.getElementsByClassName('unit-display');
     const unitBtns = document.querySelectorAll('.unit-btn');
     const langSelect = document.getElementById('lang-select');
@@ -235,8 +236,8 @@ document.addEventListener('DOMContentLoaded', () => {
             inputs: {}
         };
 
-        document.querySelectorAll('input, select').forEach(el => {
-            if (el.id) state.inputs[el.id] = el.value;
+        cachedStateInputs.forEach(el => {
+            state.inputs[el.id] = el.value;
         });
 
         localStorage.setItem('peakloads_state', JSON.stringify(state));
