@@ -7,6 +7,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // DOM Elements
     const cachedStateInputs = Array.from(document.querySelectorAll('input, select')).filter(el => el.id);
+    const stateInputsById = {};
+    for (const el of cachedStateInputs) {
+        stateInputsById[el.id] = el;
+    }
     const cachedUnitDisplays = document.getElementsByClassName('unit-display');
     const unitBtns = document.querySelectorAll('.unit-btn');
     const langSelect = document.getElementById('lang-select');
@@ -263,7 +267,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (state.inputs) {
                     Object.entries(state.inputs).forEach(([id, value]) => {
-                        const el = document.getElementById(id);
+                        const el = stateInputsById[id];
                         if (el) el.value = value;
                     });
                 }
