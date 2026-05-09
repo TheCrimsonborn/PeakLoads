@@ -329,7 +329,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderPercentageTable(data) {
-        tableBodyPct.textContent = '';
         const fragment = document.createDocumentFragment();
         data.forEach(row => {
             const tr = document.createElement('tr');
@@ -348,11 +347,10 @@ document.addEventListener('DOMContentLoaded', () => {
             tr.appendChild(tdWeight);
             fragment.appendChild(tr);
         });
-        tableBodyPct.appendChild(fragment);
+        tableBodyPct.replaceChildren(fragment);
     }
 
     function renderWarmupTable(data) {
-        tableBodyWarmup.textContent = '';
         const fragment = document.createDocumentFragment();
         data.forEach(row => {
             const tr = document.createElement('tr');
@@ -375,11 +373,10 @@ document.addEventListener('DOMContentLoaded', () => {
             tr.appendChild(tdReps);
             fragment.appendChild(tr);
         });
-        tableBodyWarmup.appendChild(fragment);
+        tableBodyWarmup.replaceChildren(fragment);
     }
 
     function renderAdvWarmupTable(data) {
-        tableBodyAdvWarmup.textContent = '';
         const fragment = document.createDocumentFragment();
         data.forEach(row => {
             const tr = document.createElement('tr');
@@ -418,7 +415,7 @@ document.addEventListener('DOMContentLoaded', () => {
             tr.appendChild(tdNotes);
             fragment.appendChild(tr);
         });
-        tableBodyAdvWarmup.appendChild(fragment);
+        tableBodyAdvWarmup.replaceChildren(fragment);
     }
 
     // Set current year in footer
