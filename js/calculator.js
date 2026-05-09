@@ -23,12 +23,13 @@ const Calculator = {
         weight = Number.parseFloat(weight);
         reps = Number.parseInt(reps);
 
-        if (!weight || !reps) return 0;
+        if (!weight || weight <= 0 || !reps || reps <= 0) return 0;
         if (reps === 1) return weight;
 
         let oneRM = 0;
         switch (formula) {
             case 'brzycki':
+                if (reps >= 37) return 0;
                 oneRM = weight * (36 / (37 - reps));
                 break;
             case 'lombardi':
@@ -51,7 +52,7 @@ const Calculator = {
         min = Number.parseFloat(min);
         max = Number.parseFloat(max);
 
-        if (!baseWeight) return [];
+        if (!baseWeight || increment <= 0 || min > max) return [];
 
         const table = [];
         for (let pct = min; pct <= max; pct += increment) {
@@ -164,7 +165,9 @@ const Calculator = {
         targetReps = Number.parseInt(targetReps);
         targetRIR = Number.parseFloat(targetRIR);
 
-        if (!weight || !reps) return { est1RM: 0, nextWeight: 0 };
+        if (!weight || weight <= 0 || !reps || reps <= 0 || rir < 0 || targetReps <= 0 || targetRIR < 0) {
+            return { est1RM: 0, nextWeight: 0 };
+        }
 
         // 1. Estimate 1RM from current set
         const repsToFailure = reps + rir;
@@ -172,7 +175,13 @@ const Calculator = {
 
         // 2. Calculate target weight for next set
         const targetRepsToFailure = targetReps + targetRIR;
-        const nextWeightRaw = est1RM / (1 + targetRepsToFailure / 30);
+        const denominator = 1 + targetRepsToFailure / 30;
+
+        if (denominator <= 0) {
+            return { est1RM: Math.round(est1RM * 10) / 10, nextWeight: 0 };
+        }
+
+        const nextWeightRaw = est1RM / denominator;
 
         return {
             est1RM: Math.round(est1RM * 10) / 10,
