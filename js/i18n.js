@@ -230,7 +230,7 @@ const I18n = {
             en: {
                 squatHighBar: { jointPrep: "Pause at bottom, check stance", activation: "Explosive concentric", skill: "Vertical torso, knees forward", acclimatization: "Brace core hard", potentiation: "Walkout only or heavy single" },
                 squatLowBar: { jointPrep: "Pause at bottom, check stance", activation: "Explosive concentric", skill: "Hip drive, back angle", acclimatization: "Master the shelf", potentiation: "Walkout only or heavy single" },
-                bench: { jointPrep: "Full ROM, control descent", activation: "Drive with legs", skill: "Squeeze bar hard", acclimatization: "Settle scapula", potentiation: "Unrack and hold" },
+                bench: { jointPrep: "Full ROM, control descent", activation: "Drive with legs", skill: "Squeeze bar hard", acclimatization: "Settle scapula", potentiation: "Heavy single push" },
                 deadliftConv: { jointPrep: "Hinge pattern focus", activation: "Engage lats", skill: "Pull slack out", acclimatization: "Push floor away", potentiation: "Heavy single pull" },
                 deadliftSumo: { jointPrep: "Open hips, patience", activation: "Engage lats", skill: "Wedge in tight", acclimatization: "Spread the floor", potentiation: "Heavy single pull" },
                 ohp: { jointPrep: "Full extension", activation: "Tight core", skill: "Head through", acclimatization: "Explode up", potentiation: "Heavy single" },
@@ -239,7 +239,7 @@ const I18n = {
             tr: {
                 squatHighBar: { jointPrep: "Dipte bekle, duruşunu kontrol et", activation: "Patlayıcı kalkış", skill: "Dik gövde, dizler ileri", acclimatization: "Merkez bölgeyi kilitle", potentiation: "Sadece walkout veya ağır tek" },
                 squatLowBar: { jointPrep: "Dipte bekle, duruşunu kontrol et", activation: "Patlayıcı kalkış", skill: "Kalça sürüşü, sırt açısı", acclimatization: "Barı sırtına göm", potentiation: "Sadece walkout veya ağır tek" },
-                bench: { jointPrep: "Tam hareket aralığı, kontrollü iniş", activation: "Bacaklardan güç al", skill: "Barı sıkı kavra", acclimatization: "Kürek kemiklerini yerleştir", potentiation: "Unrack yap ve bekle" },
+                bench: { jointPrep: "Tam hareket aralığı, kontrollü iniş", activation: "Bacaklardan güç al", skill: "Barı sıkı kavra", acclimatization: "Kürek kemiklerini yerleştir", potentiation: "Ağır tek itiş" },
                 deadliftConv: { jointPrep: "Kalça menteşesi (hinge) odaklı", activation: "Latları devreye sok", skill: "Boşluğu al (Slack pull)", acclimatization: "Yeri it", potentiation: "Ağır tek çekiş" },
                 deadliftSumo: { jointPrep: "Kalçaları aç, sabırlı ol", activation: "Latları devreye sok", skill: "İyice sıkış (Wedge)", acclimatization: "Yeri ikiye ayır", potentiation: "Ağır tek çekiş" },
                 ohp: { jointPrep: "Tam uzama", activation: "Sıkı merkez bölge", skill: "Baş ileri", acclimatization: "Patlayıcı itiş", potentiation: "Ağır tek" },
@@ -248,7 +248,7 @@ const I18n = {
             ru: {
                 squatHighBar: { jointPrep: "Пауза внизу, проверка стойки", activation: "Взрывной подъем", skill: "Вертикальный корпус, колени вперед", acclimatization: "Жесткий кор", potentiation: "Только отход или тяжелый сингл" },
                 squatLowBar: { jointPrep: "Пауза внизу, проверка стойки", activation: "Взрывной подъем", skill: "Движение тазом, угол спины", acclimatization: "Жесткая полка на спине", potentiation: "Только отход или тяжелый сингл" },
-                bench: { jointPrep: "Полная амплитуда, контроль", activation: "Драйв ногами", skill: "Сжимай гриф", acclimatization: "Сведи лопатки", potentiation: "Съем и удержание" },
+                bench: { jointPrep: "Полная амплитуда, контроль", activation: "Драйв ногами", skill: "Сжимай гриф", acclimatization: "Сведи лопатки", potentiation: "Тяжелый сингл" },
                 deadliftConv: { jointPrep: "Фокус на тазобедренном суставе", activation: "Включи широчайшие", skill: "Выбери люфт грифа", acclimatization: "Толкай пол", potentiation: "Тяжелая тяга" },
                 deadliftSumo: { jointPrep: "Раскрой таз, терпение", activation: "Включи широчайшие", skill: "Вклинивайся жестко", acclimatization: "Разрывай пол", potentiation: "Тяжелая тяга" },
                 ohp: { jointPrep: "Полное выпрямление", activation: "Жесткий кор", skill: "Голова вперед", acclimatization: "Взрывной жим", potentiation: "Тяжелый сингл" },
