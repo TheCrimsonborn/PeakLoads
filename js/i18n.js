@@ -204,14 +204,6 @@ const I18n = {
         }
     },
 
-    /**
-     * Clears the element cache, forcing the next updateDOM()
-     * to perform a fresh document.querySelectorAll().
-     */
-    refreshCache: () => {
-        I18n._elementsCache = null;
-    },
-
     updateDOM: () => {
         if (!I18n._elementsCache) {
             I18n._elementsCache = document.querySelectorAll('[data-i18n]');
