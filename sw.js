@@ -27,18 +27,31 @@ self.addEventListener('install', event => {
 });
 
 self.addEventListener('fetch', event => {
-    event.respondWith(
-        caches.match(event.request)
-            .then(response => {
-                // Cache hit - return response
-                if (response) {
-                    return response;
-                }
-                return fetch(event.request).catch(() => {
-                    // Optional: Return an offline fallback page here if applicable
+    // Stale-While-Revalidate strategy for dynamic assets
+    if (event.request.method === 'GET') {
+        event.respondWith(
+            caches.match(event.request).then(cachedResponse => {
+                const fetchPromise = fetch(event.request).then(networkResponse => {
+                    return caches.open(CACHE_NAME).then(cache => {
+                        if (networkResponse.ok) {
+                            cache.put(event.request, networkResponse.clone());
+                        }
+                        return networkResponse;
+                    });
+                }).catch(() => {
+                    // Optional: Return offline fallback
                 });
+
+                // Ensure background fetch completes even if worker is closed
+                event.waitUntil(fetchPromise);
+
+                // Return cached response immediately if available, otherwise wait for network
+                return cachedResponse || fetchPromise;
             })
-    );
+        );
+    } else {
+        event.respondWith(fetch(event.request));
+    }
 });
 
 self.addEventListener('activate', event => {
