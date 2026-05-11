@@ -52,7 +52,7 @@ const Calculator = {
         min = Number.parseFloat(min);
         max = Number.parseFloat(max);
 
-        if (!baseWeight || increment <= 0 || min > max) return [];
+        if (!baseWeight || !increment || increment < 0.01 || min > max) return [];
 
         const table = [];
         for (let pct = min; pct <= max; pct += increment) {
