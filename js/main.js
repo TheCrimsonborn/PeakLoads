@@ -335,6 +335,18 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!resultRirCard.classList.contains('hidden')) btnCalcRir.click();
     }
 
+    function createWeightCell(weight, includeUnit = true) {
+        const tdWeight = document.createElement('td');
+        tdWeight.textContent = `${weight} `;
+        if (includeUnit) {
+            const spanUnit = document.createElement('span');
+            spanUnit.className = 'unit-display';
+            spanUnit.textContent = currentUnit;
+            tdWeight.appendChild(spanUnit);
+        }
+        return tdWeight;
+    }
+
     function renderPercentageTable(data) {
         const fragment = document.createDocumentFragment();
         data.forEach(row => {
@@ -343,12 +355,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const tdPercent = document.createElement('td');
             tdPercent.textContent = `${row.percent}%`;
             
-            const tdWeight = document.createElement('td');
-            tdWeight.textContent = `${row.weight} `;
-            const spanUnit = document.createElement('span');
-            spanUnit.className = 'unit-display';
-            spanUnit.textContent = currentUnit;
-            tdWeight.appendChild(spanUnit);
+            const tdWeight = createWeightCell(row.weight);
 
             tr.appendChild(tdPercent);
             tr.appendChild(tdWeight);
@@ -365,12 +372,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const tdPercent = document.createElement('td');
             tdPercent.textContent = `${row.percent}%`;
 
-            const tdWeight = document.createElement('td');
-            tdWeight.textContent = `${row.weight} `;
-            const spanUnit = document.createElement('span');
-            spanUnit.className = 'unit-display';
-            spanUnit.textContent = currentUnit;
-            tdWeight.appendChild(spanUnit);
+            const tdWeight = createWeightCell(row.weight);
 
             const tdReps = document.createElement('td');
             tdReps.textContent = row.reps;
@@ -397,14 +399,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const tdPercent = document.createElement('td');
             tdPercent.textContent = row.percent === '-' ? '-' : `${row.percent}%`;
 
-            const tdWeight = document.createElement('td');
-            tdWeight.textContent = `${row.weight} `;
-            if (row.percent !== '-') {
-                const spanUnit = document.createElement('span');
-                spanUnit.className = 'unit-display';
-                spanUnit.textContent = currentUnit;
-                tdWeight.appendChild(spanUnit);
-            }
+            const tdWeight = createWeightCell(row.weight, row.percent !== '-');
 
             const tdReps = document.createElement('td');
             tdReps.textContent = row.reps;
