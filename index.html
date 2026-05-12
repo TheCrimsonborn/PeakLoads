@@ -100,7 +100,7 @@
                     <button id="btn-kg" class="unit-btn active">KG</button>
                     <button id="btn-lb" class="unit-btn">LB</button>
                 </div>
-                <select id="lang-select" class="lang-select">
+                <select id="lang-select" class="lang-select" aria-label="Select Language">
                     <option value="en">English</option>
                     <option value="tr">Türkçe</option>
                     <option value="ru">Русский</option>
@@ -161,11 +161,11 @@
                 <h2 data-i18n="title_1rm">1RM Estimator</h2>
                 <div class="input-group">
                     <label for="weight-1rm" data-i18n="label_weight">Weight Lifted</label>
-                    <input type="number" id="weight-1rm" placeholder="e.g. 140">
+                    <input type="number" id="weight-1rm" placeholder="e.g. 140" min="0">
                 </div>
                 <div class="input-group">
                     <label for="reps-1rm" data-i18n="label_reps">Reps</label>
-                    <input type="number" id="reps-1rm" placeholder="e.g. 5">
+                    <input type="number" id="reps-1rm" placeholder="e.g. 5" min="0">
                 </div>
                 <div class="input-group">
                     <label for="formula-1rm" data-i18n="label_formula">Formula</label>
@@ -177,7 +177,7 @@
                 </div>
                 <button id="btn-calc-1rm" class="action-btn" data-i18n="btn_calculate">Calculate</button>
 
-                <div class="result-card hidden" id="result-1rm">
+                <div class="result-card hidden" id="result-1rm" aria-live="polite">
                     <h3 data-i18n="result_estimated_1rm">Estimated 1RM</h3>
                     <div class="big-number"><span id="val-1rm">0</span> <span class="unit-display">kg</span></div>
                 </div>
@@ -188,25 +188,25 @@
                 <h2 data-i18n="title_percentage">Percentage Chart</h2>
                 <div class="input-group">
                     <label for="base-weight-pct" data-i18n="label_base_weight">Base Weight (1RM)</label>
-                    <input type="number" id="base-weight-pct" placeholder="e.g. 200">
+                    <input type="number" id="base-weight-pct" placeholder="e.g. 200" min="0">
                 </div>
                 <div class="row">
                     <div class="input-group half">
                         <label for="increment-pct" data-i18n="label_increment">Increment (%)</label>
-                        <input type="number" id="increment-pct" value="5" step="1">
+                        <input type="number" id="increment-pct" value="5" step="1" min="0">
                     </div>
                     <div class="input-group half">
                         <label for="range-min-pct" data-i18n="label_range">Range (%)</label>
                         <div class="range-inputs">
-                            <input type="number" id="range-min-pct" value="60" placeholder="Min">
+                            <input type="number" id="range-min-pct" value="60" placeholder="Min" min="0">
                             <span>-</span>
-                            <input type="number" id="range-max-pct" value="90" placeholder="Max">
+                            <input type="number" id="range-max-pct" value="90" placeholder="Max" min="0">
                         </div>
                     </div>
                 </div>
                 <button id="btn-gen-pct" class="action-btn" data-i18n="btn_generate">Generate Table</button>
 
-                <div class="result-card hidden" id="result-pct">
+                <div class="result-card hidden" id="result-pct" aria-live="polite">
                     <div class="table-responsive">
                         <table class="data-table">
                             <thead>
@@ -228,7 +228,7 @@
                 <h2 data-i18n="title_warmup">Warm-Up Planner</h2>
                 <div class="input-group">
                     <label for="top-set-warmup" data-i18n="label_top_set">Top Set Weight</label>
-                    <input type="number" id="top-set-warmup" placeholder="e.g. 180">
+                    <input type="number" id="top-set-warmup" placeholder="e.g. 180" min="0">
                 </div>
                 <div class="input-group">
                     <label for="template-warmup" data-i18n="label_template">Template</label>
@@ -240,7 +240,7 @@
                 </div>
                 <button id="btn-gen-warmup" class="action-btn" data-i18n="btn_build_warmup">Build Warm-Up</button>
 
-                <div class="result-card hidden" id="result-warmup">
+                <div class="result-card hidden" id="result-warmup" aria-live="polite">
                     <div class="table-responsive">
                         <table class="data-table">
                             <thead>
@@ -280,18 +280,18 @@
                 <div class="row">
                     <div class="input-group half">
                         <label for="adv-weight-input" data-i18n="label_adv_weight">Main Set Weight</label>
-                        <input type="number" id="adv-weight-input" placeholder="e.g. 150">
+                        <input type="number" id="adv-weight-input" placeholder="e.g. 150" min="0">
                     </div>
                     <div class="input-group half">
                         <label for="adv-reps-input" data-i18n="label_adv_reps">Main Set Reps</label>
-                        <input type="number" id="adv-reps-input" placeholder="e.g. 3">
+                        <input type="number" id="adv-reps-input" placeholder="e.g. 3" min="0">
                     </div>
                 </div>
 
                 <button id="btn-gen-adv-warmup" class="action-btn" data-i18n="btn_build_adv_warmup">Generate
                     Plan</button>
 
-                <div class="result-card hidden" id="result-adv-warmup">
+                <div class="result-card hidden" id="result-adv-warmup" aria-live="polite">
                     <div class="table-responsive">
                         <table class="data-table">
                             <thead>
@@ -321,15 +321,15 @@
                 <div class="row">
                     <div class="input-group third">
                         <label for="weight-rir" data-i18n="label_weight">Weight</label>
-                        <input type="number" id="weight-rir">
+                        <input type="number" id="weight-rir" min="0">
                     </div>
                     <div class="input-group third">
                         <label for="reps-rir" data-i18n="label_reps">Reps</label>
-                        <input type="number" id="reps-rir">
+                        <input type="number" id="reps-rir" min="0">
                     </div>
                     <div class="input-group third">
                         <label for="rir-rir" data-i18n="label_rir">RIR</label>
-                        <input type="number" id="rir-rir" placeholder="e.g. 2">
+                        <input type="number" id="rir-rir" placeholder="e.g. 2" min="0">
                     </div>
                 </div>
 
@@ -339,17 +339,17 @@
                 <div class="row">
                     <div class="input-group half">
                         <label for="target-reps-rir" data-i18n="label_target_reps">Target Reps</label>
-                        <input type="number" id="target-reps-rir" value="5">
+                        <input type="number" id="target-reps-rir" value="5" min="0">
                     </div>
                     <div class="input-group half">
                         <label for="target-rir-rir" data-i18n="label_target_rir">Target RIR</label>
-                        <input type="number" id="target-rir-rir" value="1">
+                        <input type="number" id="target-rir-rir" value="1" min="0">
                     </div>
                 </div>
 
                 <button id="btn-calc-rir" class="action-btn" data-i18n="btn_calculate">Calculate</button>
 
-                <div class="result-card hidden" id="result-rir">
+                <div class="result-card hidden" id="result-rir" aria-live="polite">
                     <div class="rir-results">
                         <div class="rir-item">
                             <span class="label" data-i18n="result_est_1rm">Est. 1RM</span>
