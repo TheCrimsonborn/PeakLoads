@@ -13,3 +13,7 @@ Action: Always wrap background fetch promises in `event.waitUntil()` inside the 
 ## 2026-05-12 - [Defer Layout-Triggering Methods]
 **Learning:** Calling `scrollIntoView()` immediately after DOM mutations (like adding/removing classes) forces synchronous reflows, causing Lighthouse 'forced-reflow-insight' warnings and thread blocking.
 **Action:** Defer layout-triggering methods using `requestAnimationFrame()` until after the browser has completed batch DOM mutations.
+
+## 2026-05-24 - [Extract Static Objects]
+**Learning:** Functions that recreate large static objects (like configuration templates or nested translation data) on every invocation cause unnecessary memory reallocation and garbage collection (GC) overhead.
+**Action:** Extract large static objects into module-level constants to prevent GC overhead in frequently called functions.
