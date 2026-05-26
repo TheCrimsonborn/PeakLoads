@@ -30,6 +30,23 @@ const WARMUP_TEMPLATES = {
     ]
 };
 
+// Extracted to prevent memory reallocation and GC overhead on each call
+const ADV_WARMUP_SETS_LOW_REPS = [
+    { percent: 0, reps: "10-15", purposeKey: "jointPrep" },
+    { percent: 45, reps: 5, purposeKey: "activation" },
+    { percent: 65, reps: 3, purposeKey: "skill" },
+    { percent: 80, reps: 2, purposeKey: "acclimatization" },
+    { percent: 90, reps: 1, purposeKey: "potentiation" },
+];
+
+const ADV_WARMUP_SETS_HIGH_REPS = [
+    { percent: 0, reps: "10-15", purposeKey: "jointPrep" },
+    { percent: 45, reps: 8, purposeKey: "activation" },
+    { percent: 65, reps: 5, purposeKey: "skill" },
+    { percent: 80, reps: 3, purposeKey: "acclimatization" },
+    { percent: 90, reps: 1, purposeKey: "potentiation" },
+];
+
 const Calculator = {
     // Unit Conversion
     toKg: (value, unit) => (unit === 'kg' ? value : value / KG_TO_LB),
@@ -115,24 +132,7 @@ const Calculator = {
         mainReps = Number.parseInt(mainReps);
         if (!mainWeight || !mainReps) return [];
 
-        let sets = [];
-        if (mainReps < 6) {
-            sets = [
-                { percent: 0, reps: "10-15", purposeKey: "jointPrep" },
-                { percent: 45, reps: 5, purposeKey: "activation" },
-                { percent: 65, reps: 3, purposeKey: "skill" },
-                { percent: 80, reps: 2, purposeKey: "acclimatization" },
-                { percent: 90, reps: 1, purposeKey: "potentiation" },
-            ];
-        } else {
-            sets = [
-                { percent: 0, reps: "10-15", purposeKey: "jointPrep" },
-                { percent: 45, reps: 8, purposeKey: "activation" },
-                { percent: 65, reps: 5, purposeKey: "skill" },
-                { percent: 80, reps: 3, purposeKey: "acclimatization" },
-                { percent: 90, reps: 1, purposeKey: "potentiation" },
-            ];
-        }
+        const sets = mainReps < 6 ? ADV_WARMUP_SETS_LOW_REPS : ADV_WARMUP_SETS_HIGH_REPS;
 
         const plan = [];
         sets.forEach((set, index) => {
