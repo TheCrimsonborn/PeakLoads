@@ -17,3 +17,6 @@ Action: Always wrap background fetch promises in `event.waitUntil()` inside the 
 ## 2026-05-25 - [Prevent GC Overhead from Static Objects]
 **Learning:** Defining large static objects (like configuration templates or translation mappings) inside frequently called functions causes unnecessary memory reallocation and garbage collection (GC) overhead on every invocation.
 **Action:** Extract large static objects into module-level constants to avoid recreating them and improve execution performance.
+## 2026-05-12 - [Hidden Cost of Live HTMLCollections]
+**Learning:** `getElementsByClassName` returns a live `HTMLCollection`. When iterating over this to update elements (e.g., unit displays), it processes *all* current elements, including dynamically generated ones inside tables. However, if those tables are immediately re-rendered right after (e.g., via a recalculation trigger), the DOM updates on those dynamic elements are completely wasted layout thrashing, as they are instantly destroyed.
+**Action:** When updating a set of permanent UI elements, use `querySelectorAll` to capture a static `NodeList` at initialization. This restricts DOM writes only to the permanent elements, avoiding redundant work on ephemeral components.
