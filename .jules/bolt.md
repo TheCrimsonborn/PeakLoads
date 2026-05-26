@@ -24,3 +24,6 @@ Action: Always wrap background fetch promises in `event.waitUntil()` inside the 
 ## 2026-05-26 - [Reduce GC Overhead from Local Static Arrays in Computation]
 **Learning:** Even small, dynamically created arrays with constant data within frequently called calculation functions (like generating warmup plan `sets`) cause noticeable memory allocation and GC overhead over many invocations.
 **Action:** Extract constant data structures, even small ones, into module-level constants instead of instantiating them inside the function scope to avoid redundant memory allocations and reduce GC overhead.
+## 2026-05-27 - [Avoid Dynamic Array Sizing and GC in Loops]
+**Learning:** Using `.push()` to build arrays iteratively causes V8 to dynamically resize the array under the hood, triggering multiple memory allocations and garbage collections. In frequently called UI functions (like building data tables), this introduces measurable overhead.
+**Action:** When generating an array whose size is known or calculable in advance, use `new Array(size)` and pre-allocate it. This improves execution speed and decreases memory fragmentation.

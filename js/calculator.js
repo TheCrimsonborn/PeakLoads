@@ -97,12 +97,25 @@ const Calculator = {
 
         if (!baseWeight || !increment || increment < 0.01 || min > max) return [];
 
-        const table = [];
-        for (let pct = min; pct <= max; pct += increment) {
+        // Float arithmetic for increments introduces inaccuracy
+        // Safe size calculation to avoid sparse arrays that break downstream iterators
+        // ⚡ Bolt Optimization: Array pre-allocation avoids dynamic resizing and V8 GC overhead
+        const size = Math.max(0, Math.floor((max - min) / increment + 1.0001));
+        const table = new Array(size);
+        let i = 0;
+        // Avoid exceeding boundaries with floating point iterations
+        for (let pct = min; pct <= max + 0.0001; pct += increment) {
+            if (i >= size) break;
             const rawWeight = baseWeight * (pct / 100);
             const weight = Calculator.roundWeight(rawWeight, unit);
-            table.push({ percent: pct, weight: weight });
+            table[i++] = { percent: Math.round(pct * 10) / 10, weight: weight }; // round percentage
         }
+
+        // Remove trailing undefined if size calculation over-estimated
+        if (i < size) {
+            table.length = i;
+        }
+
         return table;
     },
 
@@ -111,17 +124,19 @@ const Calculator = {
         topSet = Number.parseFloat(topSet);
         if (!topSet) return [];
 
-        const sets = [];
         const selectedTemplate = WARMUP_TEMPLATES[template] || WARMUP_TEMPLATES.classic;
+        // ⚡ Bolt Optimization: Array pre-allocation avoids dynamic resizing and V8 GC overhead
+        const sets = new Array(selectedTemplate.length);
 
-        selectedTemplate.forEach(step => {
+        for (let i = 0; i < selectedTemplate.length; i++) {
+            const step = selectedTemplate[i];
             const rawWeight = topSet * (step.percent / 100);
-            sets.push({
+            sets[i] = {
                 percent: step.percent,
                 weight: Calculator.roundWeight(rawWeight, unit),
                 reps: step.reps
-            });
-        });
+            };
+        }
 
         return sets;
     },
@@ -133,9 +148,11 @@ const Calculator = {
         if (!mainWeight || !mainReps) return [];
 
         const sets = mainReps < 6 ? ADV_WARMUP_SETS_LOW_REPS : ADV_WARMUP_SETS_HIGH_REPS;
+        // ⚡ Bolt Optimization: Array pre-allocation avoids dynamic resizing and V8 GC overhead
+        const plan = new Array(sets.length);
 
-        const plan = [];
-        sets.forEach((set, index) => {
+        for (let i = 0; i < sets.length; i++) {
+            const set = sets[i];
             let setWeight = mainWeight * (set.percent / 100);
             let weightLabel = Calculator.roundWeight(setWeight, unit);
             let percentLabel = set.percent;
@@ -145,15 +162,15 @@ const Calculator = {
                 percentLabel = "-";
             }
 
-            plan.push({
-                stage: index + 1,
+            plan[i] = {
+                stage: i + 1,
                 purposeStr: purposesObj[set.purposeKey],
                 percent: percentLabel,
                 weight: weightLabel,
                 reps: set.reps,
                 notes: cuesObj[set.purposeKey]
-            });
-        });
+            };
+        }
 
         return plan;
     },

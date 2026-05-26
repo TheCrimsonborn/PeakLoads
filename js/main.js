@@ -62,6 +62,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const valRir1rm = document.getElementById('val-rir-1rm');
     const valRirNext = document.getElementById('val-rir-next');
 
+    // Weight inputs array for conversion
+    const weightInputsForConversion = [
+        weight1rmInput,
+        baseWeightPctInput,
+        topSetWarmupInput,
+        advWeightInput,
+        weightRirInput
+    ];
+
     // --- Initialization ---
     loadState();
     updateUnitDisplays();
@@ -309,15 +318,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function convertAllInputs(oldUnit, newUnit) {
-        const weightInputs = [
-            weight1rmInput,
-            baseWeightPctInput,
-            topSetWarmupInput,
-            advWeightInput,
-            weightRirInput
-        ];
-
-        weightInputs.forEach(input => {
+        weightInputsForConversion.forEach(input => {
             if (input.value) {
                 let kgValue = Calculator.toKg(Number.parseFloat(input.value), oldUnit);
                 let newValue = Calculator.fromKg(kgValue, newUnit);
