@@ -4,6 +4,32 @@
 
 const KG_TO_LB = 2.2046226218;
 
+// Extracted to prevent memory reallocation and GC overhead on each call
+const WARMUP_TEMPLATES = {
+    classic: [
+        { percent: 40, reps: 5 },
+        { percent: 55, reps: 5 },
+        { percent: 65, reps: 3 },
+        { percent: 75, reps: 3 },
+        { percent: 85, reps: 2 },
+    ],
+    heavy: [
+        { percent: 30, reps: 5 },
+        { percent: 50, reps: 3 },
+        { percent: 65, reps: 3 },
+        { percent: 75, reps: 2 },
+        { percent: 85, reps: 1 },
+        { percent: 92, reps: 1 },
+    ],
+    volume: [
+        { percent: 35, reps: 8 },
+        { percent: 45, reps: 6 },
+        { percent: 55, reps: 5 },
+        { percent: 65, reps: 5 },
+        { percent: 70, reps: 3 },
+    ]
+};
+
 const Calculator = {
     // Unit Conversion
     toKg: (value, unit) => (unit === 'kg' ? value : value / KG_TO_LB),
@@ -69,32 +95,7 @@ const Calculator = {
         if (!topSet) return [];
 
         const sets = [];
-        const templates = {
-            classic: [
-                { percent: 40, reps: 5 },
-                { percent: 55, reps: 5 },
-                { percent: 65, reps: 3 },
-                { percent: 75, reps: 3 },
-                { percent: 85, reps: 2 },
-            ],
-            heavy: [
-                { percent: 30, reps: 5 },
-                { percent: 50, reps: 3 },
-                { percent: 65, reps: 3 },
-                { percent: 75, reps: 2 },
-                { percent: 85, reps: 1 },
-                { percent: 92, reps: 1 },
-            ],
-            volume: [
-                { percent: 35, reps: 8 },
-                { percent: 45, reps: 6 },
-                { percent: 55, reps: 5 },
-                { percent: 65, reps: 5 },
-                { percent: 70, reps: 3 },
-            ]
-        };
-
-        const selectedTemplate = templates[template] || templates.classic;
+        const selectedTemplate = WARMUP_TEMPLATES[template] || WARMUP_TEMPLATES.classic;
 
         selectedTemplate.forEach(step => {
             const rawWeight = topSet * (step.percent / 100);
