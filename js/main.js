@@ -11,7 +11,9 @@ document.addEventListener('DOMContentLoaded', () => {
     for (const el of cachedStateInputs) {
         stateInputsById[el.id] = el;
     }
-    const cachedUnitDisplays = document.getElementsByClassName('unit-display');
+    // Using static NodeList over live HTMLCollection to avoid redundant DOM writes
+    // on ephemeral elements that are immediately destroyed and re-rendered.
+    const staticUnitDisplays = document.querySelectorAll('.unit-display');
     const unitBtns = document.querySelectorAll('.unit-btn');
     const langSelect = document.getElementById('lang-select');
     const navBtns = document.querySelectorAll('.nav-btn');
@@ -301,7 +303,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateUnitDisplays() {
-        for (const display of cachedUnitDisplays) {
+        for (const display of staticUnitDisplays) {
             display.textContent = currentUnit;
         }
     }
