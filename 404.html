@@ -15,7 +15,8 @@
     <meta property="og:type" content="website">
 
     <!-- Styles and Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Load fonts asynchronously to prevent render blocking and improve FCP -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
     <link rel="stylesheet" href="/css/style.css">
     
     <style>
