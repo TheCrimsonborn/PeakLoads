@@ -31,20 +31,12 @@ const WARMUP_TEMPLATES = {
 };
 
 // Extracted to prevent memory reallocation and GC overhead on each call
-const ADV_WARMUP_SETS_LOW_REPS = [
-    { percent: 0, reps: "10-15", purposeKey: "jointPrep" },
-    { percent: 45, reps: 5, purposeKey: "activation" },
-    { percent: 65, reps: 3, purposeKey: "skill" },
-    { percent: 80, reps: 2, purposeKey: "acclimatization" },
-    { percent: 90, reps: 1, purposeKey: "potentiation" },
-];
-
-const ADV_WARMUP_SETS_HIGH_REPS = [
-    { percent: 0, reps: "10-15", purposeKey: "jointPrep" },
-    { percent: 45, reps: 8, purposeKey: "activation" },
-    { percent: 65, reps: 5, purposeKey: "skill" },
-    { percent: 80, reps: 3, purposeKey: "acclimatization" },
-    { percent: 90, reps: 1, purposeKey: "potentiation" },
+const ADV_WARMUP_SETS = [
+    { percent: 0, reps: "10-15", highReps: "10-15", purposeKey: "jointPrep" },
+    { percent: 45, reps: 5, highReps: 8, purposeKey: "activation" },
+    { percent: 65, reps: 3, highReps: 5, purposeKey: "skill" },
+    { percent: 80, reps: 2, highReps: 3, purposeKey: "acclimatization" },
+    { percent: 90, reps: 1, highReps: 1, purposeKey: "potentiation" },
 ];
 
 const Calculator = {
@@ -136,10 +128,8 @@ const Calculator = {
         mainReps = Number.parseInt(mainReps);
         if (!mainWeight || !mainReps) return [];
 
-        const sets = mainReps < 6 ? ADV_WARMUP_SETS_LOW_REPS : ADV_WARMUP_SETS_HIGH_REPS;
-
         const plan = [];
-        sets.forEach((set, index) => {
+        ADV_WARMUP_SETS.forEach((set, index) => {
             let setWeight = mainWeight * (set.percent / 100);
             let weightLabel = Calculator.roundWeight(setWeight, unit);
             let percentLabel = set.percent;
@@ -154,7 +144,7 @@ const Calculator = {
                 purposeStr: purposesObj[set.purposeKey],
                 percent: percentLabel,
                 weight: weightLabel,
-                reps: set.reps,
+                reps: mainReps < 6 ? set.reps : set.highReps,
                 notes: cuesObj[set.purposeKey]
             });
         });
