@@ -24,3 +24,6 @@ Action: Always wrap background fetch promises in `event.waitUntil()` inside the 
 ## 2026-05-26 - [Reduce GC Overhead from Local Static Arrays in Computation]
 **Learning:** Even small, dynamically created arrays with constant data within frequently called calculation functions (like generating warmup plan `sets`) cause noticeable memory allocation and GC overhead over many invocations.
 **Action:** Extract constant data structures, even small ones, into module-level constants instead of instantiating them inside the function scope to avoid redundant memory allocations and reduce GC overhead.
+## 2026-06-01 - [Async Font Loading for FCP]
+**Learning:** Google Fonts are render-blocking by default. In a codebase without build tools, appending `media="print" onload="this.media='all'"` directly to the stylesheet `<link>` tag forces the browser to load it asynchronously, removing the render-blocking resource and improving First Contentful Paint (FCP).
+**Action:** Use the async print-onload trick for external fonts (like Google Fonts) to boost FCP.
