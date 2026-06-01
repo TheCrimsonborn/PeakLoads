@@ -7,10 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // DOM Elements
     const cachedStateInputs = Array.from(document.querySelectorAll('input, select')).filter(el => el.id);
-    const stateInputsById = {};
-    for (const el of cachedStateInputs) {
-        stateInputsById[el.id] = el;
-    }
+    const stateInputsById = Object.fromEntries(cachedStateInputs.map(el => [el.id, el]));
     // Using static NodeList over live HTMLCollection to avoid redundant DOM writes
     // on ephemeral elements that are immediately destroyed and re-rendered.
     const staticUnitDisplays = document.querySelectorAll('.unit-display');
