@@ -349,77 +349,49 @@ document.addEventListener('DOMContentLoaded', () => {
         return tdWeight;
     }
 
-    function renderPercentageTable(data) {
+    function createTextCell(text, styles = null) {
+        const td = document.createElement('td');
+        td.textContent = text;
+        if (styles) {
+            Object.assign(td.style, styles);
+        }
+        return td;
+    }
+
+    function renderTableData(tbody, data, columns) {
         const fragment = document.createDocumentFragment();
         data.forEach(row => {
             const tr = document.createElement('tr');
-            
-            const tdPercent = document.createElement('td');
-            tdPercent.textContent = `${row.percent}%`;
-            
-            const tdWeight = createWeightCell(row.weight);
-
-            tr.appendChild(tdPercent);
-            tr.appendChild(tdWeight);
+            columns.forEach(colFn => tr.appendChild(colFn(row)));
             fragment.appendChild(tr);
         });
-        tableBodyPct.replaceChildren(fragment);
+        tbody.replaceChildren(fragment);
+    }
+
+    function renderPercentageTable(data) {
+        renderTableData(tableBodyPct, data, [
+            row => createTextCell(`${row.percent}%`),
+            row => createWeightCell(row.weight)
+        ]);
     }
 
     function renderWarmupTable(data) {
-        const fragment = document.createDocumentFragment();
-        data.forEach(row => {
-            const tr = document.createElement('tr');
-
-            const tdPercent = document.createElement('td');
-            tdPercent.textContent = `${row.percent}%`;
-
-            const tdWeight = createWeightCell(row.weight);
-
-            const tdReps = document.createElement('td');
-            tdReps.textContent = row.reps;
-
-            tr.appendChild(tdPercent);
-            tr.appendChild(tdWeight);
-            tr.appendChild(tdReps);
-            fragment.appendChild(tr);
-        });
-        tableBodyWarmup.replaceChildren(fragment);
+        renderTableData(tableBodyWarmup, data, [
+            row => createTextCell(`${row.percent}%`),
+            row => createWeightCell(row.weight),
+            row => createTextCell(row.reps)
+        ]);
     }
 
     function renderAdvWarmupTable(data) {
-        const fragment = document.createDocumentFragment();
-        data.forEach(row => {
-            const tr = document.createElement('tr');
-
-            const tdStage = document.createElement('td');
-            tdStage.textContent = row.stage;
-
-            const tdPurpose = document.createElement('td');
-            tdPurpose.textContent = row.purposeStr;
-
-            const tdPercent = document.createElement('td');
-            tdPercent.textContent = row.percent === '-' ? '-' : `${row.percent}%`;
-
-            const tdWeight = createWeightCell(row.weight, row.percent !== '-');
-
-            const tdReps = document.createElement('td');
-            tdReps.textContent = row.reps;
-
-            const tdNotes = document.createElement('td');
-            tdNotes.style.fontSize = '0.9em';
-            tdNotes.style.opacity = '0.8';
-            tdNotes.textContent = row.notes;
-
-            tr.appendChild(tdStage);
-            tr.appendChild(tdPurpose);
-            tr.appendChild(tdPercent);
-            tr.appendChild(tdWeight);
-            tr.appendChild(tdReps);
-            tr.appendChild(tdNotes);
-            fragment.appendChild(tr);
-        });
-        tableBodyAdvWarmup.replaceChildren(fragment);
+        renderTableData(tableBodyAdvWarmup, data, [
+            row => createTextCell(row.stage),
+            row => createTextCell(row.purposeStr),
+            row => createTextCell(row.percent === '-' ? '-' : `${row.percent}%`),
+            row => createWeightCell(row.weight, row.percent !== '-'),
+            row => createTextCell(row.reps),
+            row => createTextCell(row.notes, { fontSize: '0.9em', opacity: '0.8' })
+        ]);
     }
 
     // Set current year in footer
