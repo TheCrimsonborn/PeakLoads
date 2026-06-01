@@ -97,6 +97,10 @@ const Calculator = {
 
         if (!baseWeight || !increment || increment < 0.01 || min > max) return [];
 
+        // Prevent client-side DoS from excessive iterations
+        const iterations = (max - min) / increment;
+        if (iterations > 1000) return [];
+
         const table = [];
         for (let pct = min; pct <= max; pct += increment) {
             const rawWeight = baseWeight * (pct / 100);
