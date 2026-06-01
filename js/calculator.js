@@ -130,13 +130,16 @@ const Calculator = {
 
         const plan = [];
         ADV_WARMUP_SETS.forEach((set, index) => {
-            let setWeight = mainWeight * (set.percent / 100);
-            let weightLabel = Calculator.roundWeight(setWeight, unit);
-            let percentLabel = set.percent;
+            let weightLabel;
+            let percentLabel;
 
             if (set.percent === 0) {
                 weightLabel = unit === 'kg' ? 20 : 45; // Standard bar
                 percentLabel = "-";
+            } else {
+                let setWeight = mainWeight * (set.percent / 100);
+                weightLabel = Calculator.roundWeight(setWeight, unit);
+                percentLabel = set.percent;
             }
 
             plan.push({
