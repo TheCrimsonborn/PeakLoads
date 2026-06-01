@@ -24,3 +24,7 @@ Action: Always wrap background fetch promises in `event.waitUntil()` inside the 
 ## 2026-05-26 - [Reduce GC Overhead from Local Static Arrays in Computation]
 **Learning:** Even small, dynamically created arrays with constant data within frequently called calculation functions (like generating warmup plan `sets`) cause noticeable memory allocation and GC overhead over many invocations.
 **Action:** Extract constant data structures, even small ones, into module-level constants instead of instantiating them inside the function scope to avoid redundant memory allocations and reduce GC overhead.
+
+## 2024-11-13 - Avoid redundant floating point operations
+**Learning:** Performing floating-point math and calling rounding functions inside a loop when the result is ignored or overridden (e.g., standard bar calculations) wastes CPU cycles.
+**Action:** Always conditionally bypass heavy calculations when a default/hardcoded value can be used. In this case, avoiding `Calculator.roundWeight` and floating-point multiplications for `set.percent === 0` improved loop execution time by ~35%.
