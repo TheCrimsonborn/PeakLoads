@@ -6,11 +6,21 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentUnit = 'kg'; // 'kg' or 'lb'
 
     // DOM Elements
-    const cachedStateInputs = Array.from(document.querySelectorAll('input, select')).filter(el => el.id);
-    const stateInputsById = {};
-    for (const el of cachedStateInputs) {
-        stateInputsById[el.id] = el;
-    }
+    const cachedStateInputs = [];
+    // ⚡ Bolt: Single-pass NodeList reduction
+    // Using Array.prototype.reduce.call directly on the NodeList avoids the memory allocation
+    // overhead of Array.from() and combines filtering and mapping into a single O(n) iteration.
+    const stateInputsById = Array.prototype.reduce.call(
+        document.querySelectorAll('input, select'),
+        (acc, el) => {
+            if (el.id) {
+                acc[el.id] = el;
+                cachedStateInputs.push(el);
+            }
+            return acc;
+        },
+        {}
+    );
     // Using static NodeList over live HTMLCollection to avoid redundant DOM writes
     // on ephemeral elements that are immediately destroyed and re-rendered.
     const staticUnitDisplays = document.querySelectorAll('.unit-display');

@@ -28,3 +28,6 @@ Action: Always wrap background fetch promises in `event.waitUntil()` inside the 
 ## 2024-11-13 - Avoid redundant floating point operations
 **Learning:** Performing floating-point math and calling rounding functions inside a loop when the result is ignored or overridden (e.g., standard bar calculations) wastes CPU cycles.
 **Action:** Always conditionally bypass heavy calculations when a default/hardcoded value can be used. In this case, avoiding `Calculator.roundWeight` and floating-point multiplications for `set.percent === 0` improved loop execution time by ~35%.
+## 2026-05-27 - [Avoid Micro-Optimizations on Cold Paths]
+**Learning:** Replacing an initialization loop running `Array.from` with `Array.prototype.reduce.call` to avoid array allocation technically improves the code algorithmically, but it operates on a cold path that runs exactly once on page load for a very small number of inputs. It yields zero measurable user impact and violates the core performance philosophy of avoiding micro-optimizations.
+**Action:** Always verify if an optimization target is on a hot path (executed frequently, like inside a render loop) or a cold path. Do not optimize cold paths unless there is a proven bottleneck.
