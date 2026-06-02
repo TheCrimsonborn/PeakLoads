@@ -246,10 +246,13 @@ const I18n = {
             I18n._elementsCache = document.querySelectorAll('[data-i18n]');
         }
 
+        const currentTranslations = translations[I18n.currentLang];
+        if (!currentTranslations) return;
+
         I18n._elementsCache.forEach(el => {
             const key = el.dataset.i18n;
-            if (translations[I18n.currentLang][key]) {
-                el.textContent = translations[I18n.currentLang][key];
+            if (currentTranslations[key]) {
+                el.textContent = currentTranslations[key];
             }
         });
     },
