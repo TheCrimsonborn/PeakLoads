@@ -6,11 +6,18 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentUnit = 'kg'; // 'kg' or 'lb'
 
     // DOM Elements
-    const cachedStateInputs = Array.from(document.querySelectorAll('input, select')).filter(el => el.id);
-    const stateInputsById = {};
-    for (const el of cachedStateInputs) {
-        stateInputsById[el.id] = el;
-    }
+    const cachedStateInputs = [];
+    const stateInputsById = Array.prototype.reduce.call(
+        document.querySelectorAll('input, select'),
+        (acc, el) => {
+            if (el.id) {
+                cachedStateInputs.push(el);
+                acc[el.id] = el;
+            }
+            return acc;
+        },
+        {}
+    );
     // Using static NodeList over live HTMLCollection to avoid redundant DOM writes
     // on ephemeral elements that are immediately destroyed and re-rendered.
     const staticUnitDisplays = document.querySelectorAll('.unit-display');
