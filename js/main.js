@@ -287,8 +287,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (state.inputs) {
                     for (const id in state.inputs) {
-                        const el = stateInputsById[id];
-                        if (el) el.value = state.inputs[id];
+                        if (Object.prototype.hasOwnProperty.call(state.inputs, id)) {
+                            const el = stateInputsById[id];
+                            if (el) el.value = state.inputs[id];
+                        }
                     }
                 }
 
