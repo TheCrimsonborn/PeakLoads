@@ -286,10 +286,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 if (state.inputs) {
-                    Object.entries(state.inputs).forEach(([id, value]) => {
+                    for (const id in state.inputs) {
                         const el = stateInputsById[id];
-                        if (el) el.value = value;
-                    });
+                        if (el) el.value = state.inputs[id];
+                    }
                 }
 
                 // Prioritize explicit SEO URL over saved local state hash
