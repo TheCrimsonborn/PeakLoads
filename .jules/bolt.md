@@ -35,3 +35,7 @@ Action: Always wrap background fetch promises in `event.waitUntil()` inside the 
 ## 2026-06-02 - [Avoid Temporary Array Allocations when Iterating Objects]
 **Learning:** Iterating over object entries using `Object.entries(obj).forEach()` creates intermediate arrays and increases garbage collection overhead. In frequently called or initialization code paths, this can cause unnecessary delays.
 **Action:** Iterate over simple object dictionaries (like parsed JSON state) using a `for...in` loop directly instead of `Object.entries().forEach()` to improve execution speed and reduce memory pressure.
+
+## 2026-06-02 - [Reduce Cognitive Complexity for SonarCloud Compliance]
+**Learning:** Adding new nested blocks (like `if (Object.prototype.hasOwnProperty...)`) to already large functions can push their cognitive complexity over SonarCloud's limits, causing CI failures on New Code.
+**Action:** When updating monolithic initialization functions, extract logical blocks into dedicated helper functions to flatten flow and satisfy complexity linters.

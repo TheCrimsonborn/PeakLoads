@@ -267,55 +267,63 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('peakloads_state', JSON.stringify(state));
     }
 
+    function restoreStateLanguage(state) {
+        if (!state.language) return;
+        langSelect.value = state.language;
+        I18n.setLanguage(state.language);
+    }
+
+    function restoreStateUnit(state) {
+        if (!state.unit) return;
+        currentUnit = state.unit;
+        unitBtns.forEach(btn => {
+            btn.classList.toggle('active', btn.id === `btn-${currentUnit}`);
+        });
+    }
+
+    function restoreStateInputs(state) {
+        if (!state.inputs) return;
+        for (const id in state.inputs) {
+            if (Object.prototype.hasOwnProperty.call(state.inputs, id)) {
+                const el = stateInputsById[id];
+                if (el) el.value = state.inputs[id];
+            }
+        }
+    }
+
+    function restoreStateRoute(state) {
+        if (seoRoutes[globalThis.location.pathname]) {
+            activateSection(seoRoutes[globalThis.location.pathname]);
+        } else if (state.hash) {
+            if (!globalThis.location.hash || globalThis.location.hash !== state.hash) {
+                globalThis.location.hash = state.hash;
+            }
+            activateSection(state.hash.substring(1));
+        }
+    }
+
+    function triggerRestorationCalculations() {
+        setTimeout(() => {
+            if (weight1rmInput.value && reps1rmInput.value) btnCalc1rm.click();
+            if (baseWeightPctInput.value) btnGenPct.click();
+            if (topSetWarmupInput.value) btnGenWarmup.click();
+            if (advWeightInput.value && advRepsInput.value) btnGenAdvWarmup.click();
+            if (weightRirInput.value && repsRirInput.value) btnCalcRir.click();
+        }, 50);
+    }
+
     function loadState() {
         const saved = localStorage.getItem('peakloads_state');
-        if (saved) {
-            try {
-                const state = JSON.parse(saved);
-
-                if (state.language) {
-                    langSelect.value = state.language;
-                    I18n.setLanguage(state.language);
-                }
-
-                if (state.unit) {
-                    currentUnit = state.unit;
-                    unitBtns.forEach(btn => {
-                        btn.classList.toggle('active', btn.id === `btn-${currentUnit}`);
-                    });
-                }
-
-                if (state.inputs) {
-                    for (const id in state.inputs) {
-                        if (Object.prototype.hasOwnProperty.call(state.inputs, id)) {
-                            const el = stateInputsById[id];
-                            if (el) el.value = state.inputs[id];
-                        }
-                    }
-                }
-
-                // Prioritize explicit SEO URL over saved local state hash
-                if (seoRoutes[globalThis.location.pathname]) {
-                    activateSection(seoRoutes[globalThis.location.pathname]);
-                } else if (state.hash) {
-                    if (!globalThis.location.hash || globalThis.location.hash !== state.hash) {
-                        globalThis.location.hash = state.hash;
-                    }
-                    activateSection(state.hash.substring(1));
-                }
-
-                // Trigger calculations to restore UI tables silently safely
-                setTimeout(() => {
-                    if (weight1rmInput.value && reps1rmInput.value) btnCalc1rm.click();
-                    if (baseWeightPctInput.value) btnGenPct.click();
-                    if (topSetWarmupInput.value) btnGenWarmup.click();
-                    if (advWeightInput.value && advRepsInput.value) btnGenAdvWarmup.click();
-                    if (weightRirInput.value && repsRirInput.value) btnCalcRir.click();
-                }, 50);
-
-            } catch (e) {
-                console.error("Failed to restore state", e);
-            }
+        if (!saved) return;
+        try {
+            const state = JSON.parse(saved);
+            restoreStateLanguage(state);
+            restoreStateUnit(state);
+            restoreStateInputs(state);
+            restoreStateRoute(state);
+            triggerRestorationCalculations();
+        } catch (e) {
+            console.error("Failed to restore state", e);
         }
     }
 
