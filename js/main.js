@@ -328,10 +328,10 @@ document.addEventListener('DOMContentLoaded', () => {
     function convertAllInputs(oldUnit, newUnit) {
         weightInputs.forEach(input => {
             if (input.value) {
-                let kgValue = Calculator.toKg(Number.parseFloat(input.value), oldUnit);
-                let newValue = Calculator.fromKg(kgValue, newUnit);
+                const kgValue = Calculator.toKg(Number.parseFloat(input.value), oldUnit);
+                const newValue = Calculator.fromKg(kgValue, newUnit);
                 // Depending on the unit, step precision changes
-                let step = newUnit === 'kg' ? 0.5 : 1;
+                const step = newUnit === 'kg' ? 0.5 : 1;
                 input.step = step;
                 input.value = (Math.round(newValue / step) * step).toFixed(newUnit === 'kg' ? 1 : 0);
             }
