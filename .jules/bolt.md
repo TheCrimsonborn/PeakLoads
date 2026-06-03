@@ -35,3 +35,7 @@ Action: Always wrap background fetch promises in `event.waitUntil()` inside the 
 ## 2026-06-02 - [Avoid Temporary Array Allocations when Iterating Objects]
 **Learning:** Iterating over object entries using `Object.entries(obj).forEach()` creates intermediate arrays and increases garbage collection overhead. In frequently called or initialization code paths, this can cause unnecessary delays.
 **Action:** Iterate over simple object dictionaries (like parsed JSON state) using a `for...in` loop directly instead of `Object.entries().forEach()` to improve execution speed and reduce memory pressure.
+
+## 2026-06-03 - [Array Iteration over NodeList]
+**Learning:** Using `Array.prototype.reduce.call` on a `NodeList` invokes a function call for every single element, which incurs unnecessary overhead. A traditional `for` loop is significantly faster for simple data extraction and mapping.
+**Action:** When extracting data from a `NodeList` to populate arrays or objects, use a simple `for` loop rather than chaining or `call`-ing higher-order array methods.

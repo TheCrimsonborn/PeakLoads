@@ -7,17 +7,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // DOM Elements
     const cachedStateInputs = [];
-    const stateInputsById = Array.prototype.reduce.call(
-        document.querySelectorAll('input, select'),
-        (acc, el) => {
-            if (el.id) {
-                cachedStateInputs.push(el);
-                acc[el.id] = el;
-            }
-            return acc;
-        },
-        {}
-    );
+    const stateInputsById = {};
+    const inputElements = document.querySelectorAll('input, select');
+    for (let i = 0; i < inputElements.length; i++) {
+        const el = inputElements[i];
+        if (el.id) {
+            cachedStateInputs.push(el);
+            stateInputsById[el.id] = el;
+        }
+    }
     // Using static NodeList over live HTMLCollection to avoid redundant DOM writes
     // on ephemeral elements that are immediately destroyed and re-rendered.
     const staticUnitDisplays = document.querySelectorAll('.unit-display');
