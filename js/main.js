@@ -320,8 +320,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateUnitDisplays() {
-        for (const display of staticUnitDisplays) {
-            display.textContent = currentUnit;
+        for (let i = 0; i < staticUnitDisplays.length; i++) {
+            staticUnitDisplays[i].textContent = currentUnit;
         }
     }
 
