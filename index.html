@@ -39,8 +39,8 @@
     </script>
         <!-- Google tag (gtag.js) -->
         <!-- Ahrefs Analytics -->
-        <script src="https://analytics.ahrefs.com/analytics.js" data-key="WsQGuqWO4T3Lhnt3EDPMkQ" async></script>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-5PSBEY8S83"></script>
+        <script src="https://analytics.ahrefs.com/analytics.js" data-key="WsQGuqWO4T3Lhnt3EDPMkQ" defer></script>
+    <script defer src="https://www.googletagmanager.com/gtag/js?id=G-5PSBEY8S83"></script>
     <script>
     globalThis.dataLayer = globalThis.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
@@ -81,14 +81,102 @@
     <!-- ⚡ Bolt: Load external fonts asynchronously to prevent render-blocking (improves FCP) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@400;700&display=swap">
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@400;700&display=swap"
         rel="stylesheet"
         media="print"
         onload="this.media='all'">
 
+    <!-- Critical Styles -->
+    <style>
+:root {
+  --bg-color: #050505;
+  --card-bg: rgba(20, 20, 20, 0.8);
+  --card-border: rgba(220, 38, 38, 0.2);
+  --primary-color: #dc2626;
+  --primary-text: #ef4444;
+  --accent-color: #991b1b;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --input-bg: rgba(10, 10, 10, 0.8);
+  --success-color: #22c55e;
+  --font-main: "Inter", sans-serif;
+  --font-display: "Outfit", sans-serif;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --shadow-card: 0 10px 30px -10px rgba(220, 38, 38, 0.15);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-main);
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  background-image:
+    radial-gradient(circle at 10% 20%, rgba(220, 38, 38, 0.15) 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(153, 27, 27, 0.15) 0%, transparent 40%);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+  padding-top: calc(20px + env(safe-area-inset-top));
+  padding-bottom: calc(20px + env(safe-area-inset-bottom));
+  padding-left: calc(20px + env(safe-area-inset-left));
+  padding-right: calc(20px + env(safe-area-inset-right));
+}
+
+.app-container { width: 100%; max-width: 600px; display: flex; flex-direction: column; gap: 20px; }
+
+.main-header { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; flex-wrap: wrap; gap: 15px; }
+
+.logo h1 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.8rem;
+  background: linear-gradient(135deg, var(--primary-color), #ef4444);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 20px rgba(220, 38, 38, 0.3);
+}
+
+.subtitle { font-size: 0.85rem; color: var(--text-muted); display: block; }
+.settings-bar { display: flex; gap: 10px; align-items: center; flex-wrap: nowrap; }
+
+.unit-toggle { background: var(--input-bg); border-radius: 8px; padding: 4px; display: flex; border: 1px solid var(--card-border); }
+.unit-btn { background: transparent; border: none; color: var(--text-muted); padding: 5px 10px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: 600; transition: all 0.3s ease; }
+.unit-btn.active { background: var(--primary-color); color: white; box-shadow: 0 2px 8px rgba(220, 38, 38, 0.4); }
+
+.lang-select { background: var(--input-bg); color: var(--text-main); border: 1px solid var(--card-border); padding: 6px 10px; border-radius: 8px; font-size: 0.85rem; cursor: pointer; }
+.lang-select:hover { border-color: var(--primary-color); }
+
+.guide-btn { background: transparent; color: var(--primary-text); border: 1px solid var(--primary-text); padding: 6px 15px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; white-space: nowrap; transition: all 0.3s ease; }
+.guide-btn:hover { background: rgba(220, 38, 38, 0.1); box-shadow: 0 4px 12px rgba(220, 38, 38, 0.2); }
+
+.main-nav { display: flex; background: var(--card-bg); backdrop-filter: blur(12px); padding: 5px; border-radius: var(--radius-md); border: 1px solid var(--card-border); overflow-x: auto; gap: 5px; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+.main-nav::-webkit-scrollbar { display: none !important; width: 0 !important; height: 0 !important; -webkit-appearance: none; }
+.nav-btn { flex: 1 1 auto; background: transparent; border: none; color: var(--text-muted); padding: 10px 2px; border-radius: 8px; cursor: pointer; font-weight: 500; white-space: nowrap; transition: all 0.3s ease; text-decoration: none; text-align: center; }
+.nav-btn:hover { color: var(--text-main); background: rgba(255, 255, 255, 0.05); }
+.nav-btn.active { background: linear-gradient(135deg, var(--primary-color), var(--accent-color)); color: white; font-weight: 700; box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3); }
+
+.content-area { position: relative; min-height: 400px; }
+.tool-section { display: none; animation: fadeIn 0.4s ease; }
+.tool-section.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+h2 { font-family: var(--font-display); margin-bottom: 20px; font-size: 1.5rem; color: var(--text-main); }
+.input-group { margin-bottom: 15px; display: flex; flex-direction: column; gap: 8px; }
+label { font-size: 0.9rem; color: var(--text-muted); font-weight: 500; }
+input, select { width: 100%; background: var(--input-bg); border: 1px solid var(--card-border); color: var(--text-main); padding: 12px 15px; border-radius: var(--radius-md); font-size: 1rem; font-family: var(--font-main); transition: border-color 0.3s, box-shadow 0.3s; }
+input:focus, select:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.2); }
+.action-btn { width: 100%; padding: 15px; background: linear-gradient(135deg, var(--primary-color), #b91c1c); border: none; border-radius: var(--radius-md); color: #fff; font-weight: 700; font-size: 1rem; cursor: pointer; margin-top: 10px; box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3); transition: transform 0.2s, box-shadow 0.2s; }
+.action-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(220, 38, 38, 0.5); }
+    </style>
+
     <!-- Styles -->
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.css" media="print" onload="this.media='all'">
 </head>
 
 <body>
