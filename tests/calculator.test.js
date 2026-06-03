@@ -66,28 +66,9 @@ runTest('generateAdvancedWarmUp - invalid inputs', () => {
     assert.deepStrictEqual(Calculator.generateAdvancedWarmUp('Squat', null, undefined, cuesObj, purposesObj, 'kg'), []);
 });
 
-console.log(`\nTests completed: ${testsPassed} passed, ${testsFailed} failed.`);
-if (testsFailed > 0) process.exit(1);
-import assert from 'node:assert/strict';
-import Calculator from '../js/calculator.js';
 
-// Helper for running tests and tracking results
-let passed = 0;
-let failed = 0;
 
-function runTest(name, fn) {
-    try {
-        fn();
-        console.log(`✅ PASS: ${name}`);
-        passed++;
-    } catch (error) {
-        console.error(`❌ FAIL: ${name}`);
-        console.error(`   ${error.message}`);
-        failed++;
-    }
-}
-
-console.log('--- Testing Calculator.generatePercentageTable ---');
+console.log('\n--- Testing Calculator.generatePercentageTable ---');
 
 // 1. Basic Functionality
 runTest('Should generate a standard percentage table in kg', () => {
@@ -182,11 +163,11 @@ runTest('Should handle min and max being the same', () => {
 
 // Print Summary
 console.log('\n--- Test Summary ---');
-console.log(`Total:  ${passed + failed}`);
-console.log(`Passed: ${passed}`);
-console.log(`Failed: ${failed}`);
+console.log(`Total:  ${testsPassed + testsFailed}`);
+console.log(`Passed: ${testsPassed}`);
+console.log(`Failed: ${testsFailed}`);
 
-if (failed > 0) {
+if (testsFailed > 0) {
     process.exit(1);
 } else {
     process.exit(0);
