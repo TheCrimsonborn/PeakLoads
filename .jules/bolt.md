@@ -35,3 +35,6 @@ Action: Always wrap background fetch promises in `event.waitUntil()` inside the 
 ## 2026-06-02 - [Avoid Temporary Array Allocations when Iterating Objects]
 **Learning:** Iterating over object entries using `Object.entries(obj).forEach()` creates intermediate arrays and increases garbage collection overhead. In frequently called or initialization code paths, this can cause unnecessary delays.
 **Action:** Iterate over simple object dictionaries (like parsed JSON state) using a `for...in` loop directly instead of `Object.entries().forEach()` to improve execution speed and reduce memory pressure.
+## 2026-06-03 - [Preload Critical Fonts for FCP]
+**Learning:** Asynchronously loading external fonts via `media="print" onload="this.media='all'"` prevents render blocking, but it can still delay First Contentful Paint (FCP) because the browser only discovers and fetches the font file *after* executing the onload handler and evaluating the styles.
+**Action:** When using the asynchronous loading pattern for critical external fonts (like Google Fonts), pair it with a `<link rel="preload" as="style">` tag in the `<head>` so the browser's preload scanner can immediately initiate the network request for the font CSS before layout begins.
