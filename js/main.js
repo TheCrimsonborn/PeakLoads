@@ -320,9 +320,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateUnitDisplays() {
-        for (let i = 0; i < staticUnitDisplays.length; i++) {
-            staticUnitDisplays[i].textContent = currentUnit;
-        }
+        staticUnitDisplays.forEach(display => {
+            display.textContent = currentUnit;
+        });
     }
 
     function convertAllInputs(oldUnit, newUnit) {
