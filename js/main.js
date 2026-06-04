@@ -7,17 +7,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // DOM Elements
     const cachedStateInputs = [];
-    const stateInputsById = Array.prototype.reduce.call(
-        document.querySelectorAll('input, select'),
-        (acc, el) => {
-            if (el.id) {
-                cachedStateInputs.push(el);
-                acc[el.id] = el;
-            }
-            return acc;
-        },
-        {}
-    );
+    const stateInputsById = {};
+    const inputsAndSelects = document.querySelectorAll('input, select');
+    for (let i = 0; i < inputsAndSelects.length; i++) {
+        const el = inputsAndSelects[i];
+        if (el.id) {
+            cachedStateInputs.push(el);
+            stateInputsById[el.id] = el;
+        }
+    }
     // Using static NodeList over live HTMLCollection to avoid redundant DOM writes
     // on ephemeral elements that are immediately destroyed and re-rendered.
     const staticUnitDisplays = document.querySelectorAll('.unit-display');
@@ -93,7 +91,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Event Listeners ---
 
     // Unit Toggle
-    unitBtns.forEach(btn => {
+    for (let i = 0; i < unitBtns.length; i++) {
+        const btn = unitBtns[i];
         btn.addEventListener('click', () => {
             if (btn.classList.contains('active')) return;
 
@@ -102,7 +101,9 @@ document.addEventListener('DOMContentLoaded', () => {
             // Convert inputs
             convertAllInputs(currentUnit, newUnit);
 
-            unitBtns.forEach(b => b.classList.remove('active'));
+            for (let j = 0; j < unitBtns.length; j++) {
+                unitBtns[j].classList.remove('active');
+            }
             btn.classList.add('active');
             currentUnit = newUnit;
             updateUnitDisplays();
@@ -111,7 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Recalculate any open results
             recalculateOpenResults();
         });
-    });
+    }
 
     // Language Switch
     langSelect.addEventListener('change', (e) => {
@@ -126,7 +127,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!targetId) targetId = 'section-1rm'; // Default
 
         // Update Nav
-        navBtns.forEach(btn => {
+        for (let i = 0; i < navBtns.length; i++) {
+            const btn = navBtns[i];
             btn.classList.remove('active');
             if (btn.getAttribute('href') === `#${targetId}`) {
                 btn.classList.add('active');
@@ -135,25 +137,26 @@ document.addEventListener('DOMContentLoaded', () => {
                     btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
                 });
             }
-        });
+        }
 
         // Show Section
-        sections.forEach(sec => {
+        for (let i = 0; i < sections.length; i++) {
+            const sec = sections[i];
             sec.classList.remove('active');
             if (sec.id === targetId) {
                 sec.classList.add('active');
             }
-        });
+        }
     }
 
     // Handle clicks on nav links
-    navBtns.forEach(btn => {
+    for (let i = 0; i < navBtns.length; i++) {
+        const btn = navBtns[i];
         btn.addEventListener('click', (e) => {
             e.preventDefault(); // Prevent jumpy scrolling
-            const targetHash = btn.getAttribute('href');
-            globalThis.location.hash = targetHash; // Let hashchange event handle the UI update
+            globalThis.location.hash = btn.getAttribute('href'); // Let hashchange event handle the UI update
         });
-    });
+    }
 
     // Handle hash changes (back/forward buttons, direct links)
     globalThis.addEventListener('hashchange', () => {
@@ -187,8 +190,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const formula = formulaSelect.value;
 
         if (weight && reps) {
-            const result = Calculator.calculate1RM(weight, reps, formula);
-            val1rm.textContent = result;
+            val1rm.textContent = Calculator.calculate1RM(weight, reps, formula);
             result1rmCard.classList.remove('hidden');
         }
     });
@@ -260,9 +262,10 @@ document.addEventListener('DOMContentLoaded', () => {
             inputs: {}
         };
 
-        cachedStateInputs.forEach(el => {
+        for (let i = 0; i < cachedStateInputs.length; i++) {
+            const el = cachedStateInputs[i];
             state.inputs[el.id] = el.value;
-        });
+        }
 
         localStorage.setItem('peakloads_state', JSON.stringify(state));
     }
@@ -280,9 +283,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (state.unit) {
                     currentUnit = state.unit;
-                    unitBtns.forEach(btn => {
+                    for (let i = 0; i < unitBtns.length; i++) {
+                        const btn = unitBtns[i];
                         btn.classList.toggle('active', btn.id === `btn-${currentUnit}`);
-                    });
+                    }
                 }
 
                 if (state.inputs) {
@@ -320,13 +324,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateUnitDisplays() {
-        staticUnitDisplays.forEach(display => {
-            display.textContent = currentUnit;
-        });
+        for (let i = 0; i < staticUnitDisplays.length; i++) {
+            staticUnitDisplays[i].textContent = currentUnit;
+        }
     }
 
     function convertAllInputs(oldUnit, newUnit) {
-        weightInputs.forEach(input => {
+        for (let i = 0; i < weightInputs.length; i++) {
+            const input = weightInputs[i];
             if (input.value) {
                 const kgValue = Calculator.toKg(Number.parseFloat(input.value), oldUnit);
                 const newValue = Calculator.fromKg(kgValue, newUnit);
@@ -335,7 +340,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 input.step = step;
                 input.value = (Math.round(newValue / step) * step).toFixed(newUnit === 'kg' ? 1 : 0);
             }
-        });
+        }
     }
 
     function recalculateOpenResults() {
@@ -369,11 +374,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function renderTableData(tbody, data, columns) {
         const fragment = document.createDocumentFragment();
-        data.forEach(row => {
+        for (let i = 0; i < data.length; i++) {
+            const row = data[i];
             const tr = document.createElement('tr');
-            columns.forEach(colFn => tr.appendChild(colFn(row)));
+            for (let j = 0; j < columns.length; j++) {
+                tr.appendChild(columns[j](row));
+            }
             fragment.appendChild(tr);
-        });
+        }
         tbody.replaceChildren(fragment);
     }
 

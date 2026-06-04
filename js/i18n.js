@@ -249,12 +249,13 @@ const I18n = {
         const currentTranslations = translations[I18n.currentLang];
         if (!currentTranslations) return;
 
-        I18n._elementsCache.forEach(el => {
+        for (let i = 0; i < I18n._elementsCache.length; i++) {
+            const el = I18n._elementsCache[i];
             const key = el.dataset.i18n;
             if (currentTranslations[key]) {
                 el.textContent = currentTranslations[key];
             }
-        });
+        }
     },
 
     getAdvCues: () => {
