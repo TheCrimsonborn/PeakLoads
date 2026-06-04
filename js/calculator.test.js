@@ -79,9 +79,6 @@ function runTests() {
 
 runTests();
 import test from 'node:test';
-import assert from 'node:assert/strict';
-import Calculator from './calculator.js';
-
 test('Calculator - Unit Conversion', async (t) => {
     await t.test('toKg', () => {
         assert.strictEqual(Calculator.toKg(100, 'kg'), 100);
@@ -266,12 +263,7 @@ test('Calculator - calculateRIR', async (t) => {
         assert.strictEqual(result.nextWeight, 95);
     });
 });
-import assert from 'node:assert/strict';
-import Calculator from './calculator.js';
-
 console.log("Running Calculator.calculateRIR tests...");
-
-// 1. Happy Paths
 console.log("- It calculates est1RM and nextWeight correctly (kg)");
 // weight=100, reps=5, rir=1 -> failure at 6 reps -> 100 * (1 + 6/30) = 120
 // targetReps=3, targetRIR=1 -> failure at 4 reps -> 1 + 4/30 = 34/30
@@ -313,6 +305,7 @@ const invalidCases = [
     ["invalid", 5, 1, 3, 1, 'kg'] // non-numeric string
 ];
 
+// NOSONAR - Array forEach is acceptable in unit tests arrays to run test cases concisely
 invalidCases.forEach(args => {
     assert.deepEqual(
         Calculator.calculateRIR(...args),
