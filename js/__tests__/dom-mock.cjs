@@ -43,6 +43,7 @@ class MockElement {
     }
     dispatchEvent(event) {
         if (this._listeners[event.type]) {
+            // NOSONAR - Array forEach is acceptable in test mocks and doesn't affect production zero-allocation
             this._listeners[event.type].forEach(cb => cb(event));
         }
     }
@@ -98,9 +99,11 @@ class MockDocument extends MockElement {
 
     querySelectorAll(selector) {
         if (selector === 'input, select') {
+            // NOSONAR - Array filter is acceptable in test mocks and doesn't affect production zero-allocation
             return this.elements.filter(el => el.tagName === 'INPUT' || el.tagName === 'SELECT');
         } else if (selector.startsWith('.')) {
             const cls = selector.substring(1);
+            // NOSONAR - Array filter is acceptable in test mocks and doesn't affect production zero-allocation
             return this.elements.filter(el => el.classList.contains(cls));
         } else if (selector.startsWith('#')) {
             const id = selector.substring(1);
@@ -132,6 +135,7 @@ function setupMockDOM() {
         'adv-lift-select', 'adv-weight-input', 'adv-reps-input',
         'weight-rir', 'reps-rir', 'rir-rir', 'target-reps-rir', 'target-rir-rir'
     ];
+    // NOSONAR - Array forEach is acceptable in test mocks and doesn't affect production zero-allocation
     inputsToPrePopulate.forEach(id => doc.getElementById(id));
 
     // Pre-populate buttons that are queried by class later
