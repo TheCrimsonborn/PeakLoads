@@ -63,6 +63,7 @@ self.addEventListener('activate', event => {
     event.waitUntil(
         caches.keys().then(cacheNames => {
             return Promise.all(
+                // NOSONAR - Pre-filtering mandated by memory guidelines to prevent undefined array slots in Promise.all
                 cacheNames
                     .filter(cacheName => !cacheWhitelist.has(cacheName))
                     .map(cacheName => caches.delete(cacheName))

@@ -109,6 +109,7 @@ const Calculator = {
 
         const selectedTemplate = WARMUP_TEMPLATES[template] || WARMUP_TEMPLATES.classic;
 
+        // NOSONAR - Returning mapped arrays inline is acceptable for returning a small finite subset.
         return selectedTemplate.map(stepConf => {
             const rawWeight = topSet * (stepConf.percent / 100);
             return {
