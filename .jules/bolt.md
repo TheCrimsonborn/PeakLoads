@@ -48,3 +48,7 @@ You must not blindly apply fixes suggested by Qodana, CodeQL, or SonarCloud. Eve
 2. Strict Suppression Standards: When an alert is classified as a False Positive or directly contradicts our performance rules, you must suppress it inline using the specific tool's suppression syntax (e.g., `// NOSONAR`, `// noinspection`).
 3. Mandatory Justification: Every suppression tag MUST be accompanied by a concise, technical justification explaining why the rule is bypassed. Example: `// NOSONAR - Forcing for...of creates iterator overhead; using index-based loop for V8 optimization.`
 4. Security vs. Performance Escalation: If a genuine security alert (e.g., SRI hashes, CSP rules) cannot be resolved without causing a measurable performance regression, DO NOT implement a workaround. Halt execution, document the exact trade-off, and wait for human authorization.
+
+## 2026-06-04 - [Avoid Nginx Service Worker Caching]
+**Learning:** When aggressively caching static assets using `location ~* \.(css|js|...)$` directives in Nginx, the browser will cache the Service Worker (`sw.js`) along with other JavaScript files if it is not explicitly excluded. This causes the PWA to get permanently stuck on a stale version.
+**Action:** Always prepend a `location = /sw.js` block with `Cache-Control "no-cache, no-store, must-revalidate"` before applying global static asset caching directives in `nginx.conf`.
