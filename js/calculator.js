@@ -107,19 +107,16 @@ const Calculator = {
         topSet = Number.parseFloat(topSet);
         if (!topSet) return [];
 
-        const sets = [];
         const selectedTemplate = WARMUP_TEMPLATES[template] || WARMUP_TEMPLATES.classic;
 
-        selectedTemplate.forEach(step => {
-            const rawWeight = topSet * (step.percent / 100);
-            sets.push({
-                percent: step.percent,
+        return selectedTemplate.map(stepConf => {
+            const rawWeight = topSet * (stepConf.percent / 100);
+            return {
+                percent: stepConf.percent,
                 weight: Calculator.roundWeight(rawWeight, unit),
-                reps: step.reps
-            });
+                reps: stepConf.reps
+            };
         });
-
-        return sets;
     },
 
     // Advanced Warm Up Generator
@@ -128,8 +125,7 @@ const Calculator = {
         mainReps = Number.parseInt(mainReps);
         if (!mainWeight || !mainReps) return [];
 
-        const plan = [];
-        ADV_WARMUP_SETS.forEach((set, index) => {
+        return ADV_WARMUP_SETS.map((set, index) => {
             let weightLabel;
             let percentLabel;
 
@@ -142,17 +138,15 @@ const Calculator = {
                 percentLabel = set.percent;
             }
 
-            plan.push({
+            return {
                 stage: index + 1,
                 purposeStr: purposesObj[set.purposeKey],
                 percent: percentLabel,
                 weight: weightLabel,
                 reps: mainReps < 6 ? set.reps : set.highReps,
                 notes: cuesObj[set.purposeKey]
-            });
+            };
         });
-
-        return plan;
     },
 
     // RIR Translator
