@@ -39,3 +39,12 @@ Action: Always wrap background fetch promises in `event.waitUntil()` inside the 
 ## 2026-06-03 - [Prefer map over push for static iterations]
 **Learning:** Using `Array.prototype.push()` inside a `.forEach()` loop is less performant than returning a `.map()` which allows JavaScript engines to pre-allocate arrays more optimally.
 **Action:** Prefer `.map()` over `.forEach()` + `.push()` when creating arrays sequentially from static structures.
+
+**Directive 6: Static Analysis Triage and False Positive Protocol**
+
+You must not blindly apply fixes suggested by Qodana, CodeQL, or SonarCloud. Every alert must be rigorously triaged against our Core Architectural Directives before any code is modified.
+
+1. The Skeptical Evaluation: Treat every linter alert as a hypothesis. If fixing a "code smell" or "style warning" requires introducing temporary memory allocations (e.g., replacing a raw `for` loop with `Object.entries` or `Array.from`), the alert is classified as an Architectural False Positive. You must REJECT the tool's suggested fix.
+2. Strict Suppression Standards: When an alert is classified as a False Positive or directly contradicts our performance rules, you must suppress it inline using the specific tool's suppression syntax (e.g., `// NOSONAR`, `// noinspection`).
+3. Mandatory Justification: Every suppression tag MUST be accompanied by a concise, technical justification explaining why the rule is bypassed. Example: `// NOSONAR - Forcing for...of creates iterator overhead; using index-based loop for V8 optimization.`
+4. Security vs. Performance Escalation: If a genuine security alert (e.g., SRI hashes, CSP rules) cannot be resolved without causing a measurable performance regression, DO NOT implement a workaround. Halt execution, document the exact trade-off, and wait for human authorization.
