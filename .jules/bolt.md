@@ -39,3 +39,6 @@ Action: Always wrap background fetch promises in `event.waitUntil()` inside the 
 ## 2026-06-03 - [Array Iteration over NodeList]
 **Learning:** Using `Array.prototype.reduce.call` on a `NodeList` invokes a function call for every single element, which incurs unnecessary overhead. A traditional `for` loop is significantly faster for simple data extraction and mapping.
 **Action:** When extracting data from a `NodeList` to populate arrays or objects, use a simple `for` loop rather than chaining or `call`-ing higher-order array methods.
+## 2026-06-03 - [Prefer map over push for static iterations]
+**Learning:** Using `Array.prototype.push()` inside a `.forEach()` loop is less performant than returning a `.map()` which allows JavaScript engines to pre-allocate arrays more optimally.
+**Action:** Prefer `.map()` over `.forEach()` + `.push()` when creating arrays sequentially from static structures.
