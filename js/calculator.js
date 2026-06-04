@@ -125,7 +125,9 @@ const Calculator = {
         mainReps = Number.parseInt(mainReps);
         if (!mainWeight || !mainReps) return [];
 
-        return ADV_WARMUP_SETS.map((set, index) => {
+        const result = new Array(ADV_WARMUP_SETS.length);
+        for (let index = 0; index < ADV_WARMUP_SETS.length; index++) {
+            const set = ADV_WARMUP_SETS[index];
             let weightLabel;
             let percentLabel;
 
@@ -138,7 +140,7 @@ const Calculator = {
                 percentLabel = set.percent;
             }
 
-            return {
+            result[index] = {
                 stage: index + 1,
                 purposeStr: purposesObj[set.purposeKey],
                 percent: percentLabel,
@@ -146,7 +148,8 @@ const Calculator = {
                 reps: mainReps < 6 ? set.reps : set.highReps,
                 notes: cuesObj[set.purposeKey]
             };
-        });
+        }
+        return result;
     },
 
     // RIR Translator
