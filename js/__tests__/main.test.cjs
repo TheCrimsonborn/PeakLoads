@@ -26,6 +26,7 @@ describe('main.js DOM tests', () => {
         assert.ok(unitDisplays.length > 0, "Should find .unit-display elements");
 
         // Check initial state, updateUnitDisplays should be called in Initialization setting it to 'kg'
+        // NOSONAR - for...of on NodeLists is acceptable in test files where zero-allocation is not required
         for (const display of unitDisplays) {
             assert.strictEqual(display.textContent, 'kg', `Expected textContent to be 'kg', but got '${display.textContent}'`);
         }
@@ -38,6 +39,7 @@ describe('main.js DOM tests', () => {
         lbBtn.click();
 
         // Check if unit displays updated to 'lb'
+        // NOSONAR - for...of on NodeLists is acceptable in test files where zero-allocation is not required
         for (const display of unitDisplays) {
             assert.strictEqual(display.textContent, 'lb', `Expected textContent to be 'lb', but got '${display.textContent}'`);
         }
@@ -50,6 +52,7 @@ describe('main.js DOM tests', () => {
         kgBtn.click();
 
         // Check if unit displays updated back to 'kg'
+        // NOSONAR - for...of on NodeLists is acceptable in test files where zero-allocation is not required
         for (const display of unitDisplays) {
             assert.strictEqual(display.textContent, 'kg', `Expected textContent to be 'kg', but got '${display.textContent}'`);
         }

@@ -290,6 +290,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 if (state.inputs) {
+                    // NOSONAR - Zero-allocation requires avoiding Object.keys() array generation
                     for (const id in state.inputs) {
                         if (Object.prototype.hasOwnProperty.call(state.inputs, id)) {
                             const el = stateInputsById[id];
