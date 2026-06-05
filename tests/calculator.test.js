@@ -16,6 +16,57 @@ function runTest(name, testFn) {
     }
 }
 
+console.log('\n--- Testing Calculator.calculate1RM ---');
+
+runTest('Should calculate 1RM using epley formula', () => {
+    // 100kg, 5 reps -> 100 * (1 + 5/30) = 116.666...
+    const result = Calculator.calculate1RM(100, 5, 'epley');
+    assert.strictEqual(result, 116.7);
+});
+
+runTest('Should calculate 1RM using lombardi formula', () => {
+    // 100kg, 5 reps -> 100 * 5^0.1 = 117.46...
+    const result = Calculator.calculate1RM(100, 5, 'lombardi');
+    assert.strictEqual(result, 117.5);
+});
+
+runTest('Should calculate 1RM using brzycki formula', () => {
+    // 100kg, 5 reps -> 100 * (36 / (37 - 5)) = 112.5
+    const result = Calculator.calculate1RM(100, 5, 'brzycki');
+    assert.strictEqual(result, 112.5);
+});
+
+runTest('Should handle calculate1RM brzycki edge case (reps >= 37)', () => {
+    // Reps >= 37 should return 0 for brzycki
+    const result37 = Calculator.calculate1RM(100, 37, 'brzycki');
+    assert.strictEqual(result37, 0);
+
+    const result40 = Calculator.calculate1RM(100, 40, 'brzycki');
+    assert.strictEqual(result40, 0);
+});
+
+runTest('Should return input weight if reps is 1', () => {
+    const resultEpley = Calculator.calculate1RM(100, 1, 'epley');
+    assert.strictEqual(resultEpley, 100);
+
+    const resultBrzycki = Calculator.calculate1RM(100, 1, 'brzycki');
+    assert.strictEqual(resultBrzycki, 100);
+});
+
+runTest('Should return 0 for invalid weight or reps', () => {
+    assert.strictEqual(Calculator.calculate1RM(0, 5, 'epley'), 0);
+    assert.strictEqual(Calculator.calculate1RM(100, 0, 'epley'), 0);
+    assert.strictEqual(Calculator.calculate1RM(-100, 5, 'epley'), 0);
+    assert.strictEqual(Calculator.calculate1RM(100, -5, 'epley'), 0);
+    assert.strictEqual(Calculator.calculate1RM(null, 5, 'epley'), 0);
+    assert.strictEqual(Calculator.calculate1RM(100, undefined, 'epley'), 0);
+});
+
+runTest('Should parse string inputs for weight and reps', () => {
+    const result = Calculator.calculate1RM('100', '5', 'epley');
+    assert.strictEqual(result, 116.7);
+});
+
 console.log('\n--- Testing Calculator.generatePercentageTable ---');
 
 // 1. Basic Functionality
