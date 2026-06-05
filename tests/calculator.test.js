@@ -94,13 +94,17 @@ runTest('Should return empty array when min is greater than max', () => {
 });
 
 runTest('Should prevent client-side DoS from excessive iterations (>1000)', () => {
+    // Boundary condition: exactly 1000 iterations (max=1000, min=0, inc=1) -> 1000 iterations (passes)
+    const result1000 = Calculator.generatePercentageTable(100, 1, 0, 1000, 'kg');
+    assert.equal(result1000.length, 1001);
+
+    // Boundary condition: exactly 1001 iterations (max=1001, min=0, inc=1) -> 1001 iterations (fails)
+    const result1001 = Calculator.generatePercentageTable(100, 1, 0, 1001, 'kg');
+    assert.deepEqual(result1001, []);
+
     // 100 - 0 = 100 / 0.05 = 2000 iterations (fails check)
     const result = Calculator.generatePercentageTable(100, 0.05, 0, 100, 'kg');
     assert.deepEqual(result, []);
-
-    // 100 - 0 = 100 / 0.1 = 1000 iterations (passes check)
-    const result2 = Calculator.generatePercentageTable(100, 0.1, 0, 100, 'kg');
-    assert.equal(result2.length, 1001); // min to max inclusive
 });
 
 runTest('Should handle min and max being the same', () => {
