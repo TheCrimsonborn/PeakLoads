@@ -36,8 +36,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const weightAdv1rmInput = document.getElementById('weight-adv-1rm');
     const repsAdv1rmInput = document.getElementById('reps-adv-1rm');
     const rpeAdv1rmInput = document.getElementById('rpe-adv-1rm');
-    const sleepAdv1rmInput = document.getElementById('sleep-adv-1rm');
-    const stressAdv1rmInput = document.getElementById('stress-adv-1rm');
     const btnCalcAdv1rm = document.getElementById('btn-calc-adv-1rm');
     const resultAdv1rmCard = document.getElementById('result-adv-1rm');
     const valAdv1rm = document.getElementById('val-adv-1rm');
@@ -214,10 +212,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const rpe = rpeAdv1rmInput.value;
 
         if (weight && reps && rpe) {
-            const sleep = sleepAdv1rmInput.value !== '' ? sleepAdv1rmInput.value : 7;
-            const stress = stressAdv1rmInput.value !== '' ? stressAdv1rmInput.value : 5;
-            
-            const result = Calculator.calculateAdvanced1RM(weight, reps, rpe, sleep, stress);
+            const result = Calculator.calculateAdvanced1RM(weight, reps, rpe);
             valAdv1rm.textContent = result;
             resultAdv1rmCard.classList.remove('hidden');
         }

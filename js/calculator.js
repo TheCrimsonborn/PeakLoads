@@ -95,12 +95,10 @@ const Calculator = {
     },
 
     // Advanced 1RM Estimator (Ultimate Hybrid Model)
-    calculateAdvanced1RM: (weight, reps, rpe, sleepHours = 7, stressLevel = 5) => {
+    calculateAdvanced1RM: (weight, reps, rpe) => {
         weight = Number.parseFloat(weight);
         reps = Number.parseInt(reps, 10);
         rpe = Number.parseFloat(rpe);
-        sleepHours = Number.parseFloat(sleepHours);
-        stressLevel = Number.parseFloat(stressLevel);
 
         if (
             Number.isNaN(weight) || weight <= 0 ||
@@ -127,13 +125,7 @@ const Calculator = {
 
         const raw1RM = weight / (percentage / 100);
 
-        // Layer 3: Autoregulation (Readiness)
-        const sleepMod = 1 + ((sleepHours - 7) * 0.015);
-        const stressMod = 1 + ((5 - stressLevel) * 0.02);
-        
-        const finalDailyE1RM = raw1RM * sleepMod * stressMod;
-
-        return Math.round(finalDailyE1RM * 10) / 10;
+        return Math.round(raw1RM * 10) / 10;
     },
 
     // Percentage Chart Generator (Base weight in current unit)
