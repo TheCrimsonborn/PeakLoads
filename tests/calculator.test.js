@@ -16,58 +16,6 @@ function runTest(name, testFn) {
     }
 }
 
-// Test generateAdvancedWarmUp
-
-runTest('generateAdvancedWarmUp - low reps (reps < 6), unit kg', () => {
-    const cuesObj = { jointPrep: 'J', activation: 'A', skill: 'S', acclimatization: 'C', potentiation: 'P' };
-    const purposesObj = { jointPrep: 'P_J', activation: 'P_A', skill: 'P_S', acclimatization: 'P_C', potentiation: 'P_P' };
-
-    const result = Calculator.generateAdvancedWarmUp('Squat', 100, 5, cuesObj, purposesObj, 'kg');
-
-    assert.strictEqual(result.length, 5);
-    // 0%
-    assert.deepStrictEqual(result[0], { stage: 1, purposeStr: 'P_J', percent: '-', weight: 20, reps: '10-15', notes: 'J' });
-    // 45%
-    assert.deepStrictEqual(result[1], { stage: 2, purposeStr: 'P_A', percent: 45, weight: 45, reps: 5, notes: 'A' });
-    // 65%
-    assert.deepStrictEqual(result[2], { stage: 3, purposeStr: 'P_S', percent: 65, weight: 65, reps: 3, notes: 'S' });
-    // 80%
-    assert.deepStrictEqual(result[3], { stage: 4, purposeStr: 'P_C', percent: 80, weight: 80, reps: 2, notes: 'C' });
-    // 90%
-    assert.deepStrictEqual(result[4], { stage: 5, purposeStr: 'P_P', percent: 90, weight: 90, reps: 1, notes: 'P' });
-});
-
-runTest('generateAdvancedWarmUp - high reps (reps >= 6), unit lb', () => {
-    const cuesObj = { jointPrep: 'J', activation: 'A', skill: 'S', acclimatization: 'C', potentiation: 'P' };
-    const purposesObj = { jointPrep: 'P_J', activation: 'P_A', skill: 'P_S', acclimatization: 'P_C', potentiation: 'P_P' };
-
-    const result = Calculator.generateAdvancedWarmUp('Deadlift', 200, 8, cuesObj, purposesObj, 'lb');
-
-    assert.strictEqual(result.length, 5);
-    // 0%
-    assert.deepStrictEqual(result[0], { stage: 1, purposeStr: 'P_J', percent: '-', weight: 45, reps: '10-15', notes: 'J' });
-    // 45% -> 200 * 0.45 = 90
-    assert.deepStrictEqual(result[1], { stage: 2, purposeStr: 'P_A', percent: 45, weight: 90, reps: 8, notes: 'A' });
-    // 65% -> 200 * 0.65 = 130
-    assert.deepStrictEqual(result[2], { stage: 3, purposeStr: 'P_S', percent: 65, weight: 130, reps: 5, notes: 'S' });
-    // 80% -> 200 * 0.80 = 160
-    assert.deepStrictEqual(result[3], { stage: 4, purposeStr: 'P_C', percent: 80, weight: 160, reps: 3, notes: 'C' });
-    // 90% -> 200 * 0.90 = 180
-    assert.deepStrictEqual(result[4], { stage: 5, purposeStr: 'P_P', percent: 90, weight: 180, reps: 1, notes: 'P' });
-});
-
-runTest('generateAdvancedWarmUp - invalid inputs', () => {
-    const cuesObj = { jointPrep: 'J', activation: 'A', skill: 'S', acclimatization: 'C', potentiation: 'P' };
-    const purposesObj = { jointPrep: 'P_J', activation: 'P_A', skill: 'P_S', acclimatization: 'P_C', potentiation: 'P_P' };
-
-    assert.deepStrictEqual(Calculator.generateAdvancedWarmUp('Squat', 0, 5, cuesObj, purposesObj, 'kg'), []);
-    assert.deepStrictEqual(Calculator.generateAdvancedWarmUp('Squat', 100, 0, cuesObj, purposesObj, 'kg'), []);
-    assert.deepStrictEqual(Calculator.generateAdvancedWarmUp('Squat', NaN, NaN, cuesObj, purposesObj, 'kg'), []);
-    assert.deepStrictEqual(Calculator.generateAdvancedWarmUp('Squat', null, undefined, cuesObj, purposesObj, 'kg'), []);
-});
-
-
-
 console.log('\n--- Testing Calculator.generatePercentageTable ---');
 
 // 1. Basic Functionality
@@ -160,6 +108,95 @@ runTest('Should handle min and max being the same', () => {
     assert.equal(result.length, 1);
     assert.deepEqual(result[0], { percent: 100, weight: 100 });
 });
+
+
+const cuesObj = { jointPrep: 'J', activation: 'A', skill: 'S', acclimatization: 'C', potentiation: 'P' };
+const purposesObj = { jointPrep: 'P_J', activation: 'P_A', skill: 'P_S', acclimatization: 'P_C', potentiation: 'P_P' };
+
+console.log('\n--- Testing Calculator.generateAdvancedWarmUp ---');
+
+runTest('Should generate warm up with low reps (reps < 6), unit kg', () => {
+    const result = Calculator.generateAdvancedWarmUp('Squat', 100, 5, cuesObj, purposesObj, 'kg');
+
+    assert.strictEqual(result.length, 5);
+    // 0%
+    assert.deepStrictEqual(result[0], { stage: 1, purposeStr: 'P_J', percent: '-', weight: 20, reps: '10-15', notes: 'J' });
+    // 45%
+    assert.deepStrictEqual(result[1], { stage: 2, purposeStr: 'P_A', percent: 45, weight: 45, reps: 5, notes: 'A' });
+    // 65%
+    assert.deepStrictEqual(result[2], { stage: 3, purposeStr: 'P_S', percent: 65, weight: 65, reps: 3, notes: 'S' });
+    // 80%
+    assert.deepStrictEqual(result[3], { stage: 4, purposeStr: 'P_C', percent: 80, weight: 80, reps: 2, notes: 'C' });
+    // 90%
+    assert.deepStrictEqual(result[4], { stage: 5, purposeStr: 'P_P', percent: 90, weight: 90, reps: 1, notes: 'P' });
+});
+
+runTest('Should generate warm up with high reps (reps >= 6), unit lb', () => {
+    const result = Calculator.generateAdvancedWarmUp('Deadlift', 200, 8, cuesObj, purposesObj, 'lb');
+
+    assert.strictEqual(result.length, 5);
+    // 0%
+    assert.deepStrictEqual(result[0], { stage: 1, purposeStr: 'P_J', percent: '-', weight: 45, reps: '10-15', notes: 'J' });
+    // 45% -> 200 * 0.45 = 90
+    assert.deepStrictEqual(result[1], { stage: 2, purposeStr: 'P_A', percent: 45, weight: 90, reps: 8, notes: 'A' });
+    // 65% -> 200 * 0.65 = 130
+    assert.deepStrictEqual(result[2], { stage: 3, purposeStr: 'P_S', percent: 65, weight: 130, reps: 5, notes: 'S' });
+    // 80% -> 200 * 0.80 = 160
+    assert.deepStrictEqual(result[3], { stage: 4, purposeStr: 'P_C', percent: 80, weight: 160, reps: 3, notes: 'C' });
+    // 90% -> 200 * 0.90 = 180
+    assert.deepStrictEqual(result[4], { stage: 5, purposeStr: 'P_P', percent: 90, weight: 180, reps: 1, notes: 'P' });
+});
+
+runTest('Should handle string inputs for weight and reps', () => {
+    const result = Calculator.generateAdvancedWarmUp('Squat', '100.5', '5', cuesObj, purposesObj, 'kg');
+
+    assert.strictEqual(result.length, 5);
+    // 45% -> 100.5 * 0.45 = 45.225 -> rounded to nearest 2.5 = 45
+    assert.deepStrictEqual(result[1], { stage: 2, purposeStr: 'P_A', percent: 45, weight: 45, reps: 5, notes: 'A' });
+});
+
+runTest('Should handle missing keys in cuesObj and purposesObj gracefully', () => {
+    const incompleteCues = { jointPrep: 'J' }; // Missing other keys
+    const incompletePurposes = { activation: 'P_A' };
+
+    const result = Calculator.generateAdvancedWarmUp('Squat', 100, 5, incompleteCues, incompletePurposes, 'kg');
+
+    assert.strictEqual(result.length, 5);
+    // 0% - missing activation purpose, has jointPrep cue
+    assert.strictEqual(result[0].notes, 'J');
+    assert.strictEqual(result[0].purposeStr, undefined);
+
+    // 45% - missing activation cue, has activation purpose
+    assert.strictEqual(result[1].notes, undefined);
+    assert.strictEqual(result[1].purposeStr, 'P_A');
+});
+
+runTest('Should handle floating point weights in lb (rounding to nearest 5)', () => {
+    // 225.5lb * 0.45 = 101.475 -> rounded to nearest 5 = 100
+    const result = Calculator.generateAdvancedWarmUp('Squat', 225.5, 5, cuesObj, purposesObj, 'lb');
+    assert.strictEqual(result[1].weight, 100);
+});
+
+runTest('Should return empty array for 0 weight or 0 reps', () => {
+    assert.deepStrictEqual(Calculator.generateAdvancedWarmUp('Squat', 0, 5, cuesObj, purposesObj, 'kg'), []);
+    assert.deepStrictEqual(Calculator.generateAdvancedWarmUp('Squat', 100, 0, cuesObj, purposesObj, 'kg'), []);
+});
+
+runTest('Should return empty array for negative weight or negative reps', () => {
+    assert.deepStrictEqual(Calculator.generateAdvancedWarmUp('Squat', -100, 5, cuesObj, purposesObj, 'kg'), []);
+    assert.deepStrictEqual(Calculator.generateAdvancedWarmUp('Squat', 100, -5, cuesObj, purposesObj, 'kg'), []);
+});
+
+runTest('Should return empty array for NaN or invalid string inputs', () => {
+    assert.deepStrictEqual(Calculator.generateAdvancedWarmUp('Squat', NaN, NaN, cuesObj, purposesObj, 'kg'), []);
+    assert.deepStrictEqual(Calculator.generateAdvancedWarmUp('Squat', 'abc', 'def', cuesObj, purposesObj, 'kg'), []);
+});
+
+runTest('Should return empty array for null or undefined mainWeight or mainReps', () => {
+    assert.deepStrictEqual(Calculator.generateAdvancedWarmUp('Squat', null, undefined, cuesObj, purposesObj, 'kg'), []);
+    assert.deepStrictEqual(Calculator.generateAdvancedWarmUp('Squat', undefined, null, cuesObj, purposesObj, 'kg'), []);
+});
+
 
 // Print Summary
 console.log('\n--- Test Summary ---');
