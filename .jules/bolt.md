@@ -48,3 +48,6 @@ You must not blindly apply fixes suggested by Qodana, CodeQL, or SonarCloud. Eve
 2. Strict Suppression Standards: When an alert is classified as a False Positive or directly contradicts our performance rules, you must suppress it inline using the specific tool's suppression syntax (e.g., `// NOSONAR`, `// noinspection`).
 3. Mandatory Justification: Every suppression tag MUST be accompanied by a concise, technical justification explaining why the rule is bypassed. Example: `// NOSONAR - Forcing for...of creates iterator overhead; using index-based loop for V8 optimization.`
 4. Security vs. Performance Escalation: If a genuine security alert (e.g., SRI hashes, CSP rules) cannot be resolved without causing a measurable performance regression, DO NOT implement a workaround. Halt execution, document the exact trade-off, and wait for human authorization.
+## 2024-03-24 - Zero-Allocation Integer Keys for Lookup Matrices
+**Learning:** In a codebase with strict zero-allocation memory policies, implicit string casting and string concatenations for map/matrix keys (e.g., `reps + '_' + rpe`) violate memory allocation constraints.
+**Action:** Always derive zero-allocation integer keys using deterministic mathematical formulas (e.g., `(reps * 100) + (rpe * 10)`) to achieve O(1) lookups without transient object creation.
