@@ -87,7 +87,10 @@ const Calculator = {
         min = Number.parseFloat(min);
         max = Number.parseFloat(max);
 
-        if (!baseWeight || !increment || increment < 0.01 || min > max) return [];
+        if (!baseWeight || !increment || increment < 0.01 ||
+            Number.isNaN(min) || Number.isNaN(max) || min < 0 || max < 0 || min > max) {
+            return [];
+        }
 
         // Prevent client-side DoS from excessive iterations
         const iterations = (max - min) / increment;

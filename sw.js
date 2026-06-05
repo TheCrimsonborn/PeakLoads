@@ -23,6 +23,7 @@ self.addEventListener('install', event => {
             .then(cache => {
                 return cache.addAll(urlsToCache);
             })
+            .catch(err => console.error("Cache open failed:", err))
     );
 });
 
