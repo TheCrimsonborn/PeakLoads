@@ -204,6 +204,7 @@ input:focus, select:focus { outline: none; border-color: var(--primary-color); b
 
         <nav class="main-nav">
             <a href="#section-1rm" class="nav-btn active" data-i18n="nav_1rm">1RM Estimator</a>
+            <a href="#section-adv-1rm" class="nav-btn" data-i18n="nav_adv_1rm">Advanced 1RM</a>
             <a href="#section-percentage" class="nav-btn" data-i18n="nav_percentage">Percentage Chart</a>
             <a href="#section-warmup" class="nav-btn" data-i18n="nav_warmup">Warm-Up</a>
             <a href="#section-adv-warmup" class="nav-btn" data-i18n="nav_adv_warmup">Advanced Warm Up</a>
@@ -218,6 +219,13 @@ input:focus, select:focus { outline: none; border-color: var(--primary-color); b
                 <div class="guide-block">
                     <h4 data-i18n="guide_1rm_title">1RM Estimator</h4>
                     <p data-i18n="guide_1rm_desc">Enter the weight you lifted and the number of reps to estimate your one-rep max (1RM) using your preferred formula.</p>
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="guide-block">
+                    <h4 data-i18n="guide_adv_1rm_title">Advanced 1RM Estimator</h4>
+                    <p data-i18n="guide_adv_1rm_desc">Estimate your daily 1RM factoring in RPE, sleep, and stress levels for optimal autoregulation.</p>
                 </div>
 
                 <div class="divider"></div>
@@ -273,6 +281,45 @@ input:focus, select:focus { outline: none; border-color: var(--primary-color); b
                 <div class="result-card hidden" id="result-1rm" aria-live="polite">
                     <h3 data-i18n="result_estimated_1rm">Estimated 1RM</h3>
                     <div class="big-number"><span id="val-1rm">0</span> <span class="unit-display">kg</span></div>
+                </div>
+            </section>
+
+            <!-- Advanced 1RM Estimator Section -->
+            <section id="section-adv-1rm" class="tool-section">
+                <h2 data-i18n="title_adv_1rm">Advanced 1RM Estimator (Daily Readiness)</h2>
+                
+                <div class="row">
+                    <div class="input-group half">
+                        <label for="weight-adv-1rm" data-i18n="label_weight">Weight Lifted</label>
+                        <input type="number" id="weight-adv-1rm" placeholder="e.g. 140" min="0">
+                    </div>
+                    <div class="input-group half">
+                        <label for="reps-adv-1rm" data-i18n="label_reps">Reps</label>
+                        <input type="number" id="reps-adv-1rm" placeholder="e.g. 5" min="0">
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="rpe-adv-1rm" data-i18n="label_rpe">RPE</label>
+                    <input type="number" id="rpe-adv-1rm" placeholder="e.g. 8" min="6.5" max="10" step="0.5">
+                </div>
+
+                <div class="row">
+                    <div class="input-group half">
+                        <label for="sleep-adv-1rm" data-i18n="label_sleep">Sleep Hours</label>
+                        <input type="number" id="sleep-adv-1rm" value="7" min="4" max="12" step="0.5">
+                    </div>
+                    <div class="input-group half">
+                        <label for="stress-adv-1rm" data-i18n="label_stress">Stress Level (1-10)</label>
+                        <input type="number" id="stress-adv-1rm" value="5" min="1" max="10" step="1">
+                    </div>
+                </div>
+
+                <button id="btn-calc-adv-1rm" class="action-btn" data-i18n="btn_calculate">Calculate</button>
+
+                <div class="result-card hidden" id="result-adv-1rm" aria-live="polite">
+                    <h3 data-i18n="result_daily_e1rm">Daily e1RM</h3>
+                    <div class="big-number"><span id="val-adv-1rm">0</span> <span class="unit-display">kg</span></div>
                 </div>
             </section>
 

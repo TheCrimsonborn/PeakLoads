@@ -32,6 +32,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const result1rmCard = document.getElementById('result-1rm');
     const val1rm = document.getElementById('val-1rm');
 
+    // Advanced 1RM Elements
+    const weightAdv1rmInput = document.getElementById('weight-adv-1rm');
+    const repsAdv1rmInput = document.getElementById('reps-adv-1rm');
+    const rpeAdv1rmInput = document.getElementById('rpe-adv-1rm');
+    const sleepAdv1rmInput = document.getElementById('sleep-adv-1rm');
+    const stressAdv1rmInput = document.getElementById('stress-adv-1rm');
+    const btnCalcAdv1rm = document.getElementById('btn-calc-adv-1rm');
+    const resultAdv1rmCard = document.getElementById('result-adv-1rm');
+    const valAdv1rm = document.getElementById('val-adv-1rm');
+
     // Percentage Elements
     const baseWeightPctInput = document.getElementById('base-weight-pct');
     const incrementPctInput = document.getElementById('increment-pct');
@@ -69,6 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const weightInputs = [
         weight1rmInput,
+        weightAdv1rmInput,
         baseWeightPctInput,
         topSetWarmupInput,
         advWeightInput,
@@ -168,6 +179,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Programmatic SEO Routes Map
     const seoRoutes = {
         '/squat-1rm-calculator': 'section-1rm',
+        '/advanced-1rm-estimator': 'section-adv-1rm',
         '/bench-press-warm-up-planner': 'section-adv-warmup',
         '/rpe-rir-translator': 'section-rir'
     };
@@ -192,6 +204,22 @@ document.addEventListener('DOMContentLoaded', () => {
         if (weight && reps) {
             val1rm.textContent = Calculator.calculate1RM(weight, reps, formula);
             result1rmCard.classList.remove('hidden');
+        }
+    });
+
+    // Advanced 1RM Calculator
+    btnCalcAdv1rm.addEventListener('click', () => {
+        const weight = weightAdv1rmInput.value;
+        const reps = repsAdv1rmInput.value;
+        const rpe = rpeAdv1rmInput.value;
+
+        if (weight && reps && rpe) {
+            const sleep = sleepAdv1rmInput.value !== '' ? sleepAdv1rmInput.value : 7;
+            const stress = stressAdv1rmInput.value !== '' ? stressAdv1rmInput.value : 5;
+            
+            const result = Calculator.calculateAdvanced1RM(weight, reps, rpe, sleep, stress);
+            valAdv1rm.textContent = result;
+            resultAdv1rmCard.classList.remove('hidden');
         }
     });
 
@@ -312,6 +340,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Trigger calculations to restore UI tables silently safely
                 setTimeout(() => {
                     if (weight1rmInput.value && reps1rmInput.value) btnCalc1rm.click();
+                    if (weightAdv1rmInput.value && repsAdv1rmInput.value && rpeAdv1rmInput.value) btnCalcAdv1rm.click();
                     if (baseWeightPctInput.value) btnGenPct.click();
                     if (topSetWarmupInput.value) btnGenWarmup.click();
                     if (advWeightInput.value && advRepsInput.value) btnGenAdvWarmup.click();
@@ -346,6 +375,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function recalculateOpenResults() {
         if (!result1rmCard.classList.contains('hidden')) btnCalc1rm.click();
+        if (!resultAdv1rmCard.classList.contains('hidden')) btnCalcAdv1rm.click();
         if (!resultPctCard.classList.contains('hidden')) btnGenPct.click();
         if (!resultWarmupCard.classList.contains('hidden')) btnGenWarmup.click();
         if (!resultAdvWarmupCard.classList.contains('hidden')) btnGenAdvWarmup.click();
