@@ -8,3 +8,10 @@ node_modules
 .github
 .vscode
 .idea
+
+# Test dosyalari ve klasorleri
+tests/
+**/__tests__/
+**/*.test.js
+**/*.test.cjs
+js/calculator.test.js
