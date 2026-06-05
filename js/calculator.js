@@ -124,7 +124,7 @@ const Calculator = {
     generateAdvancedWarmUp: (liftType, mainWeight, mainReps, cuesObj, purposesObj, unit) => {
         mainWeight = Number.parseFloat(mainWeight);
         mainReps = Number.parseInt(mainReps);
-        if (!mainWeight || !mainReps) return [];
+        if (!mainWeight || mainWeight <= 0 || !mainReps || mainReps <= 0) return [];
 
         const result = new Array(ADV_WARMUP_SETS.length);
         for (let index = 0; index < ADV_WARMUP_SETS.length; index++) {
