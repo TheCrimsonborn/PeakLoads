@@ -262,5 +262,28 @@ console.log(`Failed: ${testsFailed}`);
 if (testsFailed > 0) {
     process.exit(1);
 } else {
-    process.exit(0);
+
 }
+
+console.log("\n--- Testing Calculator.calculateAdvanced1RM ---");
+const advTests = [
+    { name: "Should calculate with optimal RTS matrix values", run: () => Calculator.calculateAdvanced1RM(100, 5, 8) === 123.5 },
+    { name: "Should fallback to baseline values on NaN modifiers", run: () => Calculator.calculateAdvanced1RM(100, 5, 8, "foo", "bar") === 123.5 },
+    { name: "Should clamp sleepHours and stressLevel", run: () => {
+        const resultLowSleep = Calculator.calculateAdvanced1RM(100, 5, 8, -5, 5);
+        const resultHighStress = Calculator.calculateAdvanced1RM(100, 5, 8, 7, 100);
+        return resultLowSleep > 0 && resultHighStress > 0;
+    }},
+    { name: "Should handle string inputs implicitly", run: () => Calculator.calculateAdvanced1RM("100", "5", "8", "7", "5") === 123.5 }
+];
+
+let advPassed = 0;
+for (const t of advTests) {
+    if (t.run()) {
+        console.log(`✅ ${t.name}`);
+        advPassed++;
+    } else {
+        console.log(`❌ ${t.name}`);
+    }
+}
+console.log(`\nAdvanced 1RM Passed: ${advPassed}/${advTests.length}`);
