@@ -39,6 +39,20 @@ const ADV_WARMUP_SETS = [
     { percent: 90, reps: 1, highReps: 1, purposeKey: "potentiation" },
 ];
 
+// Extracted to prevent memory reallocation and GC overhead on each call
+const RTS_MATRIX = {
+    "1_10": 100, "1_9.5": 98, "1_9": 96, "1_8.5": 94, "1_8": 92, "1_7.5": 91, "1_7": 89, "1_6.5": 88,
+    "2_10": 96, "2_9.5": 94, "2_9": 92, "2_8.5": 91, "2_8": 89, "2_7.5": 88, "2_7": 86, "2_6.5": 85,
+    "3_10": 92, "3_9.5": 91, "3_9": 89, "3_8.5": 88, "3_8": 86, "3_7.5": 85, "3_7": 84, "3_6.5": 82,
+    "4_10": 89, "4_9.5": 88, "4_9": 86, "4_8.5": 85, "4_8": 84, "4_7.5": 82, "4_7": 81, "4_6.5": 80,
+    "5_10": 86, "5_9.5": 85, "5_9": 84, "5_8.5": 82, "5_8": 81, "5_7.5": 80, "5_7": 79, "5_6.5": 77,
+    "6_10": 84, "6_9.5": 82, "6_9": 81, "6_8.5": 80, "6_8": 79, "6_7.5": 77, "6_7": 76, "6_6.5": 75,
+    "7_10": 81, "7_9.5": 80, "7_9": 79, "7_8.5": 77, "7_8": 76, "7_7.5": 75, "7_7": 74, "7_6.5": 72,
+    "8_10": 79, "8_9.5": 77, "8_9": 76, "8_8.5": 75, "8_8": 74, "8_7.5": 72, "8_7": 71, "8_6.5": 69,
+    "9_10": 76, "9_9.5": 75, "9_9": 74, "9_8.5": 72, "9_8": 71, "9_7.5": 69, "9_7": 68, "9_6.5": 67,
+    "10_10": 74, "10_9.5": 72, "10_9": 71, "10_8.5": 69, "10_8": 68, "10_7.5": 67, "10_7": 65, "10_6.5": 64
+};
+
 const Calculator = {
     // Unit Conversion
     toKg: (value, unit) => (unit === 'kg' ? value : value / KG_TO_LB),
@@ -78,6 +92,48 @@ const Calculator = {
 
         // Return rounded value (not necessarily plate rounded for 1RM estimate, just integer or 1 decimal)
         return Math.round(oneRM * 10) / 10;
+    },
+
+    // Advanced 1RM Estimator (Ultimate Hybrid Model)
+    calculateAdvanced1RM: (weight, reps, rpe, sleepHours = 7, stressLevel = 5) => {
+        weight = Number.parseFloat(weight);
+        reps = Number.parseInt(reps, 10);
+        rpe = Number.parseFloat(rpe);
+        sleepHours = Number.parseFloat(sleepHours);
+        stressLevel = Number.parseFloat(stressLevel);
+
+        if (
+            Number.isNaN(weight) || weight <= 0 ||
+            Number.isNaN(reps) || reps <= 0 ||
+            Number.isNaN(rpe) || rpe <= 0
+        ) {
+            return 0;
+        }
+
+        let percentage = 0;
+
+        if (reps <= 10 && rpe >= 6.5) {
+            // Layer 1: O(1) RTS Matrix (Statistical Center)
+            const key = reps + "_" + rpe;
+            percentage = RTS_MATRIX[key];
+        }
+
+        if (!percentage) {
+            // Layer 2: Asymptotic Decay (Fallback)
+            const rir = 10 - rpe;
+            const effectiveReps = reps + rir;
+            percentage = 15.7 + (84.3 * Math.exp(-0.0346 * effectiveReps));
+        }
+
+        const raw1RM = weight / (percentage / 100);
+
+        // Layer 3: Autoregulation (Readiness)
+        const sleepMod = 1 + ((sleepHours - 7) * 0.015);
+        const stressMod = 1 + ((5 - stressLevel) * 0.02);
+        
+        const finalDailyE1RM = raw1RM * sleepMod * stressMod;
+
+        return Math.round(finalDailyE1RM * 10) / 10;
     },
 
     // Percentage Chart Generator (Base weight in current unit)
