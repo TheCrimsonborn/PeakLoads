@@ -145,12 +145,22 @@ const Calculator = {
         const iterations = (max - min) / increment;
         if (iterations > 1000) return [];
 
-        const table = [];
+        // ⚡ Bolt: Pre-allocate array to avoid dynamic resizing overhead
+        const expectedLength = Math.max(0, Math.floor((max - min) / increment) + 1);
+        const table = new Array(expectedLength);
+        let index = 0;
+
         for (let pct = min; pct <= max; pct += increment) {
             const rawWeight = baseWeight * (pct / 100);
             const weight = Calculator.roundWeight(rawWeight, unit);
-            table.push({ percent: pct, weight: weight });
+            table[index++] = { percent: pct, weight: weight };
         }
+
+        // Handle floating point precision edge cases where loop runs fewer times
+        if (index !== expectedLength) {
+            table.length = index;
+        }
+
         return table;
     },
 
