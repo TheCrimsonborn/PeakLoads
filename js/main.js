@@ -6,16 +6,20 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentUnit = 'kg'; // 'kg' or 'lb'
 
     // DOM Elements
-    const cachedStateInputs = [];
-    const stateInputsById = {};
     const inputsAndSelects = document.querySelectorAll('input, select');
+    // ⚡ Bolt: Pre-allocate array to avoid dynamic memory resizing
+    const cachedStateInputs = new Array(inputsAndSelects.length);
+    const stateInputsById = {};
+    let cachedInputsIdx = 0;
+
     for (let i = 0; i < inputsAndSelects.length; i++) {
         const el = inputsAndSelects[i];
         if (el.id) {
-            cachedStateInputs.push(el);
+            cachedStateInputs[cachedInputsIdx++] = el;
             stateInputsById[el.id] = el;
         }
     }
+    cachedStateInputs.length = cachedInputsIdx; // Truncate to actual size
     // Using static NodeList over live HTMLCollection to avoid redundant DOM writes
     // on ephemeral elements that are immediately destroyed and re-rendered.
     const staticUnitDisplays = document.querySelectorAll('.unit-display');
