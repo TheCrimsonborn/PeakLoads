@@ -150,8 +150,11 @@ const Calculator = {
         const table = new Array(expectedLength);
         let index = 0;
 
+        // ⚡ Bolt: Pre-calculate multiplier to avoid division inside loop
+        const baseMultiplier = baseWeight / 100;
+
         for (let pct = min; pct <= max; pct += increment) {
-            const rawWeight = baseWeight * (pct / 100);
+            const rawWeight = baseMultiplier * pct;
             const weight = Calculator.roundWeight(rawWeight, unit);
             table[index++] = { percent: pct, weight: weight };
         }
@@ -171,9 +174,12 @@ const Calculator = {
 
         const selectedTemplate = WARMUP_TEMPLATES[template] || WARMUP_TEMPLATES.classic;
 
+        // ⚡ Bolt: Pre-calculate multiplier to avoid division inside loop
+        const topMultiplier = topSet / 100;
+
         // NOSONAR - Returning mapped arrays inline is acceptable for returning a small finite subset.
         return selectedTemplate.map(stepConf => {
-            const rawWeight = topSet * (stepConf.percent / 100);
+            const rawWeight = topMultiplier * stepConf.percent;
             return {
                 percent: stepConf.percent,
                 weight: Calculator.roundWeight(rawWeight, unit),
@@ -189,6 +195,10 @@ const Calculator = {
         if (!mainWeight || mainWeight <= 0 || !mainReps || mainReps <= 0) return [];
 
         const result = new Array(ADV_WARMUP_SETS.length);
+
+        // ⚡ Bolt: Pre-calculate multiplier to avoid division inside loop
+        const mainMultiplier = mainWeight / 100;
+
         for (let index = 0; index < ADV_WARMUP_SETS.length; index++) {
             const set = ADV_WARMUP_SETS[index];
             let weightLabel;
@@ -198,7 +208,7 @@ const Calculator = {
                 weightLabel = unit === 'kg' ? 20 : 45; // Standard bar
                 percentLabel = "-";
             } else {
-                let setWeight = mainWeight * (set.percent / 100);
+                let setWeight = mainMultiplier * set.percent;
                 weightLabel = Calculator.roundWeight(setWeight, unit);
                 percentLabel = set.percent;
             }
