@@ -26,6 +26,9 @@ global.document = {
     querySelectorAll: (selector) => {
         return [];
     },
+    getElementsByTagName: (tagName) => {
+        return [];
+    },
     getElementById: (id) => {
         if (!mockElements[id]) {
             mockElements[id] = createMockElement(id);

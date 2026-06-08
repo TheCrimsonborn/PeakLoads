@@ -8,9 +8,18 @@ document.addEventListener('DOMContentLoaded', () => {
     // DOM Elements
     const cachedStateInputs = [];
     const stateInputsById = {};
-    const inputsAndSelects = document.querySelectorAll('input, select');
-    for (let i = 0; i < inputsAndSelects.length; i++) {
-        const el = inputsAndSelects[i];
+    // ⚡ Bolt: getElementsByTagName is significantly faster than querySelectorAll for bulk element selection
+    const inputs = document.getElementsByTagName('input');
+    for (let i = 0; i < inputs.length; i++) {
+        const el = inputs[i];
+        if (el.id) {
+            cachedStateInputs.push(el);
+            stateInputsById[el.id] = el;
+        }
+    }
+    const selects = document.getElementsByTagName('select');
+    for (let i = 0; i < selects.length; i++) {
+        const el = selects[i];
         if (el.id) {
             cachedStateInputs.push(el);
             stateInputsById[el.id] = el;
