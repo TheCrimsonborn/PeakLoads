@@ -344,6 +344,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             } catch (e) {
                 console.error("Failed to restore state", e);
+                localStorage.removeItem('peakloads_state');
+                globalThis.alert("Failed to restore previous session state. Your session has been reset.");
             }
         }
     }

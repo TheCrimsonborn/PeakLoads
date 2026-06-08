@@ -43,6 +43,7 @@ global.document = {
     })
 };
 
+let localStorageRemovedItem = null;
 global.localStorage = {
     getItem: (key) => {
         if (key === 'peakloads_state') {
@@ -51,7 +52,15 @@ global.localStorage = {
         }
         return null;
     },
-    setItem: () => {}
+    setItem: () => {},
+    removeItem: (key) => {
+        localStorageRemovedItem = key;
+    }
+};
+
+let alertCalledWith = null;
+global.globalThis.alert = (msg) => {
+    alertCalledWith = msg;
 };
 
 // Required for UI bindings and routing within the try block (even though we fail before reaching it)
@@ -80,6 +89,8 @@ import('../js/main.js').then(() => {
     // Assert
     try {
         assert.strictEqual(consoleErrorCalled, true, 'console.error should be called with "Failed to restore state"');
+        assert.strictEqual(localStorageRemovedItem, 'peakloads_state', 'localStorage.removeItem should be called with "peakloads_state"');
+        assert.strictEqual(alertCalledWith, 'Failed to restore previous session state. Your session has been reset.', 'alert should be called with the error message');
         console.log('✅ Test passed: loadState error path successfully tested.');
         console.error = originalConsoleError;
         process.exit(0);
