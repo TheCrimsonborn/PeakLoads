@@ -26,9 +26,6 @@ peakloads is a sleek powerlifting companion that helps you plan training session
 - To modify UI event listeners and DOM updates, check `js/main.js`.
 - For translation adjustments, check `js/i18n.js`.
 
-### Legacy Version
-
-If you prefer the classic, single-page scrolling layout of the original peakloads application, it is fully preserved! You can access it by opening `legacy/index.html` or clicking the "Legacy" button in the header.
 
 ## License
 
