@@ -15,7 +15,7 @@ peakloads is a sleek powerlifting companion that helps you plan training session
 
 ## Getting Started
 
-1. Open `index.html` in your browser—no build step required.
+1. Open `index.html` in your browser, no build step required.
 2. Enter a recent heavy set to estimate your 1RM, build percentage tables or warm-up plans, and log RIR-based targets.
 3. Use the header controls to change units (kg/lb) or language (EN/TR/RU).
 
