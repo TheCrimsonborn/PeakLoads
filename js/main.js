@@ -89,11 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
     updateUnitDisplays();
 
     // Auto-save state on user input
-    let saveStateTimeout;
-    const debouncedSaveState = () => {
-        clearTimeout(saveStateTimeout);
-        saveStateTimeout = setTimeout(saveState, 300);
-    };
+    const debouncedSaveState = debounce(saveState, 300);
     document.addEventListener('input', debouncedSaveState);
     document.addEventListener('change', debouncedSaveState);
 
@@ -276,6 +272,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // --- Helper Functions ---
+
+    function debounce(func, wait) {
+        let timeout;
+        return function(...args) {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => func.apply(this, args), wait);
+        };
+    }
 
     function saveState() {
         const state = {
