@@ -71,7 +71,7 @@ body {
   gap: 15px;
 }
 
-.logo h1 {
+.logo h1, .logo .logo-text {
   font-family: var(--font-display);
   font-weight: 700;
   font-size: 1.8rem;
