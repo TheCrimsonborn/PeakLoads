@@ -112,8 +112,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
             for (let j = 0; j < unitBtns.length; j++) {
                 unitBtns[j].classList.remove('active');
+                unitBtns[j].setAttribute('aria-pressed', 'false');
             }
             btn.classList.add('active');
+            btn.setAttribute('aria-pressed', 'true');
             currentUnit = newUnit;
             updateUnitDisplays();
             saveState();
@@ -308,7 +310,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     currentUnit = state.unit;
                     for (let i = 0; i < unitBtns.length; i++) {
                         const btn = unitBtns[i];
-                        btn.classList.toggle('active', btn.id === `btn-${currentUnit}`);
+                        const isActive = btn.id === `btn-${currentUnit}`;
+                        btn.classList.toggle('active', isActive);
+                        btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
                     }
                 }
 
