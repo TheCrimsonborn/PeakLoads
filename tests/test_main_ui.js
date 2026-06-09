@@ -7,6 +7,9 @@ const createMockElement = (id) => ({
     id,
     value: '',
     textContent: '',
+    attributes: {},
+    setAttribute: function(name, val) { this.attributes[name] = val; },
+    getAttribute: function(name) { return this.attributes[name] || null; },
     classList: {
         classes: new Set(),
         contains: function(cls) { return this.classes.has(cls); },
