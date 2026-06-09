@@ -11,6 +11,9 @@ on:
       - 'js/**'
       - '_redirects'
 
+permissions:
+  contents: read
+
 jobs:
   submit:
     runs-on: ubuntu-latest
