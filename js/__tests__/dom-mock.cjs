@@ -26,6 +26,7 @@ class MockElement {
         this.children = [];
         this._listeners = {};
         this.attributes = {};
+        this.dataset = {};
     }
     appendChild(child) {
         this.children.push(child);
@@ -52,6 +53,10 @@ class MockElement {
     }
     setAttribute(key, val) {
         this.attributes[key] = val;
+        if (key.startsWith('data-')) {
+            const dataKey = key.substring(5).replace(/-([a-z])/g, (g) => g[1].toUpperCase());
+            this.dataset[dataKey] = val;
+        }
     }
     getAttribute(key) {
         return this.attributes[key];
@@ -63,6 +68,7 @@ class MockDocument extends MockElement {
     constructor() {
         super('document');
         this.elements = [];
+        this.documentElement = new MockElement('html');
     }
 
     createElement(tagName) {
@@ -109,6 +115,15 @@ class MockDocument extends MockElement {
             const id = selector.substring(1);
             const el = this.getElementById(id);
             return el ? [el] : [];
+        } else if (selector.startsWith('[') && selector.endsWith(']')) {
+            const attr = selector.slice(1, -1);
+            return this.elements.filter(el => {
+                if (attr.startsWith('data-')) {
+                    const dataKey = attr.substring(5).replace(/-([a-z])/g, (g) => g[1].toUpperCase());
+                    return el.dataset && el.dataset[dataKey] !== undefined;
+                }
+                return el.attributes[attr] !== undefined;
+            });
         }
         return [];
     }
