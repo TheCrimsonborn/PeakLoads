@@ -1,4 +1,4 @@
-const https = require('https');
+const https = require('node:https');
 
 const host = 'peakloads.com';
 const key = process.env.INDEXNOW_KEY;
