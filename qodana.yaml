@@ -8,3 +8,6 @@ profile:
   name: qodana.recommended
 include:
   - name: CheckDependencyLicenses
+exclude:
+  - name: "tests"
+  - name: "js/__tests__"
