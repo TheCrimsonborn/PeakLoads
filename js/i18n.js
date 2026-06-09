@@ -255,6 +255,7 @@ const I18n = {
     setLanguage: (lang) => {
         if (translations[lang]) {
             I18n.currentLang = lang;
+            document.documentElement.lang = lang;
             I18n.updateDOM();
         }
     },
