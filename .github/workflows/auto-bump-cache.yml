@@ -1,0 +1,43 @@
+name: Auto-Bump Cache Version
+
+on:
+  push:
+    branches:
+      - main
+      - master
+    paths:
+      - 'index.html'
+      - 'js/**'
+      - 'css/**'
+
+jobs:
+  bump-cache:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Update Cache Version
+        run: |
+          APP_VERSION="1.0"
+          SHORT_SHA="${GITHUB_SHA::7}"
+          NEW_CACHE="peakloads-cache-${APP_VERSION}.${SHORT_SHA}"
+
+          # Replace the exact line starting with const CACHE_NAME =
+          sed -i "s/^const CACHE_NAME = .*/const CACHE_NAME = '${NEW_CACHE}';/" sw.js
+
+      - name: Commit & Push Changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add sw.js
+
+          APP_VERSION="1.0"
+          SHORT_SHA="${GITHUB_SHA::7}"
+
+          # Only commit if there are staged changes
+          git diff --quiet && git diff --staged --quiet || (git commit -m "chore: bump sw cache to ${APP_VERSION}.${SHORT_SHA} [skip ci]" && git push)
