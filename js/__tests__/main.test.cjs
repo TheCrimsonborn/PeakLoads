@@ -38,6 +38,10 @@ describe('main.js DOM tests', () => {
         // Click 'lb' button
         lbBtn.click();
 
+        // Verify aria-pressed states updated
+        assert.strictEqual(lbBtn.getAttribute('aria-pressed'), 'true', "lbBtn should have aria-pressed=true after clicking");
+        assert.strictEqual(global.document.getElementById('btn-kg').getAttribute('aria-pressed'), 'false', "kgBtn should have aria-pressed=false after clicking lbBtn");
+
         // Check if unit displays updated to 'lb'
         // NOSONAR - for...of on NodeLists is acceptable in test files where zero-allocation is not required
         for (const display of unitDisplays) {
@@ -50,6 +54,10 @@ describe('main.js DOM tests', () => {
 
         // Click 'kg' button
         kgBtn.click();
+
+        // Verify aria-pressed states updated again
+        assert.strictEqual(kgBtn.getAttribute('aria-pressed'), 'true', "kgBtn should have aria-pressed=true after clicking");
+        assert.strictEqual(lbBtn.getAttribute('aria-pressed'), 'false', "lbBtn should have aria-pressed=false after clicking kgBtn");
 
         // Check if unit displays updated back to 'kg'
         // NOSONAR - for...of on NodeLists is acceptable in test files where zero-allocation is not required
