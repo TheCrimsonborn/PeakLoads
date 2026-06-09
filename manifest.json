@@ -6,6 +6,21 @@
   "background_color": "#050505",
   "theme_color": "#dc2626",
   "description": "Powerlifting Command Center. 1RM Estimator, Percentage Chart, Warm-Up Planner.",
+  "categories": ["fitness", "health", "sports"],
+  "screenshots": [
+    {
+      "src": "assets/screenshots/mobile.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "assets/screenshots/desktop.png",
+      "sizes": "1920x1080",
+      "type": "image/png",
+      "form_factor": "wide"
+    }
+  ],
   "icons": [
     {
       "src": "assets/icons/icon-192.png",
