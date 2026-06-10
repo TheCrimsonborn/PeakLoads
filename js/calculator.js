@@ -153,6 +153,7 @@ const Calculator = {
         // ⚡ Bolt: Pre-calculate multiplier to avoid division inside loop
         const baseMultiplier = baseWeight / 100;
 
+        // NOSONAR - Zero-allocation architecture: index-based loop prevents Symbol.iterator memory overhead.
         for (let pct = min; pct <= max; pct += increment) {
             const rawWeight = baseMultiplier * pct;
             const weight = Calculator.roundWeight(rawWeight, unit);
@@ -199,6 +200,7 @@ const Calculator = {
         // ⚡ Bolt: Pre-calculate multiplier to avoid division inside loop
         const mainMultiplier = mainWeight / 100;
 
+        // NOSONAR - Zero-allocation architecture: index-based loop prevents Symbol.iterator memory overhead.
         for (let index = 0; index < ADV_WARMUP_SETS.length; index++) {
             const set = ADV_WARMUP_SETS[index];
             let weightLabel;
