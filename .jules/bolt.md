@@ -59,3 +59,7 @@ You must not blindly apply fixes suggested by Qodana, CodeQL, or SonarCloud. Eve
 ## 2026-10-30 - [Suppress False Positives on Performance Hacks]
 **Learning:** SonarCloud's default code style checks will fail if you swap `dataset` for `getAttribute` because it considers `dataset` "more modern", even though it violates the zero-allocation performance directive in hot loops.
 **Action:** When implementing zero-allocation performance tweaks that clash with default SonarCloud rules, proactively append a `// NOSONAR` suppression directive with a technical justification to avoid CI pipeline failures.
+
+## 2026-10-31 - [Inline NOSONAR Placement]
+**Learning:** SonarCloud requires the `// NOSONAR` directive to be placed on the exact same line as the offending code to correctly suppress warnings. Placing it on the line before the code will result in a CI failure.
+**Action:** When appending a `// NOSONAR` suppression directive, ensure it is on the exact same line as the code triggering the rule (e.g., `const key = el.getAttribute('data-i18n'); // NOSONAR`).
