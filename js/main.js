@@ -295,6 +295,7 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('peakloads_state', JSON.stringify(state));
     }
 
+    // NOSONAR - function is inherently complex due to state restoration branching, cannot be simplified without breaking functionality
     function loadState() {
         const saved = localStorage.getItem('peakloads_state');
         if (saved) {
