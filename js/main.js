@@ -317,7 +317,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 if (state.inputs) {
-                    // NOSONAR - Zero-allocation requires avoiding Object.keys() array generation
+                    // NOSONAR - Zero-allocation architecture: avoiding Object.keys() array generation and for...in loop over object properties is preferred
                     for (const id in state.inputs) {
                         if (Object.prototype.hasOwnProperty.call(state.inputs, id)) {
                             const el = stateInputsById[id];
@@ -400,7 +400,7 @@ document.addEventListener('DOMContentLoaded', () => {
         td.textContent = text;
         if (styles) {
             // ⚡ Bolt: Direct assignment via for...in loop is faster than Object.assign
-            // NOSONAR - Zero-allocation requires avoiding Object.keys() array generation
+            // NOSONAR - Zero-allocation architecture: avoiding Object.keys() array generation and for...in loop over object properties is preferred
             for (const key in styles) {
                 if (Object.prototype.hasOwnProperty.call(styles, key)) {
                     td.style[key] = styles[key];

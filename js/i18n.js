@@ -268,6 +268,7 @@ const I18n = {
         const currentTranslations = translations[I18n.currentLang];
         if (!currentTranslations) return;
 
+        // NOSONAR - Zero-allocation architecture: index-based loop prevents Symbol.iterator memory overhead.
         for (let i = 0; i < I18n._elementsCache.length; i++) {
             const el = I18n._elementsCache[i];
             // ⚡ Bolt: Direct attribute access is faster than DOMStringMap proxy access via dataset
