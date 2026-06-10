@@ -84,6 +84,41 @@ document.addEventListener('DOMContentLoaded', () => {
         weightRirInput
     ];
 
+    // Programmatic SEO Routes Map
+    const seoRoutes = {
+        '/squat-1rm-calculator': 'section-1rm',
+        '/advanced-1rm-estimator': 'section-adv-1rm',
+        '/bench-press-warm-up-planner': 'section-adv-warmup',
+        '/rpe-rir-translator': 'section-rir'
+    };
+
+    // Navigation (Hash Routing)
+    function activateSection(targetId) {
+        if (!targetId) targetId = 'section-1rm'; // Default
+
+        // Update Nav
+        for (let i = 0; i < navBtns.length; i++) {
+            const btn = navBtns[i];
+            btn.classList.remove('active');
+            if (btn.getAttribute('href') === `#${targetId}`) {
+                btn.classList.add('active');
+                // Defer scroll to avoid forced reflow
+                requestAnimationFrame(() => {
+                    btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                });
+            }
+        }
+
+        // Show Section
+        for (let i = 0; i < sections.length; i++) {
+            const sec = sections[i];
+            sec.classList.remove('active');
+            if (sec.id === targetId) {
+                sec.classList.add('active');
+            }
+        }
+    }
+
     // --- Initialization ---
     loadState();
     updateUnitDisplays();
@@ -133,33 +168,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Navigation (Hash Routing)
-    function activateSection(targetId) {
-        if (!targetId) targetId = 'section-1rm'; // Default
-
-        // Update Nav
-        for (let i = 0; i < navBtns.length; i++) {
-            const btn = navBtns[i];
-            btn.classList.remove('active');
-            if (btn.getAttribute('href') === `#${targetId}`) {
-                btn.classList.add('active');
-                // Defer scroll to avoid forced reflow
-                requestAnimationFrame(() => {
-                    btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-                });
-            }
-        }
-
-        // Show Section
-        for (let i = 0; i < sections.length; i++) {
-            const sec = sections[i];
-            sec.classList.remove('active');
-            if (sec.id === targetId) {
-                sec.classList.add('active');
-            }
-        }
-    }
-
     // Handle clicks on nav links
     for (let i = 0; i < navBtns.length; i++) {
         const btn = navBtns[i];
@@ -175,14 +183,6 @@ document.addEventListener('DOMContentLoaded', () => {
         activateSection(hash || 'section-1rm');
         saveState();
     });
-
-    // Programmatic SEO Routes Map
-    const seoRoutes = {
-        '/squat-1rm-calculator': 'section-1rm',
-        '/advanced-1rm-estimator': 'section-adv-1rm',
-        '/bench-press-warm-up-planner': 'section-adv-warmup',
-        '/rpe-rir-translator': 'section-rir'
-    };
 
     const currentPath = globalThis.location.pathname;
 
