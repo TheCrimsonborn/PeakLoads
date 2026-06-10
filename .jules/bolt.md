@@ -51,3 +51,6 @@ You must not blindly apply fixes suggested by Qodana, CodeQL, or SonarCloud. Eve
 ## 2026-10-28 - Zero-Allocation Integer Keys for Static Lookups
 **Learning:** Using string concatenation (`reps + '_' + rpe`) to construct keys for dictionary/matrix lookups causes unnecessary memory allocation and garbage collection on the hot path. V8 is much faster at computing simple integer hashes.
 **Action:** Always derive zero-allocation integer keys using deterministic mathematical formulas (e.g., `(reps * 100) + (rpe * 10)`) for O(1) object lookups instead of implicit string casts or concatenations.
+## 2026-10-30 - V8 Micro-Optimizations for Style Assignment and DOM Attributes
+**Learning:** `Object.assign()` introduces function call overhead and temporary object handling that is slower than a direct `for...in` loop when applying simple style objects in frequently called DOM creation functions. Similarly, accessing `dataset.*` involves a `DOMStringMap` proxy that incurs memory allocation and performance penalties compared to the direct native `getAttribute('data-*')` API.
+**Action:** Replace `Object.assign()` with a direct `for...in` loop, safeguarded by `Object.prototype.hasOwnProperty.call()` for security, to minimize V8 execution overhead. Replace `dataset.*` access with `getAttribute('data-*')` to eliminate proxy overhead on hot paths.

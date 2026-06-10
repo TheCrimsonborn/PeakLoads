@@ -399,7 +399,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const td = document.createElement('td');
         td.textContent = text;
         if (styles) {
-            Object.assign(td.style, styles);
+            // ⚡ Bolt: Direct assignment via for...in loop is faster than Object.assign
+            for (const key in styles) {
+                if (Object.prototype.hasOwnProperty.call(styles, key)) {
+                    td.style[key] = styles[key];
+                }
+            }
         }
         return td;
     }

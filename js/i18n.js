@@ -270,7 +270,8 @@ const I18n = {
 
         for (let i = 0; i < I18n._elementsCache.length; i++) {
             const el = I18n._elementsCache[i];
-            const key = el.dataset.i18n;
+            // ⚡ Bolt: Direct attribute access is faster than DOMStringMap proxy access via dataset
+            const key = el.getAttribute('data-i18n');
             if (currentTranslations[key]) {
                 el.textContent = currentTranslations[key];
             }
