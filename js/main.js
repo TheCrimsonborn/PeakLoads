@@ -1,6 +1,8 @@
 import Calculator from './calculator.js';
 import I18n from './i18n.js';
 
+let analyticsLoaded = false;
+
 document.addEventListener('DOMContentLoaded', () => {
     // State
     let currentUnit = 'kg'; // 'kg' or 'lb'
@@ -92,6 +94,33 @@ document.addEventListener('DOMContentLoaded', () => {
         '/bench-press-warm-up-planner': 'section-adv-warmup',
         '/rpe-rir-translator': 'section-rir'
     };
+
+    function injectAnalytics() {
+        if (analyticsLoaded) return;
+        analyticsLoaded = true;
+
+        // Google Analytics
+        const gtagScript = document.createElement('script');
+        gtagScript.src = 'https://www.googletagmanager.com/gtag/js?id=G-5PSBEY8S83';
+        gtagScript.defer = true;
+        document.head.appendChild(gtagScript);
+
+        const gtagConfig = document.createElement('script');
+        gtagConfig.textContent = `
+            globalThis.dataLayer = globalThis.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-5PSBEY8S83');
+        `;
+        document.head.appendChild(gtagConfig);
+
+        // Ahrefs
+        const ahrefsScript = document.createElement('script');
+        ahrefsScript.src = 'https://analytics.ahrefs.com/analytics.js';
+        ahrefsScript.defer = true;
+        ahrefsScript.setAttribute('data-key', 'WsQGuqWO4T3Lhnt3EDPMkQ');
+        document.head.appendChild(ahrefsScript);
+    }
 
     // Navigation (Hash Routing)
     function activateSection(targetId) {
@@ -199,6 +228,14 @@ document.addEventListener('DOMContentLoaded', () => {
         activateSection(globalThis.location.hash.substring(1));
     } else {
         activateSection('section-1rm');
+    }
+
+    const calcBtns = [btnCalc1rm, btnCalcAdv1rm, btnGenPct, btnGenWarmup, btnGenAdvWarmup, btnCalcRir];
+    // NOSONAR - Zero-allocation architecture: index-based loop prevents Symbol.iterator memory overhead.
+    for (let i = 0; i < calcBtns.length; i++) {
+        calcBtns[i].addEventListener('click', (e) => {
+            if (e.isTrusted) injectAnalytics();
+        });
     }
 
     // 1RM Calculator
