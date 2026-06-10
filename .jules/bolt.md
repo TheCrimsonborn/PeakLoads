@@ -51,3 +51,7 @@ You must not blindly apply fixes suggested by Qodana, CodeQL, or SonarCloud. Eve
 ## 2026-10-28 - Zero-Allocation Integer Keys for Static Lookups
 **Learning:** Using string concatenation (`reps + '_' + rpe`) to construct keys for dictionary/matrix lookups causes unnecessary memory allocation and garbage collection on the hot path. V8 is much faster at computing simple integer hashes.
 **Action:** Always derive zero-allocation integer keys using deterministic mathematical formulas (e.g., `(reps * 100) + (rpe * 10)`) for O(1) object lookups instead of implicit string casts or concatenations.
+
+## 2026-10-29 - [Prefer getAttribute over dataset for zero-allocation attribute access]
+**Learning:** Accessing `el.dataset.*` properties creates or utilizes a `DOMStringMap` proxy behind the scenes, causing unnecessary memory allocation overhead. In contrast, the native `el.getAttribute('data-*')` accesses the string directly without this overhead.
+**Action:** Always prefer the direct native API `getAttribute('data-*')` over `dataset.*` properties in loops and performance-critical sections to eliminate the memory allocation overhead associated with the `DOMStringMap` object.
