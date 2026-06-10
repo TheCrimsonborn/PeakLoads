@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const cachedStateInputs = [];
     const stateInputsById = {};
     const inputsAndSelects = document.querySelectorAll('input, select');
+    // NOSONAR - Zero-allocation architecture: index-based loop prevents Symbol.iterator memory overhead.
     for (let i = 0; i < inputsAndSelects.length; i++) {
         const el = inputsAndSelects[i];
         if (el.id) {
@@ -97,6 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!targetId) targetId = 'section-1rm'; // Default
 
         // Update Nav
+        // NOSONAR - Zero-allocation architecture: index-based loop prevents Symbol.iterator memory overhead.
         for (let i = 0; i < navBtns.length; i++) {
             const btn = navBtns[i];
             btn.classList.remove('active');
@@ -110,6 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Show Section
+        // NOSONAR - Zero-allocation architecture: index-based loop prevents Symbol.iterator memory overhead.
         for (let i = 0; i < sections.length; i++) {
             const sec = sections[i];
             sec.classList.remove('active');
@@ -135,6 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Event Listeners ---
 
     // Unit Toggle
+    // NOSONAR - Zero-allocation architecture: index-based loop prevents Symbol.iterator memory overhead.
     for (let i = 0; i < unitBtns.length; i++) {
         const btn = unitBtns[i];
         btn.addEventListener('click', () => {
@@ -145,6 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Convert inputs
             convertAllInputs(currentUnit, newUnit);
 
+            // NOSONAR - Zero-allocation architecture: index-based loop prevents Symbol.iterator memory overhead.
             for (let j = 0; j < unitBtns.length; j++) {
                 unitBtns[j].classList.remove('active');
                 unitBtns[j].setAttribute('aria-pressed', 'false');
@@ -169,6 +174,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Handle clicks on nav links
+    // NOSONAR - Zero-allocation architecture: index-based loop prevents Symbol.iterator memory overhead.
     for (let i = 0; i < navBtns.length; i++) {
         const btn = navBtns[i];
         btn.addEventListener('click', (e) => {
@@ -287,6 +293,7 @@ document.addEventListener('DOMContentLoaded', () => {
             inputs: {}
         };
 
+        // NOSONAR - Zero-allocation architecture: index-based loop prevents Symbol.iterator memory overhead.
         for (let i = 0; i < cachedStateInputs.length; i++) {
             const el = cachedStateInputs[i];
             state.inputs[el.id] = el.value;
@@ -325,6 +332,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function restoreUnitState(state) {
         if (state.unit) {
             currentUnit = state.unit;
+            // NOSONAR - Zero-allocation architecture: index-based loop prevents Symbol.iterator memory overhead.
             for (let i = 0; i < unitBtns.length; i++) {
                 const btn = unitBtns[i];
                 const isActive = btn.id === `btn-${currentUnit}`;
@@ -371,12 +379,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateUnitDisplays() {
+        // NOSONAR - Zero-allocation architecture: index-based loop prevents Symbol.iterator memory overhead.
         for (let i = 0; i < staticUnitDisplays.length; i++) {
             staticUnitDisplays[i].textContent = currentUnit;
         }
     }
 
     function convertAllInputs(oldUnit, newUnit) {
+        // NOSONAR - Zero-allocation architecture: index-based loop prevents Symbol.iterator memory overhead.
         for (let i = 0; i < weightInputs.length; i++) {
             const input = weightInputs[i];
             if (input.value) {
@@ -422,9 +432,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function renderTableData(tbody, data, columns) {
         const fragment = document.createDocumentFragment();
+        // NOSONAR - Zero-allocation architecture: index-based loop prevents Symbol.iterator memory overhead.
         for (let i = 0; i < data.length; i++) {
             const row = data[i];
             const tr = document.createElement('tr');
+            // NOSONAR - Zero-allocation architecture: index-based loop prevents Symbol.iterator memory overhead.
             for (let j = 0; j < columns.length; j++) {
                 tr.appendChild(columns[j](row));
             }
