@@ -14,6 +14,7 @@ const urlList = [
   'https://peakloads.com/squat-1rm-calculator',
   'https://peakloads.com/bench-press-warm-up-planner',
   'https://peakloads.com/rpe-rir-translator',
+  'https://peakloads.com/advanced-1rm-estimator',
 ];
 
 const payload = JSON.stringify({
