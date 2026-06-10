@@ -301,50 +301,11 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 const state = JSON.parse(saved);
 
-                if (state.language) {
-                    langSelect.value = state.language;
-                    I18n.setLanguage(state.language);
-                }
-
-                if (state.unit) {
-                    currentUnit = state.unit;
-                    for (let i = 0; i < unitBtns.length; i++) {
-                        const btn = unitBtns[i];
-                        const isActive = btn.id === `btn-${currentUnit}`;
-                        btn.classList.toggle('active', isActive);
-                        btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
-                    }
-                }
-
-                if (state.inputs) {
-                    // NOSONAR - Zero-allocation requires avoiding Object.keys() array generation
-                    for (const id in state.inputs) {
-                        if (Object.prototype.hasOwnProperty.call(state.inputs, id)) {
-                            const el = stateInputsById[id];
-                            if (el) el.value = state.inputs[id];
-                        }
-                    }
-                }
-
-                // Prioritize explicit SEO URL over saved local state hash
-                if (seoRoutes[globalThis.location.pathname]) {
-                    activateSection(seoRoutes[globalThis.location.pathname]);
-                } else if (state.hash) {
-                    if (!globalThis.location.hash || globalThis.location.hash !== state.hash) {
-                        globalThis.location.hash = state.hash;
-                    }
-                    activateSection(state.hash.substring(1));
-                }
-
-                // Trigger calculations to restore UI tables silently safely
-                setTimeout(() => {
-                    if (weight1rmInput.value && reps1rmInput.value) btnCalc1rm.click();
-                    if (weightAdv1rmInput.value && repsAdv1rmInput.value && rpeAdv1rmInput.value) btnCalcAdv1rm.click();
-                    if (baseWeightPctInput.value) btnGenPct.click();
-                    if (topSetWarmupInput.value) btnGenWarmup.click();
-                    if (advWeightInput.value && advRepsInput.value) btnGenAdvWarmup.click();
-                    if (weightRirInput.value && repsRirInput.value) btnCalcRir.click();
-                }, 50);
+                restoreLanguageState(state);
+                restoreUnitState(state);
+                restoreInputValues(state);
+                restoreRoutingState(state, seoRoutes);
+                triggerSavedCalculations();
 
             } catch (e) {
                 console.error("Failed to restore state", e);
@@ -352,6 +313,61 @@ document.addEventListener('DOMContentLoaded', () => {
                 globalThis.alert("Failed to restore previous session state. Your session has been reset.");
             }
         }
+    }
+
+    function restoreLanguageState(state) {
+        if (state.language) {
+            langSelect.value = state.language;
+            I18n.setLanguage(state.language);
+        }
+    }
+
+    function restoreUnitState(state) {
+        if (state.unit) {
+            currentUnit = state.unit;
+            for (let i = 0; i < unitBtns.length; i++) {
+                const btn = unitBtns[i];
+                const isActive = btn.id === `btn-${currentUnit}`;
+                btn.classList.toggle('active', isActive);
+                btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+            }
+        }
+    }
+
+    function restoreInputValues(state) {
+        if (state.inputs) {
+            // NOSONAR - Zero-allocation requires avoiding Object.keys() array generation
+            for (const id in state.inputs) {
+                if (Object.prototype.hasOwnProperty.call(state.inputs, id)) {
+                    const el = stateInputsById[id];
+                    if (el) el.value = state.inputs[id];
+                }
+            }
+        }
+    }
+
+    function restoreRoutingState(state, seoRoutes) {
+        // Prioritize explicit SEO URL over saved local state hash
+        if (seoRoutes[globalThis.location.pathname]) {
+            activateSection(seoRoutes[globalThis.location.pathname]);
+        } else if (state.hash) {
+            if (!globalThis.location.hash || globalThis.location.hash !== state.hash) {
+                globalThis.location.hash = state.hash;
+            }
+            activateSection(state.hash.substring(1));
+        }
+    }
+
+    function triggerSavedCalculations() {
+        // Trigger calculations to restore UI tables silently safely
+        setTimeout(() => {
+            if (weight1rmInput.value && reps1rmInput.value) btnCalc1rm.click();
+            if (weightAdv1rmInput.value && repsAdv1rmInput.value && rpeAdv1rmInput.value) btnCalcAdv1rm.click();
+            if (baseWeightPctInput.value) btnGenPct.click();
+            if (topSetWarmupInput.value) btnGenWarmup.click();
+            if (advWeightInput.value && advRepsInput.value) btnGenAdvWarmup.click();
+            if (weightRirInput.value && repsRirInput.value) btnCalcRir.click();
+        }, 50);
     }
 
     function updateUnitDisplays() {
