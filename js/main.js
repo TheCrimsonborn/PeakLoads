@@ -400,6 +400,7 @@ document.addEventListener('DOMContentLoaded', () => {
         td.textContent = text;
         if (styles) {
             // ⚡ Bolt: Direct assignment via for...in loop is faster than Object.assign
+            // NOSONAR - Zero-allocation requires avoiding Object.keys() array generation
             for (const key in styles) {
                 if (Object.prototype.hasOwnProperty.call(styles, key)) {
                     td.style[key] = styles[key];
