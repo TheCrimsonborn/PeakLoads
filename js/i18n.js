@@ -271,7 +271,8 @@ const I18n = {
         // NOSONAR - Zero-allocation architecture: index-based loop prevents Symbol.iterator memory overhead.
         for (let i = 0; i < I18n._elementsCache.length; i++) {
             const el = I18n._elementsCache[i];
-            const key = el.dataset.i18n;
+            // ⚡ Bolt: Use getAttribute instead of dataset to avoid DOMStringMap proxy allocation overhead.
+            const key = el.getAttribute('data-i18n');
             if (currentTranslations[key]) {
                 el.textContent = currentTranslations[key];
             }
