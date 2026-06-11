@@ -141,11 +141,17 @@ test('Calculator - generatePercentageTable', async (t) => {
         assert.deepStrictEqual(Calculator.generatePercentageTable(0, 5, 50, 100, 'kg'), []);
         assert.deepStrictEqual(Calculator.generatePercentageTable(100, 0, 50, 100, 'kg'), []);
         assert.deepStrictEqual(Calculator.generatePercentageTable(100, 5, 100, 50, 'kg'), []);
+        assert.deepStrictEqual(Calculator.generatePercentageTable(100, 5, -10, 100, 'kg'), []);
+        assert.deepStrictEqual(Calculator.generatePercentageTable(100, 5, 0, -10, 'kg'), []);
+        assert.deepStrictEqual(Calculator.generatePercentageTable(100, 5, NaN, 100, 'kg'), []);
+        assert.deepStrictEqual(Calculator.generatePercentageTable(100, 5, 0, NaN, 'kg'), []);
     });
 
     await t.test('prevents infinite loops', () => {
-        assert.deepStrictEqual(Calculator.generatePercentageTable(100, 0.001, 0, 100, 'kg'), []); // < 0.01
-        assert.deepStrictEqual(Calculator.generatePercentageTable(100, 0.05, 0, 100, 'kg'), []); // > 1000 iterations
+        assert.deepStrictEqual(Calculator.generatePercentageTable(100, 0.009, 0, 100, 'kg'), []); // < 0.01 limit
+        assert.strictEqual(Calculator.generatePercentageTable(100, 0.01, 0, 0.1, 'kg').length, 11); // exactly 0.01 increment allowed
+        assert.deepStrictEqual(Calculator.generatePercentageTable(100, 0.099, 0, 100, 'kg'), []); // > 1000 iterations limit exactly
+        assert.strictEqual(Calculator.generatePercentageTable(100, 0.1, 0, 100, 'kg').length, 1001); // exactly 1000 iterations allowed
     });
 
     await t.test('generates valid table for kg', () => {
