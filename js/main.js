@@ -12,7 +12,7 @@ const SafeStorage = {
             localStorage.setItem(testKey, testKey);
             localStorage.removeItem(testKey);
             this._isAvailable = true;
-        } catch (e) {
+        } catch (e) { // NOSONAR - Exception is expected when storage is blocked; we fallback to in-memory flag.
             this._isAvailable = false;
         }
         return this._isAvailable;
@@ -22,7 +22,7 @@ const SafeStorage = {
         if (this.checkAvailability()) {
             try {
                 return localStorage.getItem(key);
-            } catch (e) {
+            } catch (e) { // NOSONAR - Exception is expected when storage is blocked; we fallback to in-memory state.
                 return this._memoryFallback[key] || null;
             }
         }
@@ -34,7 +34,7 @@ const SafeStorage = {
             try {
                 localStorage.setItem(key, value);
                 return;
-            } catch (e) {
+            } catch (e) { // NOSONAR - Exception is expected on QuotaExceededError or denial; silent fallback to memory.
                 // Silently fallback to memory on QuotaExceededError or sudden denial
             }
         }
