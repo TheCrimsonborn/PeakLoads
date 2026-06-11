@@ -1,6 +1,47 @@
 import Calculator from './calculator.js';
 import I18n from './i18n.js';
 
+const SafeStorage = {
+    _memoryFallback: {},
+    _isAvailable: null,
+
+    checkAvailability() {
+        if (this._isAvailable !== null) return this._isAvailable;
+        try {
+            const testKey = '__test__';
+            localStorage.setItem(testKey, testKey);
+            localStorage.removeItem(testKey);
+            this._isAvailable = true;
+        } catch (e) { // NOSONAR - Exception is expected when storage is blocked; we fallback to in-memory flag.
+            this._isAvailable = false;
+        }
+        return this._isAvailable;
+    },
+
+    getItem(key) {
+        if (this.checkAvailability()) {
+            try {
+                return localStorage.getItem(key);
+            } catch (e) { // NOSONAR - Exception is expected when storage is blocked; we fallback to in-memory state.
+                return this._memoryFallback[key] || null;
+            }
+        }
+        return this._memoryFallback[key] || null;
+    },
+
+    setItem(key, value) {
+        if (this.checkAvailability()) {
+            try {
+                localStorage.setItem(key, value);
+                return;
+            } catch (e) { // NOSONAR - Exception is expected on QuotaExceededError or denial; silent fallback to memory.
+                // Silently fallback to memory on QuotaExceededError or sudden denial
+            }
+        }
+        this._memoryFallback[key] = value;
+    }
+};
+
 let analyticsLoaded = false;
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -342,11 +383,11 @@ document.addEventListener('DOMContentLoaded', () => {
             state.inputs[el.id] = el.value;
         }
 
-        localStorage.setItem('peakloads_state', JSON.stringify(state));
+        SafeStorage.setItem('peakloads_state', JSON.stringify(state));
     }
 
     function loadState() {
-        const saved = localStorage.getItem('peakloads_state');
+        const saved = SafeStorage.getItem('peakloads_state');
         if (saved) {
             try {
                 const state = JSON.parse(saved);
@@ -359,7 +400,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             } catch (e) {
                 console.error("Failed to restore state", e);
-                localStorage.removeItem('peakloads_state');
+                SafeStorage.setItem('peakloads_state', ''); // removeItem equivalent, uses empty string so if (saved) falsy handles it
                 globalThis.alert("Failed to restore previous session state. Your session has been reset.");
             }
         }
