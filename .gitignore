@@ -15,4 +15,3 @@ tests/
 **/*.test.js
 **/*.test.cjs
 js/calculator.test.js
-scripts/
