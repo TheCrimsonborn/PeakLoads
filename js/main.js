@@ -207,6 +207,62 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Event Listeners ---
 
+    document.addEventListener('keydown', (e) => {
+        if (e.target.tagName === 'INPUT' && e.target.type === 'number') {
+            const key = e.key;
+
+            if (key === 'e' || key === 'E' || key === '+' || key === '-') {
+                e.preventDefault();
+            }
+
+            if (key === ',') {
+                e.preventDefault();
+                if (e.target.value.indexOf('.') === -1) {
+                    e.target.value = e.target.value + '.';
+                    e.target.dispatchEvent(new Event('input', { bubbles: true }));
+                }
+            }
+
+            if (key === '.' && e.target.value.indexOf('.') !== -1) {
+                e.preventDefault();
+            }
+        }
+    });
+
+    document.addEventListener('paste', (e) => {
+        if (e.target.tagName === 'INPUT' && e.target.type === 'number') {
+            const pasteData = (e.clipboardData || window.clipboardData).getData('text');
+            let dotCount = e.target.value.indexOf('.') !== -1 ? 1 : 0;
+            let hasComma = false;
+
+            for (let i = 0; i < pasteData.length; i++) {
+                const char = pasteData[i];
+                if (char === '.' || char === ',') {
+                    dotCount++;
+                    if (char === ',') hasComma = true;
+                } else if (char < '0' || char > '9') {
+                    e.preventDefault();
+                    return;
+                }
+            }
+
+            if (dotCount > 1) {
+                e.preventDefault();
+                return;
+            }
+
+            if (hasComma) {
+                e.preventDefault();
+                let sanitized = '';
+                for (let i = 0; i < pasteData.length; i++) {
+                    sanitized += (pasteData[i] === ',' ? '.' : pasteData[i]);
+                }
+                e.target.value = sanitized;
+                e.target.dispatchEvent(new Event('input', { bubbles: true }));
+            }
+        }
+    });
+
     rpeAdv1rmInput.addEventListener('input', () => {
         if (Number.parseFloat(rpeAdv1rmInput.value) > 10) {
             rpeAdv1rmInput.value = '10';
