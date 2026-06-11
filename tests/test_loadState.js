@@ -23,6 +23,9 @@ global.document = {
             domContentLoadedCb = cb;
         }
     },
+    getElementsByTagName: (tagName) => {
+        return [];
+    },
     querySelectorAll: (selector) => {
         return [];
     },

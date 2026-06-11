@@ -63,3 +63,6 @@ You must not blindly apply fixes suggested by Qodana, CodeQL, or SonarCloud. Eve
 ## 2026-10-31 - [Inline NOSONAR Placement]
 **Learning:** SonarCloud requires the `// NOSONAR` directive to be placed on the exact same line as the offending code to correctly suppress warnings. Placing it on the line before the code will result in a CI failure.
 **Action:** When appending a `// NOSONAR` suppression directive, ensure it is on the exact same line as the code triggering the rule (e.g., `const key = el.getAttribute('data-i18n'); // NOSONAR`).
+## 2026-06-11 - [Mock DOM Missing Methods]
+**Learning:** Custom DOM mocks used for tests (e.g., in js/__tests__/dom-mock.cjs) may not natively implement methods like getElementsByTagName. When changing DOM query methods in source code for performance, tests will fail with 'is not a function' if mocks are not updated.
+**Action:** Always ensure any custom mock DOM implementations are updated to support the new method before committing a performance optimization that changes DOM traversal.

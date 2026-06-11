@@ -51,10 +51,20 @@ document.addEventListener('DOMContentLoaded', () => {
     // DOM Elements
     const cachedStateInputs = [];
     const stateInputsById = {};
-    const inputsAndSelects = document.querySelectorAll('input, select');
+    // ⚡ Bolt: Prefer getElementsByTagName over querySelectorAll to avoid CSS selector parsing and static NodeList overhead
+    const inputs = document.getElementsByTagName('input');
+    const selects = document.getElementsByTagName('select');
     // NOSONAR - Zero-allocation architecture: index-based loop prevents Symbol.iterator memory overhead.
-    for (let i = 0; i < inputsAndSelects.length; i++) {
-        const el = inputsAndSelects[i];
+    for (let i = 0; i < inputs.length; i++) {
+        const el = inputs[i];
+        if (el.id) {
+            cachedStateInputs.push(el);
+            stateInputsById[el.id] = el;
+        }
+    }
+    // NOSONAR - Zero-allocation architecture: index-based loop prevents Symbol.iterator memory overhead.
+    for (let i = 0; i < selects.length; i++) {
+        const el = selects[i];
         if (el.id) {
             cachedStateInputs.push(el);
             stateInputsById[el.id] = el;

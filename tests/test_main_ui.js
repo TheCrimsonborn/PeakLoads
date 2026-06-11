@@ -46,6 +46,20 @@ global.document = {
             // ignore
         }
     },
+    getElementsByTagName: (tagName) => {
+        if (tagName === 'input') {
+            return [
+                global.document.getElementById('weight-1rm'),
+                global.document.getElementById('reps-1rm')
+            ];
+        }
+        if (tagName === 'select') {
+            return [
+                global.document.getElementById('formula-1rm')
+            ];
+        }
+        return [];
+    },
     querySelectorAll: (selector) => {
         if (selector === 'input, select') {
             return [

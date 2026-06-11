@@ -103,6 +103,10 @@ class MockDocument extends MockElement {
         return el;
     }
 
+    getElementsByTagName(tagName) {
+        return this.elements.filter(el => el.tagName === tagName.toUpperCase());
+    }
+
     querySelectorAll(selector) {
         if (selector === 'input, select') {
             // NOSONAR - Array filter is acceptable in test mocks and doesn't affect production zero-allocation
