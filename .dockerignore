@@ -2,16 +2,14 @@ docker-compose.yml
 Dockerfile
 .git
 node_modules
-# Varsa diğer hassas dosyalar
 .env
 .tar
 .github
 .vscode
 .idea
-
-# Test dosyalari ve klasorleri
 tests/
 **/__tests__/
 **/*.test.js
 **/*.test.cjs
 js/calculator.test.js
+scripts/
