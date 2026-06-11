@@ -44,6 +44,8 @@ global.document = {
 };
 
 let localStorageRemovedItem = null;
+let safeStorageItemSet = null;
+
 global.localStorage = {
     getItem: (key) => {
         if (key === 'peakloads_state') {
@@ -52,7 +54,11 @@ global.localStorage = {
         }
         return null;
     },
-    setItem: () => {},
+    setItem: (key, value) => {
+        if (key === 'peakloads_state' && value === '') {
+            safeStorageItemSet = key;
+        }
+    },
     removeItem: (key) => {
         localStorageRemovedItem = key;
     }
@@ -89,7 +95,8 @@ import('../js/main.js').then(() => {
     // Assert
     try {
         assert.strictEqual(consoleErrorCalled, true, 'console.error should be called with "Failed to restore state"');
-        assert.strictEqual(localStorageRemovedItem, 'peakloads_state', 'localStorage.removeItem should be called with "peakloads_state"');
+        // Check that safe storage setItem was called to empty string
+        assert.strictEqual(safeStorageItemSet, 'peakloads_state', 'SafeStorage.setItem should be called with "peakloads_state" and empty string');
         assert.strictEqual(alertCalledWith, 'Failed to restore previous session state. Your session has been reset.', 'alert should be called with the error message');
         console.log('✅ Test passed: loadState error path successfully tested.');
         console.error = originalConsoleError;
