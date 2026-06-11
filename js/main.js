@@ -166,6 +166,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Event Listeners ---
 
+    rpeAdv1rmInput.addEventListener('input', () => {
+        if (Number.parseFloat(rpeAdv1rmInput.value) > 10) {
+            rpeAdv1rmInput.value = '10';
+        }
+    });
+
     // Unit Toggle
     // NOSONAR - Zero-allocation architecture: index-based loop prevents Symbol.iterator memory overhead.
     for (let i = 0; i < unitBtns.length; i++) {
