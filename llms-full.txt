@@ -1,0 +1,20 @@
+# PeakLoads: Full Context and Architectural Guidelines
+
+## 1. Project Philosophy
+PeakLoads is an elite powerlifting calculator suite. It strictly follows International Powerlifting Federation (IPF) standards and limits inputs to physiologically accurate ranges (e.g., maximum RPE is strictly 10).
+
+## 2. Architecture: Zero-Allocation Rule
+The most critical engineering directive in this project is "Zero-Allocation". To prevent Garbage Collection pauses and V8 overhead on hot paths:
+- Never use `for...of` or `forEach` on arrays; use traditional `for (let i = 0; ...)` loops.
+- Do not use `Object.assign()` or `Object.keys()`; iterate properties with `for...in` and `Object.hasOwn()`.
+- Avoid the `DOMStringMap` proxy; strictly use native `getAttribute()` and `setAttribute()` instead of `element.dataset`.
+- Suppress specific SonarQube false positives regarding these rules using inline `// NOSONAR` tags.
+
+## 3. Storage and Resilience
+Direct `localStorage` access is forbidden due to Chromium `SecurityError` risks when third-party data is blocked. All storage operations must route through the `SafeStorage` adapter, which provides an in-memory fallback to prevent fatal DOM aborts.
+
+## 4. Privacy and Tracking
+The application uses "Engagement-Based Tracking" (Implicit Consent). Analytics scripts (GA4, Ahrefs) are not hardcoded in the HTML head. They are injected dynamically into the DOM strictly only after a user executes a calculation, ensuring passive visitors are not tracked.
+
+## 5. Routing Matrix
+PeakLoads acts as a Vanilla JS SPA. Server-side (Nginx/Vercel) rewrites direct all traffic to `index.html`. Client-side routing is handled via the `seoRoutes` object in `js/main.js`. Every route must be perfectly synchronized across `nginx.conf`, `vercel.json`, `sitemap.xml`, and the frontend state loader.
