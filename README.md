@@ -1,32 +1,34 @@
-# peakloads
+# PeakLoads
 
-peakloads is a sleek powerlifting companion that helps you plan training sessions with confidence. Estimate your one-rep max using the Epley, Brzycki, or Lombardi formulas, then convert those numbers into ready-to-use percentage tables for programming.
+## Project Overview
+PeakLoads is a zero-dependency, high-performance Vanilla JS Single Page Application (SPA) meticulously tailored for powerlifting. Built from the ground up for speed, precision, and resilience, it provides strength athletes with advanced programming tools without the bloat of modern JavaScript frameworks.
 
-## Features
+## Core Features
+PeakLoads provides a suite of advanced calculators strictly adhering to **International Powerlifting Federation (IPF) standards** and enforcing strict physiological input caps to guarantee accurate, real-world programming:
+- **1RM Estimators:** Standard approximations using the Epley, Brzycki, or Lombardi formulas.
+- **Advanced RPE/RIR Estimations:** Utilizes an ultimate hybrid model combining O(1) RTS Matrix lookups and asymptotic decay to calculate precise 1RMs with Rate of Perceived Exertion (RPE) data.
+- **Bench Press Warm-up Planner:** Auto-build progressive warm-up sets, potentiation sets, and skill acclimation sets based on precise percentages.
+- **RIR Translator:** Converts last-set data into recommended working weights based on Reps In Reserve (RIR).
 
-- **1RM Estimator** – Quickly approximate your max using the Epley, Brzycki, or Lombardi formulas.
-- **Percentage Builder** – Generate working weights across any intensity range with configurable increments.
-- **Warm-Up Planner** – Auto-build progressive warm-up sets from your top weight using preset templates.
-- **Advanced Warm Up** – Generate lift-specific warm-ups outlining mobility and potentiation sets.
-- **RIR Translator** – Turn last-set data into estimated 1RM and recommended working weights with Reps In Reserve.
-- **Unit Toggle** – Flip seamlessly between kilograms and pounds; outputs update instantly.
-- **Localized UI** – Switch between English, Türkçe, and Русский via the language dropdown.
-- **Modern UI** – Responsive, polished "Command Center" interface tuned for desktops and mobile devices.
+## Architectural Philosophy (Zero-Allocation)
+This project rigorously adheres to a **Zero-Allocation** architecture to maximize V8 engine performance. Hot paths are optimized to avoid Garbage Collection (GC) pauses by strictly prohibiting:
+- Regular expressions
+- Temporary array allocations (e.g., `.split()`, `.map()`, `.filter()`)
+- High-overhead proxies (e.g., `DOMStringMap` via `dataset`)
 
-## Getting Started
+Instead, the codebase prefers primitive index-based `for` loops, strict equality checks (`===`), pre-allocated arrays, deterministic mathematical key generation for matrix lookups, and direct native DOM APIs like `getAttribute('data-*')`.
 
-1. Open `index.html` in your browser, no build step required.
-2. Enter a recent heavy set to estimate your 1RM, build percentage tables or warm-up plans, and log RIR-based targets.
-3. Use the header controls to change units (kg/lb) or language (EN/TR/RU).
+## Security & Resilience
+The application utilizes a `SafeStorage` adapter to handle local state persistence. This adapter incorporates a robust in-memory fallback mechanism to gracefully prevent `SecurityError` DOM aborts when `localStorage` is blocked by strict browser privacy settings or quota limits. Furthermore, strict numeric input validations employ a primitive, native string-manipulation approach and direct conditional clamping, ensuring safe mathematical boundaries without unnecessary memory overhead.
 
-### Customization
+## Privacy Architecture
+PeakLoads implements an **Engagement-Based Tracking** (Implicit Consent) model. Analytics scripts (such as Google Analytics and Ahrefs) are never statically loaded on the initial page view. Instead, they are dynamically injected into the DOM only after a user executes their first active, trusted interaction (e.g., executing a calculation). This ensures absolute privacy compliance and maintains zero-allocation performance on initial load.
 
-- To customize styling, edit `css/style.css`.
-- To adjust formulas and computation logic, modify `js/calculator.js`.
-- To modify UI event listeners and DOM updates, check `js/main.js`.
-- For translation adjustments, check `js/i18n.js`.
+## DevOps, Linux & Cloud Deployment
+PeakLoads utilizes modern web operations to deliver a lightning-fast experience:
+- **Local Development:** The app requires zero build steps—simply open `index.html`.
+- **Docker Integration & Nginx:** The project includes custom Docker and `nginx.conf` configurations ensuring stringent security headers (CSP, HSTS, X-Frame-Options) and proper compression.
+- **Cloud Deployment:** Seamlessly deployed, the cloud configuration (`vercel.json`, `_redirects`) includes programmatic SEO rewrite rules to map multiple semantic URLs to the SPA client-side routing model flawlessly.
 
-
-## License
-
-Released under the MIT License. See `LICENSE` for details.
+## AI & GEO Integration
+Embracing the era of Generative Engine Optimization (GEO) and AI crawler context, the repository integrates `llms.txt` and `llms-full.txt` standards. These files expose strict architectural philosophies and project capabilities directly to LLMs, ensuring accurate context and representation in AI-generated summaries and autonomous developer workflows.
