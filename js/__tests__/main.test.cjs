@@ -65,4 +65,30 @@ describe('main.js DOM tests', () => {
             assert.strictEqual(display.textContent, 'kg', `Expected textContent to be 'kg', but got '${display.textContent}'`);
         }
     });
+
+    test('SafeStorage.checkAvailability sets _isAvailable to false when localStorage is blocked', async () => {
+        const originalLocalStorage = global.localStorage;
+
+        try {
+            // Mock localStorage setItem to throw
+            global.localStorage = {
+                setItem: () => { throw new Error('Storage blocked'); },
+                getItem: () => null,
+                removeItem: () => {}
+            };
+
+            const module = await import('../main.js');
+            const SafeStorage = module.SafeStorage;
+
+            // Reset internal state for test
+            SafeStorage._isAvailable = null;
+
+            const isAvailable = SafeStorage.checkAvailability();
+
+            assert.strictEqual(isAvailable, false, "Expected checkAvailability() to return false");
+            assert.strictEqual(SafeStorage._isAvailable, false, "Expected internal _isAvailable state to be false");
+        } finally {
+            global.localStorage = originalLocalStorage;
+        }
+    });
 });
