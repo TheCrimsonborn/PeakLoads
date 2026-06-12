@@ -63,7 +63,7 @@ function runTests() {
     });
 
     assertTest('Formula: Lombardi calculates correctly', () => {
-        // 100 * Math.pow(5, 0.1) = 100 * 1.1746... = 117.4618... rounded to 117.5
+        // 100 * (5 ** 0.1) = 100 * 1.1746... = 117.4618... rounded to 117.5
         assert.strictEqual(Calculator.calculate1RM(100, 5, 'lombardi'), 117.5);
     });
 
