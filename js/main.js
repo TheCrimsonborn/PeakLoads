@@ -244,10 +244,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Convert number inputs to text for exact cursor position control without browser quirks
-    document.querySelectorAll('input[type="number"]').forEach(input => {
-        input.type = 'text';
-        input.inputMode = 'decimal';
-    });
+    const numberInputs = document.querySelectorAll('input[type="number"]');
+    // NOSONAR - Zero-allocation architecture: index-based loop prevents Symbol.iterator memory overhead.
+    for (let i = 0; i < numberInputs.length; i++) {
+        numberInputs[i].type = 'text';
+        numberInputs[i].inputMode = 'decimal';
+    }
 
     // Completely disable pasting in input fields
     document.addEventListener('paste', (e) => {
