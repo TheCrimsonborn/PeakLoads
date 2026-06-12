@@ -1,7 +1,7 @@
 import Calculator from './calculator.js';
 import I18n from './i18n.js';
 
-const SafeStorage = {
+export const SafeStorage = {
     _memoryFallback: {},
     _isAvailable: null,
 
