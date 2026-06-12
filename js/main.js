@@ -207,6 +207,55 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Event Listeners ---
 
+    // Zero-allocation: Pre-allocate constants and objects outside hot event paths
+    const ALLOWED_KEYS = {
+        'Backspace': true, 'Tab': true, 'Delete': true, 'ArrowLeft': true, 'ArrowRight': true, 
+        'ArrowUp': true, 'ArrowDown': true, 'Home': true, 'End': true, 'Enter': true, 'Escape': true
+    };
+    const VALID_NUMBER_CHAR = /^[0-9.]$/;
+    const SYNTHETIC_INPUT_EVENT = new Event('input', { bubbles: true });
+
+    // Global input restriction: only numbers and dots allowed. Comma is converted to dot.
+    document.addEventListener('keydown', (e) => {
+        if (e.target.tagName === 'INPUT') {
+            if (ALLOWED_KEYS[e.key] || e.ctrlKey || e.metaKey || e.altKey) return;
+
+            const isDot = e.key === '.';
+            const isComma = e.key === ',';
+
+            if (isDot || isComma) {
+                // Prevent starting with a dot. Since inputs are converted to text, selectionStart works perfectly.
+                if (e.target.selectionStart === 0) {
+                    e.preventDefault();
+                    return;
+                }
+
+                if (isComma) {
+                    e.preventDefault();
+                    document.execCommand('insertText', false, '.');
+                    return;
+                }
+            }
+
+            if (!VALID_NUMBER_CHAR.test(e.key)) {
+                e.preventDefault();
+            }
+        }
+    });
+
+    // Convert number inputs to text for exact cursor position control without browser quirks
+    document.querySelectorAll('input[type="number"]').forEach(input => {
+        input.type = 'text';
+        input.inputMode = 'decimal';
+    });
+
+    // Completely disable pasting in input fields
+    document.addEventListener('paste', (e) => {
+        if (e.target.tagName === 'INPUT') {
+            e.preventDefault();
+        }
+    });
+
     rpeAdv1rmInput.addEventListener('input', () => {
         if (Number.parseFloat(rpeAdv1rmInput.value) > 10) {
             rpeAdv1rmInput.value = '10';
