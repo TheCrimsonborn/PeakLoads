@@ -77,7 +77,7 @@ describe('main.js DOM tests', () => {
                 removeItem: () => {}
             };
 
-            const module = await import('../main.js');
+            const module = await import('../main.js?t=' + Date.now());
             const SafeStorage = module.SafeStorage;
 
             // Reset internal state for test
@@ -87,6 +87,42 @@ describe('main.js DOM tests', () => {
 
             assert.strictEqual(isAvailable, false, "Expected checkAvailability() to return false");
             assert.strictEqual(SafeStorage._isAvailable, false, "Expected internal _isAvailable state to be false");
+        } finally {
+            global.localStorage = originalLocalStorage;
+        }
+    });
+
+    test('SafeStorage.setItem silently falls back to _memoryFallback when localStorage.setItem throws', async () => {
+        const originalLocalStorage = global.localStorage;
+
+        try {
+            // Mock localStorage setItem to throw only on specific key, to pass checkAvailability
+            global.localStorage = {
+                setItem: (key, value) => {
+                    if (key === '__test__') return; // Allow checkAvailability to succeed
+                    throw new Error('QuotaExceededError');
+                },
+                getItem: () => null,
+                removeItem: () => {}
+            };
+
+            const module = await import('../main.js?t=' + Date.now());
+            const SafeStorage = module.SafeStorage;
+
+            // Reset internal state for test
+            SafeStorage._isAvailable = null;
+            SafeStorage._memoryFallback = {};
+
+            const isAvailable = SafeStorage.checkAvailability();
+            assert.strictEqual(isAvailable, true, "Expected checkAvailability() to return true");
+
+            // Attempt to set item
+            const testKey = 'test_key';
+            const testValue = 'test_value';
+            SafeStorage.setItem(testKey, testValue);
+
+            // Verify fallback
+            assert.strictEqual(SafeStorage._memoryFallback[testKey], testValue, "Expected value to be saved in _memoryFallback");
         } finally {
             global.localStorage = originalLocalStorage;
         }
