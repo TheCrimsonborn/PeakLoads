@@ -70,7 +70,7 @@ const Calculator = {
     // 1RM Formulas (Expects input in current unit, returns in current unit)
     calculate1RM: (weight, reps, formula = 'epley') => {
         weight = Number.parseFloat(weight);
-        reps = Number.parseInt(reps);
+        reps = Number.parseInt(reps, 10);
 
         if (!weight || weight <= 0 || !reps || reps <= 0) return 0;
         if (reps === 1) return weight;
@@ -171,7 +171,7 @@ const Calculator = {
     // Warm-Up Planner (Top set in current unit)
     generateWarmUp: (topSet, template, unit) => {
         topSet = Number.parseFloat(topSet);
-        if (!topSet) return [];
+        if (!topSet || topSet <= 0) return [];
 
         const selectedTemplate = WARMUP_TEMPLATES[template] || WARMUP_TEMPLATES.classic;
 
@@ -192,7 +192,7 @@ const Calculator = {
     // Advanced Warm Up Generator
     generateAdvancedWarmUp: (liftType, mainWeight, mainReps, cuesObj, purposesObj, unit) => {
         mainWeight = Number.parseFloat(mainWeight);
-        mainReps = Number.parseInt(mainReps);
+        mainReps = Number.parseInt(mainReps, 10);
         if (!mainWeight || mainWeight <= 0 || !mainReps || mainReps <= 0) return [];
 
         const result = new Array(ADV_WARMUP_SETS.length);
@@ -230,12 +230,12 @@ const Calculator = {
     // RIR Translator
     calculateRIR: (weight, reps, rir, targetReps, targetRIR, unit) => {
         weight = Number.parseFloat(weight);
-        reps = Number.parseInt(reps);
+        reps = Number.parseInt(reps, 10);
         rir = Number.parseFloat(rir);
-        targetReps = Number.parseInt(targetReps);
+        targetReps = Number.parseInt(targetReps, 10);
         targetRIR = Number.parseFloat(targetRIR);
 
-        if (!weight || weight <= 0 || !reps || reps <= 0 || rir < 0 || targetReps <= 0 || targetRIR < 0) {
+        if (!weight || weight <= 0 || !reps || reps <= 0 || Number.isNaN(rir) || rir < 0 || targetReps <= 0 || Number.isNaN(targetRIR) || targetRIR < 0) {
             return { est1RM: 0, nextWeight: 0 };
         }
 

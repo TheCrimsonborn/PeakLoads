@@ -340,7 +340,7 @@ document.addEventListener('DOMContentLoaded', () => {
     btnGenAdvWarmup.addEventListener('click', () => {
         const liftType = advLiftSelect.value;
         const weight = Number.parseFloat(advWeightInput.value);
-        const reps = Number.parseInt(advRepsInput.value);
+        const reps = Number.parseInt(advRepsInput.value, 10);
 
         if (weight && reps) {
             const cuesObj = I18n.getAdvCues()[liftType];
@@ -354,9 +354,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // RIR Translator
     btnCalcRir.addEventListener('click', () => {
         const weight = Number.parseFloat(weightRirInput.value);
-        const reps = Number.parseInt(repsRirInput.value);
+        const reps = Number.parseInt(repsRirInput.value, 10);
         const rir = Number.parseFloat(rirRirInput.value) || 0;
-        const tReps = Number.parseInt(targetRepsRirInput.value) || 1;
+        const tReps = Number.parseInt(targetRepsRirInput.value, 10) || 1;
         const tRir = Number.parseFloat(targetRirRirInput.value) || 0;
 
         if (weight && reps) {
