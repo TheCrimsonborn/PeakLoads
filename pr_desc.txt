@@ -1,0 +1,4 @@
+💡 **What:** Extracted inline column definition arrays and their associated arrow functions outside of the renderPercentageTable, renderWarmupTable, and renderAdvWarmupTable functions into static constant arrays (PCT_COLUMNS, WARMUP_COLUMNS, ADV_WARMUP_COLUMNS).
+🎯 **Why:** Creating new array instances and multiple arrow functions on every single render call causes unnecessary memory allocation and garbage collection (GC) overhead. Hoisting these definitions aligns with the project's zero-allocation architecture for hot paths.
+📊 **Impact:** Reduces function/array allocations by 14 objects per full table re-render, reducing GC pause frequency.
+🔬 **Measurement:** Verify tests run successfully and memory profile shows reduced garbage collection events during table regeneration.
