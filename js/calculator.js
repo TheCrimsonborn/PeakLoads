@@ -178,15 +178,21 @@ const Calculator = {
         // ⚡ Bolt: Pre-calculate multiplier to avoid division inside loop
         const topMultiplier = topSet / 100;
 
-        // NOSONAR - Returning mapped arrays inline is acceptable for returning a small finite subset.
-        return selectedTemplate.map(stepConf => {
+        const len = selectedTemplate.length;
+        const result = new Array(len);
+
+        // NOSONAR - Zero-allocation architecture: index-based loop prevents Symbol.iterator memory overhead.
+        for (let i = 0; i < len; i++) {
+            const stepConf = selectedTemplate[i];
             const rawWeight = topMultiplier * stepConf.percent;
-            return {
+            result[i] = {
                 percent: stepConf.percent,
                 weight: Calculator.roundWeight(rawWeight, unit),
                 reps: stepConf.reps
             };
-        });
+        }
+
+        return result;
     },
 
     // Advanced Warm Up Generator
