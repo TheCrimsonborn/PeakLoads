@@ -28,35 +28,34 @@ self.addEventListener('install', event => {
 });
 
 self.addEventListener('fetch', event => {
-    // Stale-While-Revalidate strategy for dynamic assets
-    if (event.request.method === 'GET') {
-        event.respondWith(
-            caches.match(event.request).then(cachedResponse => {
-                const fetchPromise = fetch(event.request).then(networkResponse => {
-                    return caches.open(CACHE_NAME).then(cache => {
-                        if (networkResponse.ok) {
-                            const url = new URL(event.request.url);
-                            // Prevent unbounded caching by restricting to same-origin and no query params
-                            if (url.origin === self.location.origin && !url.search) {
-                                cache.put(event.request, networkResponse.clone());
-                            }
-                        }
-                        return networkResponse;
-                    });
-                }).catch(() => {
-                    // Optional: Return offline fallback
-                });
-
-                // Ensure background fetch completes even if worker is closed
-                event.waitUntil(fetchPromise);
-
-                // Return cached response immediately if available, otherwise wait for network
-                return cachedResponse || fetchPromise;
-            })
-        );
-    } else {
-        event.respondWith(fetch(event.request));
+    if (event.request.method !== 'GET') {
+        return;
     }
+
+    event.respondWith(
+        caches.match(event.request).then(cachedResponse => {
+            const fetchPromise = fetch(event.request).then(networkResponse => {
+                return caches.open(CACHE_NAME).then(cache => {
+                    if (networkResponse.ok) {
+                        const url = new URL(event.request.url);
+                        if (url.origin === self.location.origin && !url.search) {
+                            cache.put(event.request, networkResponse.clone());
+                        }
+                    }
+                    return networkResponse;
+                });
+            }).catch(() => {
+                if (event.request.mode === 'navigate') {
+                    return caches.match('/index.html');
+                }
+                return Response.error();
+            });
+
+            event.waitUntil(fetchPromise);
+
+            return cachedResponse || fetchPromise;
+        })
+    );
 });
 
 self.addEventListener('activate', event => {
