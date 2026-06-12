@@ -82,7 +82,7 @@ const Calculator = {
                 oneRM = weight * (36 / (37 - reps));
                 break;
             case 'lombardi':
-                oneRM = weight * Math.pow(reps, 0.1);
+                oneRM = weight * (reps ** 0.1);
                 break;
             case 'epley':
             default:
