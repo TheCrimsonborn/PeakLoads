@@ -63,3 +63,10 @@ You must not blindly apply fixes suggested by Qodana, CodeQL, or SonarCloud. Eve
 ## 2026-10-31 - [Inline NOSONAR Placement]
 **Learning:** SonarCloud requires the `// NOSONAR` directive to be placed on the exact same line as the offending code to correctly suppress warnings. Placing it on the line before the code will result in a CI failure.
 **Action:** When appending a `// NOSONAR` suppression directive, ensure it is on the exact same line as the code triggering the rule (e.g., `const key = el.getAttribute('data-i18n'); // NOSONAR`).
+## 2026-06-13 - [Write-Through Cache for Sync Disk I/O]
+**Learning:** Synchronous Disk I/O operations like `localStorage.setItem` are thread-blocking and heavily degrade performance, especially when fired repeatedly by global event listeners (like 'input' or 'change'). Generating the same state strings repeatedly causes redundant disk writes.
+**Action:** Implement a primitive Write-Through Cache mechanism (e.g., a `_lastWritten` dictionary) and use strict equality checks (`===`) before triggering disk I/O. This intercepts redundant writes without allocating temporary memory and significantly reduces thread-blocking delays.
+
+## 2026-06-13 - [Avoid Sorting after getElementsByTagName]
+**Learning:** While `getElementsByTagName` is a faster C++ native call for single tag lookups compared to parsing CSS selectors with `querySelectorAll`, replacing a combined query like `querySelectorAll('input, select')` with multiple `getElementsByTagName` calls requires manually sorting the results with `compareDocumentPosition` to preserve strict document order. Crossing the JS-C++ boundary repeatedly to sort DOM nodes creates massive overhead, resulting in a performance regression.
+**Action:** Do not micro-optimize combined `querySelectorAll` queries if preserving strict document order is required. The native C++ combined query is faster than a JS-side sort algorithm running `compareDocumentPosition`.

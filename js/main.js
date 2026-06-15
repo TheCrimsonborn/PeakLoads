@@ -3,6 +3,7 @@ import I18n from './i18n.js';
 
 export const SafeStorage = {
     _memoryFallback: {},
+    _lastWritten: {}, // ⚡ Bolt: Primitive write-through cache to intercept redundant disk I/O
     _isAvailable: null,
 
     checkAvailability() {
@@ -30,6 +31,9 @@ export const SafeStorage = {
     },
 
     setItem(key, value) {
+        if (this._lastWritten[key] === value) return;
+        this._lastWritten[key] = value;
+
         if (this.checkAvailability()) {
             try {
                 localStorage.setItem(key, value);
