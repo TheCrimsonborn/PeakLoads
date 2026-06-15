@@ -70,3 +70,7 @@ You must not blindly apply fixes suggested by Qodana, CodeQL, or SonarCloud. Eve
 ## 2026-06-13 - [Avoid Sorting after getElementsByTagName]
 **Learning:** While `getElementsByTagName` is a faster C++ native call for single tag lookups compared to parsing CSS selectors with `querySelectorAll`, replacing a combined query like `querySelectorAll('input, select')` with multiple `getElementsByTagName` calls requires manually sorting the results with `compareDocumentPosition` to preserve strict document order. Crossing the JS-C++ boundary repeatedly to sort DOM nodes creates massive overhead, resulting in a performance regression.
 **Action:** Do not micro-optimize combined `querySelectorAll` queries if preserving strict document order is required. The native C++ combined query is faster than a JS-side sort algorithm running `compareDocumentPosition`.
+
+## 2026-11-13 - [Hoist Array of Closures to Avoid GC Overhead]
+**Learning:** Defining arrays of closure functions (e.g., column definitions `[row => createTextCell(row.percent)]`) inside frequently called table render functions causes redundant memory reallocation and massive garbage collection overhead on every table update, as a new array and new closure instances are instantiated each time.
+**Action:** Extract static arrays containing function definitions (like table column renderers) to the module level. This prevents recreation on every render cycle, ensuring a zero-allocation hot path and improving layout rendering speed significantly.
