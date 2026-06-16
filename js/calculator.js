@@ -3,6 +3,7 @@
  */
 
 const KG_TO_LB = 2.2046226218;
+const LB_TO_KG = 1 / KG_TO_LB;
 
 // Extracted to prevent memory reallocation and GC overhead on each call
 const WARMUP_TEMPLATES = {
@@ -55,15 +56,16 @@ const RTS_MATRIX = {
 
 const Calculator = {
     // Unit Conversion
-    toKg: (value, unit) => (unit === 'kg' ? value : value / KG_TO_LB),
+    toKg: (value, unit) => (unit === 'kg' ? value : value * LB_TO_KG),
     fromKg: (valueKg, unit) => (unit === 'kg' ? valueKg : valueKg * KG_TO_LB),
 
     // Rounding logic based on unit (2.5kg or 5lb steps)
+    // ⚡ Bolt: Use multiplication instead of division for faster execution in hot paths
     roundWeight: (weight, unit) => {
         if (unit === 'kg') {
-            return Math.round(weight / 2.5) * 2.5;
+            return Math.round(weight * 0.4) * 2.5; // weight / 2.5 === weight * 0.4
         } else {
-            return Math.round(weight / 5) * 5; // Typically 5lb jumps in plates
+            return Math.round(weight * 0.2) * 5; // weight / 5 === weight * 0.2
         }
     },
 

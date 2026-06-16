@@ -70,3 +70,7 @@ You must not blindly apply fixes suggested by Qodana, CodeQL, or SonarCloud. Eve
 ## 2026-06-13 - [Avoid Sorting after getElementsByTagName]
 **Learning:** While `getElementsByTagName` is a faster C++ native call for single tag lookups compared to parsing CSS selectors with `querySelectorAll`, replacing a combined query like `querySelectorAll('input, select')` with multiple `getElementsByTagName` calls requires manually sorting the results with `compareDocumentPosition` to preserve strict document order. Crossing the JS-C++ boundary repeatedly to sort DOM nodes creates massive overhead, resulting in a performance regression.
 **Action:** Do not micro-optimize combined `querySelectorAll` queries if preserving strict document order is required. The native C++ combined query is faster than a JS-side sort algorithm running `compareDocumentPosition`.
+
+## 2026-06-16 - [Optimize Hot Paths with Multiplication over Division]
+**Learning:** V8 and modern CPUs calculate floating-point multiplications significantly faster than floating-point divisions. When divisions occur in frequently executed loops (like percentage chart generation or warmup plans), this causes measurable performance degradation.
+**Action:** Always pre-calculate the reciprocal (`1 / divisor`) outside the loop and substitute division (`x / y`) with multiplication (`x * reciprocal`) in performance-critical hot paths.
