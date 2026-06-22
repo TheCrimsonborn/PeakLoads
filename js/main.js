@@ -595,30 +595,38 @@ document.addEventListener('DOMContentLoaded', () => {
         tbody.replaceChildren(fragment);
     }
 
+    // ⚡ Bolt: Hoist static column configurations to prevent redundant array/function allocations on each click
+    const PCT_COLUMNS = [
+        row => createTextCell(`${row.percent}%`),
+        row => createWeightCell(row.weight)
+    ];
+
     function renderPercentageTable(data) {
-        renderTableData(tableBodyPct, data, [
-            row => createTextCell(`${row.percent}%`),
-            row => createWeightCell(row.weight)
-        ]);
+        renderTableData(tableBodyPct, data, PCT_COLUMNS);
     }
+
+    const WARMUP_COLUMNS = [
+        row => createTextCell(`${row.percent}%`),
+        row => createWeightCell(row.weight),
+        row => createTextCell(row.reps)
+    ];
 
     function renderWarmupTable(data) {
-        renderTableData(tableBodyWarmup, data, [
-            row => createTextCell(`${row.percent}%`),
-            row => createWeightCell(row.weight),
-            row => createTextCell(row.reps)
-        ]);
+        renderTableData(tableBodyWarmup, data, WARMUP_COLUMNS);
     }
 
+    const ADV_WARMUP_NOTES_STYLE = { fontSize: '0.9em', opacity: '0.8' };
+    const ADV_WARMUP_COLUMNS = [
+        row => createTextCell(row.stage),
+        row => createTextCell(row.purposeStr),
+        row => createTextCell(row.percent === '-' ? '-' : `${row.percent}%`),
+        row => createWeightCell(row.weight, row.percent !== '-'),
+        row => createTextCell(row.reps),
+        row => createTextCell(row.notes, ADV_WARMUP_NOTES_STYLE)
+    ];
+
     function renderAdvWarmupTable(data) {
-        renderTableData(tableBodyAdvWarmup, data, [
-            row => createTextCell(row.stage),
-            row => createTextCell(row.purposeStr),
-            row => createTextCell(row.percent === '-' ? '-' : `${row.percent}%`),
-            row => createWeightCell(row.weight, row.percent !== '-'),
-            row => createTextCell(row.reps),
-            row => createTextCell(row.notes, { fontSize: '0.9em', opacity: '0.8' })
-        ]);
+        renderTableData(tableBodyAdvWarmup, data, ADV_WARMUP_COLUMNS);
     }
 
     // Set current year in footer
