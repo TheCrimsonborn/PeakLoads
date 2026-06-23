@@ -70,3 +70,7 @@ You must not blindly apply fixes suggested by Qodana, CodeQL, or SonarCloud. Eve
 ## 2026-06-13 - [Avoid Sorting after getElementsByTagName]
 **Learning:** While `getElementsByTagName` is a faster C++ native call for single tag lookups compared to parsing CSS selectors with `querySelectorAll`, replacing a combined query like `querySelectorAll('input, select')` with multiple `getElementsByTagName` calls requires manually sorting the results with `compareDocumentPosition` to preserve strict document order. Crossing the JS-C++ boundary repeatedly to sort DOM nodes creates massive overhead, resulting in a performance regression.
 **Action:** Do not micro-optimize combined `querySelectorAll` queries if preserving strict document order is required. The native C++ combined query is faster than a JS-side sort algorithm running `compareDocumentPosition`.
+
+## 2026-10-31 - [Hoist UI Render Configurations]
+**Learning:** Defining inline column configurations (arrays of rendering functions) or inline style objects directly within `render` functions causes unnecessary memory reallocation and garbage collection (GC) overhead every time the table is re-rendered (e.g., on button click).
+**Action:** Extract static UI render configurations, such as arrays of column generator functions and style objects, into constants defined outside the frequently called functions to adhere to the zero-allocation architecture.
