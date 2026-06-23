@@ -16,21 +16,48 @@
 
     <!-- Structured Data (JSON-LD) for SEO -->
     <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
     {
-      "@context": "https://schema.org",
       "@type": "WebApplication",
-      "name": "peakloads",
-      "url": "https://peakloads.com/",
-      "description": "A comprehensive powerlifting calculator offering 1RM estimation, RPE/RIR translation, warm-up planning, and percentage charts.",
-      "applicationCategory": "HealthApplication",
-      "operatingSystem": "Web",
-      "inLanguage": ["en", "tr", "ru"],
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD"
-      }
+      "name": "PeakLoads",
+      "url": "https://peakloads.com",
+      "applicationCategory": "HealthAndFitnessApplication",
+      "operatingSystem": "Any",
+      "description": "Advanced 1RM calculator, warm-up planner and RPE/RIR translator for powerlifting and strength training."
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is 1RM (One Rep Max)?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "1RM is the maximum amount of weight a person can lift for one repetition of an exercise. PeakLoads calculates this using established mathematical models like Epley and Lombardi formulas."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do you translate RIR to RPE?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "RIR (Reps in Reserve) indicates how many more reps you could perform before reaching muscular failure. RPE (Rate of Perceived Exertion) is a scale from 1 to 10 measuring intensity. PeakLoads provides a direct translation matrix between these two metrics based on standard powerlifting protocols."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How to calculate warm up sets for lifting?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Warm up sets are typically calculated as a progressive percentage of your top set weight. PeakLoads automatically generates a step-by-step warmup protocol based on your target weight and selected rep ranges."
+          }
+        }
+      ]
     }
+  ]
+}
     </script>
 
     <!-- Open Graph / Facebook -->
