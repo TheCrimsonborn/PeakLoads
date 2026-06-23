@@ -566,3 +566,64 @@ h4 {
     /* larger touch targets */
   }
 }
+
+/* Developer Section */
+.developer-section {
+    margin-top: 40px;
+    padding: 20px;
+    background: var(--card-bg);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    text-align: center;
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.developer-content .developer-text {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+.developer-content .developer-text strong {
+    color: var(--text-main);
+}
+
+.developer-links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.developer-link {
+    color: var(--primary-text);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 8px 16px;
+    border: 1px solid var(--primary-color);
+    border-radius: var(--radius-md);
+    transition: all 0.3s ease;
+    background: rgba(220, 38, 38, 0.05);
+}
+
+.developer-link:hover {
+    background: var(--primary-color);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+}
