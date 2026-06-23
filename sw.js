@@ -1,4 +1,4 @@
-const CACHE_NAME = 'peakloads-cache-1.0.a1c85cd';
+const CACHE_NAME = 'peakloads-cache-1.0.007c38b';
 const urlsToCache = [
     '/',
     '/index.html',
