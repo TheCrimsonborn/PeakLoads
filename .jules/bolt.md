@@ -74,3 +74,7 @@ You must not blindly apply fixes suggested by Qodana, CodeQL, or SonarCloud. Eve
 ## 2026-10-31 - [Hoist UI Render Configurations]
 **Learning:** Defining inline column configurations (arrays of rendering functions) or inline style objects directly within `render` functions causes unnecessary memory reallocation and garbage collection (GC) overhead every time the table is re-rendered (e.g., on button click).
 **Action:** Extract static UI render configurations, such as arrays of column generator functions and style objects, into constants defined outside the frequently called functions to adhere to the zero-allocation architecture.
+
+## 2026-06-24 - [Strict Zero-Allocation Compliance over General Readability]
+**Learning:** When core architectural rules (like "Zero-Allocation" in llms-full.txt) conflict with general code health guidelines (like "Avoid micro-optimizations like replacing Object.assign() with a for...in loop"), the strict architectural rule takes absolute precedence.
+**Action:** Always prioritize absolute zero-allocation constraints (e.g. using `for...in` with `Object.hasOwn()`) over avoiding micro-optimizations when modifying object property assignment in critical paths.
