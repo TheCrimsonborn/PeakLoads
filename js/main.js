@@ -575,7 +575,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const td = document.createElement('td');
         td.textContent = text;
         if (styles) {
-            Object.assign(td.style, styles);
+            // NOSONAR - Zero-allocation requires avoiding Object.keys() array generation
+            for (const key in styles) {
+                if (Object.hasOwn(styles, key)) {
+                    td.style[key] = styles[key];
+                }
+            }
         }
         return td;
     }
