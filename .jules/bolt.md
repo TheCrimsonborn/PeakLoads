@@ -1,3 +1,6 @@
+## 2026-06-28 - [Avoid Redundant Layout Thrashing in Routing]
+**Learning:** Functions that manage routing and UI updates (like `activateSection`) can be called multiple times during initialization (e.g., from `loadState` and then again from URL parsing). Without an early return, this causes redundant DOM mutations, CSS class toggling, and forces layout recalculations, causing thread-blocking performance degradation.
+**Action:** Implement a state variable (e.g., `currentActiveSectionId`) and add a strict equality early return condition at the top of the function to prevent duplicate execution when the target is already active.
 18:31-08/05/2026 : [Batch DOM Appends with DocumentFragment]
 Learning: Appending DOM elements inside a loop causes multiple reflows, which is a common performance bottleneck in SPAs. Using a DocumentFragment allows batching these appends into a single 'live' DOM update.
 Action: Always use DocumentFragment when generating table rows or lists dynamically from data arrays.

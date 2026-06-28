@@ -51,6 +51,7 @@ let analyticsLoaded = false;
 document.addEventListener('DOMContentLoaded', () => {
     // State
     let currentUnit = 'kg'; // 'kg' or 'lb'
+    let currentActiveSectionId = null; // Track active section to prevent redundant layout thrashing
 
     // DOM Elements
     const cachedStateInputs = [];
@@ -181,6 +182,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Navigation (Hash Routing)
     function activateSection(targetId) {
         if (!targetId) targetId = 'section-1rm'; // Default
+
+        // ⚡ Bolt: Early return to prevent redundant DOM mutations and layout thrashing
+        if (currentActiveSectionId === targetId) return;
+        currentActiveSectionId = targetId;
 
         // Update Nav
         // NOSONAR - Zero-allocation architecture: index-based loop prevents Symbol.iterator memory overhead.
