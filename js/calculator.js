@@ -60,6 +60,8 @@ const RTS_MATRIX = (() => {
     return arr;
 })();
 
+const isValidWeightAndReps = (weight, reps) => !Number.isNaN(weight) && weight > 0 && !Number.isNaN(reps) && reps > 0;
+
 const Calculator = {
     // Unit Conversion
     toKg: (value, unit) => (unit === 'kg' ? value : value / KG_TO_LB),
@@ -79,7 +81,7 @@ const Calculator = {
         weight = +weight;
         reps = Math.trunc(+reps);
 
-        if (!weight || weight <= 0 || !reps || reps <= 0) return 0;
+        if (!isValidWeightAndReps(weight, reps)) return 0;
         if (reps === 1) return weight;
 
         let oneRM = 0;
@@ -108,8 +110,7 @@ const Calculator = {
         rpe = +rpe;
 
         if (
-            Number.isNaN(weight) || weight <= 0 ||
-            Number.isNaN(reps) || reps <= 0 ||
+            !isValidWeightAndReps(weight, reps) ||
             Number.isNaN(rpe) || rpe <= 0
         ) {
             return 0;
@@ -213,7 +214,7 @@ const Calculator = {
     generateAdvancedWarmUp: (liftType, mainWeight, mainReps, cuesObj, purposesObj, unit) => {
         mainWeight = +mainWeight;
         mainReps = Math.trunc(+mainReps);
-        if (!mainWeight || mainWeight <= 0 || !mainReps || mainReps <= 0) return [];
+        if (!isValidWeightAndReps(mainWeight, mainReps)) return [];
 
         const result = new Array(ADV_WARMUP_SETS.length);
 
@@ -256,7 +257,7 @@ const Calculator = {
         targetReps = Math.trunc(+targetReps);
         targetRIR = +targetRIR;
 
-        if (!weight || weight <= 0 || !reps || reps <= 0 || Number.isNaN(rir) || rir < 0 || targetReps <= 0 || Number.isNaN(targetRIR) || targetRIR < 0) {
+        if (!isValidWeightAndReps(weight, reps) || Number.isNaN(rir) || rir < 0 || targetReps <= 0 || Number.isNaN(targetRIR) || targetRIR < 0) {
             return { est1RM: 0, nextWeight: 0 };
         }
 
