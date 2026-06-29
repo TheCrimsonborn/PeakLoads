@@ -568,40 +568,38 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // ⚡ Bolt: Use Template Literals (String Builder pattern) for table cells to avoid createElement/appendChild overhead
     function createWeightCell(weight, includeUnit = true) {
-        const tdWeight = document.createElement('td');
-        tdWeight.textContent = `${weight} `;
         if (includeUnit) {
-            const spanUnit = document.createElement('span');
-            spanUnit.className = 'unit-display';
-            spanUnit.textContent = currentUnit;
-            tdWeight.appendChild(spanUnit);
+            return `<td>${weight} <span class="unit-display">${currentUnit}</span></td>`;
         }
-        return tdWeight;
+        return `<td>${weight} </td>`;
     }
 
     function createTextCell(text, styles = null) {
-        const td = document.createElement('td');
-        td.textContent = text;
         if (styles) {
-            Object.assign(td.style, styles);
+            return `<td style="${styles}">${text}</td>`;
         }
-        return td;
+        return `<td>${text}</td>`;
     }
 
     function renderTableData(tbody, data, columns) {
-        const fragment = document.createDocumentFragment();
+        const start = performance.now();
+        // ⚡ Bolt: Construct the entire table body as a single long string in memory
+        let html = '';
         // NOSONAR - Zero-allocation architecture: index-based loop prevents Symbol.iterator memory overhead.
         for (let i = 0; i < data.length; i++) {
             const row = data[i];
-            const tr = document.createElement('tr');
+            html += '<tr>';
             // NOSONAR - Zero-allocation architecture: index-based loop prevents Symbol.iterator memory overhead.
             for (let j = 0; j < columns.length; j++) {
-                tr.appendChild(columns[j](row));
+                html += columns[j](row);
             }
-            fragment.appendChild(tr);
+            html += '</tr>';
         }
-        tbody.replaceChildren(fragment);
+        tbody.innerHTML = html;
+        const end = performance.now();
+        console.log(`⚡ Bolt Table Render Time: ${(end - start).toFixed(2)}ms`);
     }
 
     // ⚡ Bolt: Hoist static column configurations to prevent redundant array/function allocations on each click
@@ -624,7 +622,7 @@ document.addEventListener('DOMContentLoaded', () => {
         renderTableData(tableBodyWarmup, data, WARMUP_COLUMNS);
     }
 
-    const ADV_WARMUP_NOTES_STYLE = { fontSize: '0.9em', opacity: '0.8' };
+    const ADV_WARMUP_NOTES_STYLE = 'font-size: 0.9em; opacity: 0.8;';
     const ADV_WARMUP_COLUMNS = [
         row => createTextCell(row.stage),
         row => createTextCell(row.purposeStr),
