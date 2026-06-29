@@ -74,3 +74,7 @@ You must not blindly apply fixes suggested by Qodana, CodeQL, or SonarCloud. Eve
 ## 2026-10-31 - [Hoist UI Render Configurations]
 **Learning:** Defining inline column configurations (arrays of rendering functions) or inline style objects directly within `render` functions causes unnecessary memory reallocation and garbage collection (GC) overhead every time the table is re-rendered (e.g., on button click).
 **Action:** Extract static UI render configurations, such as arrays of column generator functions and style objects, into constants defined outside the frequently called functions to adhere to the zero-allocation architecture.
+
+## 2026-11-01 - [IIFE Typed Arrays and Float Math]
+**Learning:** Initializing a TypedArray from an object literal causes the object literal to persist in memory unnecessarily. Furthermore, floating point increments in `for` loops can cause severe compounding rounding errors and infinite loop edge cases.
+**Action:** Always wrap memory-intensive TypedArray initializations in an IIFE (`(() => { ... })()`) to ensure temporary helper objects fall out of scope and are garbage collected. Convert all loop boundaries and increments to integers (e.g. `Math.round(val * 100)`) before iterating over them to ensure mathematical safety.
