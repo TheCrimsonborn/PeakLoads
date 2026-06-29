@@ -40,7 +40,8 @@ const ADV_WARMUP_SETS = [
 ];
 
 // Extracted to prevent memory reallocation and GC overhead on each call
-const RTS_MATRIX = {
+const RTS_MATRIX = (() => {
+    const obj = {
     200: 100, 195: 98, 190: 96, 185: 94, 180: 92, 175: 91, 170: 89, 165: 88,
     300: 96, 295: 94, 290: 92, 285: 91, 280: 89, 275: 88, 270: 86, 265: 85,
     400: 92, 395: 91, 390: 89, 385: 88, 380: 86, 375: 85, 370: 84, 365: 82,
@@ -52,6 +53,12 @@ const RTS_MATRIX = {
     1000: 76, 995: 75, 990: 74, 985: 72, 980: 71, 975: 69, 970: 68, 965: 67,
     1100: 74, 1095: 72, 1090: 71, 1085: 69, 1080: 68, 1075: 67, 1070: 65, 1065: 64
 };
+    const arr = new Uint8Array(1101);
+    for (const k in obj) {
+        arr[k] = obj[k];
+    }
+    return arr;
+})();
 
 const Calculator = {
     // Unit Conversion
@@ -69,8 +76,8 @@ const Calculator = {
 
     // 1RM Formulas (Expects input in current unit, returns in current unit)
     calculate1RM: (weight, reps, formula = 'epley') => {
-        weight = Number.parseFloat(weight);
-        reps = Number.parseInt(reps, 10);
+        weight = +weight;
+        reps = Math.trunc(+reps);
 
         if (!weight || weight <= 0 || !reps || reps <= 0) return 0;
         if (reps === 1) return weight;
@@ -96,9 +103,9 @@ const Calculator = {
 
     // Advanced 1RM Estimator (Ultimate Hybrid Model)
     calculateAdvanced1RM: (weight, reps, rpe) => {
-        weight = Number.parseFloat(weight);
-        reps = Number.parseInt(reps, 10);
-        rpe = Number.parseFloat(rpe);
+        weight = +weight;
+        reps = Math.trunc(+reps);
+        rpe = +rpe;
 
         if (
             Number.isNaN(weight) || weight <= 0 ||
@@ -131,10 +138,10 @@ const Calculator = {
 
     // Percentage Chart Generator (Base weight in current unit)
     generatePercentageTable: (baseWeight, increment, min, max, unit) => {
-        baseWeight = Number.parseFloat(baseWeight);
-        increment = Number.parseFloat(increment);
-        min = Number.parseFloat(min);
-        max = Number.parseFloat(max);
+        baseWeight = +baseWeight;
+        increment = +increment;
+        min = +min;
+        max = +max;
 
         if (!baseWeight || !increment || increment < 0.01 ||
             Number.isNaN(min) || Number.isNaN(max) || min < 0 || max < 0 || min > max) {
@@ -152,11 +159,17 @@ const Calculator = {
 
         // ⚡ Bolt: Pre-calculate multiplier to avoid division inside loop
         const baseMultiplier = baseWeight / 100;
+        const step = unit === 'kg' ? 2.5 : 5;
+
+        const incInt = Math.round(increment * 100);
+        const minInt = Math.round(min * 100);
+        const maxInt = Math.round(max * 100);
 
         // NOSONAR - Zero-allocation architecture: index-based loop prevents Symbol.iterator memory overhead.
-        for (let pct = min; pct <= max; pct += increment) {
+        for (let pctInt = minInt; pctInt <= maxInt; pctInt += incInt) {
+            const pct = pctInt / 100;
             const rawWeight = baseMultiplier * pct;
-            const weight = Calculator.roundWeight(rawWeight, unit);
+            const weight = Math.round(rawWeight / step) * step;
             table[index++] = { percent: pct, weight: weight };
         }
 
@@ -170,7 +183,7 @@ const Calculator = {
 
     // Warm-Up Planner (Top set in current unit)
     generateWarmUp: (topSet, template, unit) => {
-        topSet = Number.parseFloat(topSet);
+        topSet = +topSet;
         if (!topSet || topSet <= 0) return [];
 
         const selectedTemplate = WARMUP_TEMPLATES[template] || WARMUP_TEMPLATES.classic;
@@ -180,6 +193,7 @@ const Calculator = {
 
         const len = selectedTemplate.length;
         const result = new Array(len);
+        const step = unit === 'kg' ? 2.5 : 5;
 
         // NOSONAR - Zero-allocation architecture: index-based loop prevents Symbol.iterator memory overhead.
         for (let i = 0; i < len; i++) {
@@ -187,7 +201,7 @@ const Calculator = {
             const rawWeight = topMultiplier * stepConf.percent;
             result[i] = {
                 percent: stepConf.percent,
-                weight: Calculator.roundWeight(rawWeight, unit),
+                weight: Math.round(rawWeight / step) * step,
                 reps: stepConf.reps
             };
         }
@@ -197,14 +211,15 @@ const Calculator = {
 
     // Advanced Warm Up Generator
     generateAdvancedWarmUp: (liftType, mainWeight, mainReps, cuesObj, purposesObj, unit) => {
-        mainWeight = Number.parseFloat(mainWeight);
-        mainReps = Number.parseInt(mainReps, 10);
+        mainWeight = +mainWeight;
+        mainReps = Math.trunc(+mainReps);
         if (!mainWeight || mainWeight <= 0 || !mainReps || mainReps <= 0) return [];
 
         const result = new Array(ADV_WARMUP_SETS.length);
 
         // ⚡ Bolt: Pre-calculate multiplier to avoid division inside loop
         const mainMultiplier = mainWeight / 100;
+        const step = unit === 'kg' ? 2.5 : 5;
 
         // NOSONAR - Zero-allocation architecture: index-based loop prevents Symbol.iterator memory overhead.
         for (let index = 0; index < ADV_WARMUP_SETS.length; index++) {
@@ -217,7 +232,7 @@ const Calculator = {
                 percentLabel = "-";
             } else {
                 let setWeight = mainMultiplier * set.percent;
-                weightLabel = Calculator.roundWeight(setWeight, unit);
+                weightLabel = Math.round(setWeight / step) * step;
                 percentLabel = set.percent;
             }
 
@@ -235,11 +250,11 @@ const Calculator = {
 
     // RIR Translator
     calculateRIR: (weight, reps, rir, targetReps, targetRIR, unit) => {
-        weight = Number.parseFloat(weight);
-        reps = Number.parseInt(reps, 10);
-        rir = Number.parseFloat(rir);
-        targetReps = Number.parseInt(targetReps, 10);
-        targetRIR = Number.parseFloat(targetRIR);
+        weight = +weight;
+        reps = Math.trunc(+reps);
+        rir = +rir;
+        targetReps = Math.trunc(+targetReps);
+        targetRIR = +targetRIR;
 
         if (!weight || weight <= 0 || !reps || reps <= 0 || Number.isNaN(rir) || rir < 0 || targetReps <= 0 || Number.isNaN(targetRIR) || targetRIR < 0) {
             return { est1RM: 0, nextWeight: 0 };
@@ -258,10 +273,11 @@ const Calculator = {
         }
 
         const nextWeightRaw = est1RM / denominator;
+        const step = unit === 'kg' ? 2.5 : 5;
 
         return {
             est1RM: Math.round(est1RM * 10) / 10,
-            nextWeight: Calculator.roundWeight(nextWeightRaw, unit)
+            nextWeight: Math.round(nextWeightRaw / step) * step
         };
     }
 };
