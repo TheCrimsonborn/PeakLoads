@@ -74,3 +74,7 @@ You must not blindly apply fixes suggested by Qodana, CodeQL, or SonarCloud. Eve
 ## 2026-10-31 - [Hoist UI Render Configurations]
 **Learning:** Defining inline column configurations (arrays of rendering functions) or inline style objects directly within `render` functions causes unnecessary memory reallocation and garbage collection (GC) overhead every time the table is re-rendered (e.g., on button click).
 **Action:** Extract static UI render configurations, such as arrays of column generator functions and style objects, into constants defined outside the frequently called functions to adhere to the zero-allocation architecture.
+
+## 2024-05-18 - Avoid Synchronous Render Cascades
+**Learning:** When functions like state loaders or form resets modify multiple inputs sequentially, the `input`/`change` event listeners trigger the heavy table rendering functions multiple times within the exact same JavaScript execution tick. This causes severe layout thrashing, wastes CPU cycles on abandoned renders, and heavily impacts the Interaction to Next Paint (INP) Core Web Vital.
+**Action:** Implement "Frame Batching" (Render Debouncing) for main UI update functions. Wrap DOM update execution in a scheduling mechanism using `requestAnimationFrame` and a module-level state flag (e.g., `let isRenderScheduled = false;`) to ensure the DOM is only updated once per frame, significantly reducing main-thread blocking time.

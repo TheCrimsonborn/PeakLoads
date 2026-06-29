@@ -550,13 +550,22 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    let isRenderScheduled = false;
+
     function recalculateOpenResults() {
-        if (!result1rmCard.classList.contains('hidden')) btnCalc1rm.click();
-        if (!resultAdv1rmCard.classList.contains('hidden')) btnCalcAdv1rm.click();
-        if (!resultPctCard.classList.contains('hidden')) btnGenPct.click();
-        if (!resultWarmupCard.classList.contains('hidden')) btnGenWarmup.click();
-        if (!resultAdvWarmupCard.classList.contains('hidden')) btnGenAdvWarmup.click();
-        if (!resultRirCard.classList.contains('hidden')) btnCalcRir.click();
+        if (isRenderScheduled) return;
+        isRenderScheduled = true;
+
+        requestAnimationFrame(() => {
+            console.count('Render Execution');
+            if (!result1rmCard.classList.contains('hidden')) btnCalc1rm.click();
+            if (!resultAdv1rmCard.classList.contains('hidden')) btnCalcAdv1rm.click();
+            if (!resultPctCard.classList.contains('hidden')) btnGenPct.click();
+            if (!resultWarmupCard.classList.contains('hidden')) btnGenWarmup.click();
+            if (!resultAdvWarmupCard.classList.contains('hidden')) btnGenAdvWarmup.click();
+            if (!resultRirCard.classList.contains('hidden')) btnCalcRir.click();
+            isRenderScheduled = false;
+        });
     }
 
     function createWeightCell(weight, includeUnit = true) {
