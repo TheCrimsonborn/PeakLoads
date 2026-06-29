@@ -60,6 +60,15 @@ const RTS_MATRIX = (() => {
     return arr;
 })();
 
+const isValidRIRInput = (weight, reps, rir, targetReps, targetRIR) => {
+    if (!weight || weight <= 0) return false;
+    if (!reps || reps <= 0) return false;
+    if (Number.isNaN(rir) || rir < 0) return false;
+    if (targetReps <= 0) return false;
+    if (Number.isNaN(targetRIR) || targetRIR < 0) return false;
+    return true;
+};
+
 const Calculator = {
     // Unit Conversion
     toKg: (value, unit) => (unit === 'kg' ? value : value / KG_TO_LB),
@@ -256,7 +265,7 @@ const Calculator = {
         targetReps = Math.trunc(+targetReps);
         targetRIR = +targetRIR;
 
-        if (!weight || weight <= 0 || !reps || reps <= 0 || Number.isNaN(rir) || rir < 0 || targetReps <= 0 || Number.isNaN(targetRIR) || targetRIR < 0) {
+        if (!isValidRIRInput(weight, reps, rir, targetReps, targetRIR)) {
             return { est1RM: 0, nextWeight: 0 };
         }
 
