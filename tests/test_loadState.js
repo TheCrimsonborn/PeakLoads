@@ -32,6 +32,7 @@ global.document = {
         }
         return mockElements[id];
     },
+    querySelector: () => null,
     createElement: () => ({
         className: '',
         textContent: '',

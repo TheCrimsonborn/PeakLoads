@@ -179,8 +179,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Navigation (Hash Routing)
+    let currentActiveSectionId = document.querySelector('.tool-section.active')?.id || null;
     function activateSection(targetId) {
         if (!targetId) targetId = 'section-1rm'; // Default
+
+        // ⚡ Bolt: Early return if section is already active to prevent redundant DOM updates and layout thrashing
+        if (currentActiveSectionId === targetId) return;
+        currentActiveSectionId = targetId;
 
         // Update Nav
         // NOSONAR - Zero-allocation architecture: index-based loop prevents Symbol.iterator memory overhead.

@@ -124,8 +124,15 @@ class MockDocument extends MockElement {
                 }
                 return el.attributes[attr] !== undefined;
             });
+        } else if (selector === '.tool-section.active') {
+            return this.elements.filter(el => el.classList.contains('tool-section') && el.classList.contains('active'));
         }
         return [];
+    }
+
+    querySelector(selector) {
+        const results = this.querySelectorAll(selector);
+        return results.length > 0 ? results[0] : null;
     }
 }
 
