@@ -56,6 +56,7 @@ body {
 .app-container {
   width: 100%;
   max-width: 600px;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -213,6 +214,7 @@ body {
 .content-area {
   position: relative;
   min-height: 400px;
+  flex-grow: 1;
 }
 
 .tool-section {
