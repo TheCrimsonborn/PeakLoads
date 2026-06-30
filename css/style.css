@@ -213,7 +213,7 @@ body {
 /* Main Content */
 .content-area {
   position: relative;
-  min-height: 400px;
+  min-height: 750px;
   flex-grow: 1;
 }
 
