@@ -87,8 +87,20 @@
     <link rel="icon" type="image/png" sizes="16x16" href="assets/icons/favicon-16x16.png">
 
     <!-- Fonts -->
-    <link rel="preload" href="https://peakloads.com/cf-fonts/v/inter/5.2.8/latin/wght/normal.woff2" as="font" type="font/woff2" crossorigin="anonymous"> <!-- NOSONAR Web:S5725 Dynamic third-party asset -> SRI invalid -->
-    <link rel="preload" href="https://peakloads.com/cf-fonts/v/inter/5.2.8/cyrillic/wght/normal.woff2" as="font" type="font/woff2" crossorigin="anonymous"> <!-- NOSONAR Web:S5725 Dynamic third-party asset -> SRI invalid -->
+    <!-- NOSONAR Web:S5725 Dynamic third-party asset -> SRI invalid -->
+    <link
+        rel="preload"
+        href="https://peakloads.com/cf-fonts/v/inter/5.2.8/latin/wght/normal.woff2"
+        as="font"
+        type="font/woff2"
+        crossorigin="anonymous">
+    <!-- NOSONAR Web:S5725 Dynamic third-party asset -> SRI invalid -->
+    <link
+        rel="preload"
+        href="https://peakloads.com/cf-fonts/v/inter/5.2.8/cyrillic/wght/normal.woff2"
+        as="font"
+        type="font/woff2"
+        crossorigin="anonymous">
     <!-- Bolt: Load external fonts asynchronously to prevent render-blocking (improves FCP) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
