@@ -179,7 +179,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Navigation (Hash Routing)
-    let currentActiveSectionId = null;
+    let currentActiveSectionId = document.querySelector('.tool-section.active')?.id || null;
     function activateSection(targetId) {
         if (!targetId) targetId = 'section-1rm'; // Default
 
