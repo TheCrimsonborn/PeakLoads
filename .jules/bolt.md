@@ -81,3 +81,6 @@ You must not blindly apply fixes suggested by Qodana, CodeQL, or SonarCloud. Eve
 ## 2024-05-18 - Avoid Synchronous Render Cascades
 **Learning:** When functions like state loaders or form resets modify multiple inputs sequentially, the `input`/`change` event listeners trigger the heavy table rendering functions multiple times within the exact same JavaScript execution tick. This causes severe layout thrashing, wastes CPU cycles on abandoned renders, and heavily impacts the Interaction to Next Paint (INP) Core Web Vital.
 **Action:** Implement "Frame Batching" (Render Debouncing) for main UI update functions. Wrap DOM update execution in a scheduling mechanism using `requestAnimationFrame` and a module-level state flag (e.g., `let isRenderScheduled = false;`) to ensure the DOM is only updated once per frame, significantly reducing main-thread blocking time.
+## 2024-05-19 - Layout Thrashing in activateSection
+**Learning:** Functions that manage routing and UI updates (like `activateSection`) can be called multiple times during initialization. This can cause redundant DOM mutations, CSS class toggling, and layout recalculations (thrashing).
+**Action:** Implement a state variable (e.g., `currentActiveSectionId`) and add a strict equality early return condition to prevent duplicate execution when the target is already active.
