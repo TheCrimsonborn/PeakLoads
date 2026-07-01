@@ -178,9 +178,15 @@ document.addEventListener('DOMContentLoaded', () => {
         document.head.appendChild(clarityScript);
     }
 
+    let currentActiveSectionId = null;
+
     // Navigation (Hash Routing)
     function activateSection(targetId) {
         if (!targetId) targetId = 'section-1rm'; // Default
+
+        // ⚡ Bolt: Early return if the target section is already active to prevent redundant DOM mutations and layout thrashing
+        if (currentActiveSectionId === targetId) return;
+        currentActiveSectionId = targetId;
 
         // Update Nav
         // NOSONAR - Zero-allocation architecture: index-based loop prevents Symbol.iterator memory overhead.
