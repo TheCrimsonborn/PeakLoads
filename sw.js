@@ -1,7 +1,6 @@
 const CACHE_NAME = 'peakloads-cache-1.0.a43872c';
 const urlsToCache = [
     '/',
-    '/index.html',
     '/css/style.css',
     '/js/main.js',
     '/js/calculator.js',
@@ -10,9 +9,6 @@ const urlsToCache = [
     '/404.html',
     '/privacy',
     '/terms',
-    '/squat-1rm-calculator',
-    '/bench-press-warm-up-planner',
-    '/rpe-rir-translator',
     '/assets/icons/icon-192.png',
     '/assets/icons/icon-512.png'
 ];
@@ -51,7 +47,7 @@ self.addEventListener('fetch', event => {
                 });
             }).catch(() => {
                 if (event.request.mode === 'navigate') {
-                    return caches.match('/index.html');
+                    return caches.match('/');
                 }
                 return Response.error();
             });

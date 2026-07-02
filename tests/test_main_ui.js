@@ -93,7 +93,7 @@ global.document = {
 global.localStorage = {
     getItem: (key) => {
         if (key === 'peakloads_state') {
-            return null; // Return null so we don't hit the seoRoutes error during init
+            return null;
         }
         return null;
     },

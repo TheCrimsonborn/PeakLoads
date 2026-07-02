@@ -1,9 +1,11 @@
 {
+  "cleanUrls": true,
   "redirects": [
-    {
-      "source": "/(.*)",
-      "destination": "https://peakloads.com/$1",
-      "permanent": true
-    }
+    { "source": "/squat-1rm-calculator", "destination": "/", "permanent": true },
+    { "source": "/advanced-1rm-estimator", "destination": "/", "permanent": true },
+    { "source": "/bench-press-warm-up-planner", "destination": "/", "permanent": true },
+    { "source": "/squat-warm-up-planner", "destination": "/", "permanent": true },
+    { "source": "/deadlift-warm-up-planner", "destination": "/", "permanent": true },
+    { "source": "/rpe-rir-translator", "destination": "/", "permanent": true }
   ]
 }

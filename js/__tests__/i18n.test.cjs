@@ -56,11 +56,11 @@ describe('I18n module tests', () => {
         I18n.updateDOM();
 
         assert.strictEqual(els[0].textContent, '1RM Estimator');
-        assert.strictEqual(els[1].textContent, 'Warm-Up');
+        assert.strictEqual(els[1].textContent, 'Quick Warm-Up');
 
         I18n.setLanguage('tr');
         assert.strictEqual(els[0].textContent, '1RM Hesaplayıcı');
-        assert.strictEqual(els[1].textContent, 'Isınma Planı');
+        assert.strictEqual(els[1].textContent, 'Hızlı Isınma');
     });
 
     test('getAdvCues and getAdvPurposes return correct dictionaries based on language', async () => {

@@ -6,10 +6,10 @@
 PeakLoads provides advanced tools for strength athletes, focusing on 1RM estimations, RPE/RIR translations, and warm-up planning. The application is built with strictly Vanilla JS, adhering to a "Zero-Allocation" architecture to maximize V8 engine performance.
 
 ## Core Tools
-- [Squat 1RM Calculator](https://peakloads.com/squat-1rm-calculator): Standard one-rep max estimations.
-- [Advanced 1RM Estimator](https://peakloads.com/advanced-1rm-estimator): Asymptotic decay estimations integrating RPE.
-- [Bench Press Warm-up Planner](https://peakloads.com/bench-press-warm-up-planner): Automated plate math and progression.
-- [RPE / RIR Translator](https://peakloads.com/rpe-rir-translator): Conversions between Rate of Perceived Exertion and Reps in Reserve.
+- [Warm-up Planner](https://peakloads.com/#section-adv-warmup): Evidence-based progression for squat, bench press, deadlift, and overhead press.
+- [1RM Estimator](https://peakloads.com/#section-1rm): Standard one-rep max estimations.
+- [Advanced 1RM Estimator](https://peakloads.com/#section-adv-1rm): Asymptotic decay estimations integrating RPE.
+- [RPE / RIR Translator](https://peakloads.com/#section-rir): Conversions between Rate of Perceived Exertion and Reps in Reserve.
 
 ## Full Documentation
 For complete architectural guidelines, JavaScript standards, and internal routing logic, see the full documentation:
