@@ -4,10 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PeakLoads | Advanced 1RM Calculator & Warm-up Planner</title>
+    <title>Warm-Up Planner for Squat, Bench Press &amp; Deadlift | PeakLoads</title>
     <meta name="description"
-        content="Free powerlifting calculator. Estimate your 1RM, plan warm-up sets, generate percentage charts, and translate RIR/RPE for optimal strength training.">
-    <meta name="keywords" content="powerlifting calculator, 1rm calculator, rpe calculator, rir calculator, warm up calculator, percentage table powerlifting, strength training, kg to lb converter">
+        content="Generate evidence-based warm-up sets for squat, bench press and deadlift. Enter your working weight and reps to get plate-ready loads in kg or lb.">
     <meta name="author" content="peakloads">
     <meta name="theme-color" content="#dc2626">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -18,44 +17,24 @@
     <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "WebApplication",
-      "name": "PeakLoads",
-      "url": "https://peakloads.com",
-      "applicationCategory": "HealthAndFitnessApplication",
-      "operatingSystem": "Any",
-      "description": "Advanced 1RM calculator, warm-up planner and RPE/RIR translator for powerlifting and strength training."
-    },
-    {
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "What is 1RM (One Rep Max)?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "1RM is the maximum amount of weight a person can lift for one repetition of an exercise. PeakLoads calculates this using established mathematical models like Epley and Lombardi formulas."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "How do you translate RIR to RPE?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "RIR (Reps in Reserve) indicates how many more reps you could perform before reaching muscular failure. RPE (Rate of Perceived Exertion) is a scale from 1 to 10 measuring intensity. PeakLoads provides a direct translation matrix between these two metrics based on standard powerlifting protocols."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "How to calculate warm up sets for lifting?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Warm up sets are typically calculated as a progressive percentage of your top set weight. PeakLoads automatically generates a step-by-step warmup protocol based on your target weight and selected rep ranges."
-          }
-        }
-      ]
-    }
+  "@type": "WebApplication",
+  "name": "PeakLoads Warm-Up Planner",
+  "alternateName": "PeakLoads",
+  "url": "https://peakloads.com/",
+  "applicationCategory": "HealthAndFitnessApplication",
+  "operatingSystem": "Any",
+  "browserRequirements": "Requires JavaScript",
+  "isAccessibleForFree": true,
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "description": "Evidence-based warm-up planner for squat, bench press, deadlift and overhead press, with plate-ready loads in kilograms or pounds.",
+  "featureList": [
+    "Warm-up planning for squat, bench press, deadlift and overhead press",
+    "Plate-ready loads in kilograms and pounds",
+    "1RM estimation and RIR/RPE translation"
   ]
 }
     </script>
@@ -64,9 +43,9 @@
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="peakloads">
     <meta property="og:url" content="https://peakloads.com/">
-    <meta property="og:title" content="peakloads | 1RM Calculator & RIR Translator">
+    <meta property="og:title" content="Warm-Up Planner for Squat, Bench Press &amp; Deadlift | PeakLoads">
     <meta property="og:description"
-        content="Free powerlifting calculator to estimate 1RM, generate percentage tables, and manage fatigue using RIR/RPE.">
+        content="Generate evidence-based, plate-ready warm-up sets for squat, bench press and deadlift in kg or lb.">
     <meta property="og:image" itemprop="image" content="https://peakloads.com/assets/icons/icon-512.png">
     <meta property="og:image:type" content="image/png">
     <meta property="og:image:width" content="512">
@@ -75,9 +54,9 @@
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="https://peakloads.com/">
-    <meta name="twitter:title" content="peakloads | Powerlifting 1RM & RPE Calculator">
+    <meta name="twitter:title" content="Warm-Up Planner for Squat, Bench Press &amp; Deadlift | PeakLoads">
     <meta name="twitter:description"
-        content="Calculate your 1 rep max, autoregulate with RIR, and plan your heavy singles.">
+        content="Generate evidence-based, plate-ready warm-up sets for squat, bench press and deadlift in kg or lb.">
     <meta name="twitter:image" content="https://peakloads.com/assets/icons/icon-512.png">
 
     <!-- PWA -->
@@ -189,7 +168,7 @@ body {
 .tool-section.active { display: block; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-h2 { font-family: var(--font-display); margin-bottom: 20px; font-size: 1.5rem; color: var(--text-main); }
+h1, h2 { font-family: var(--font-display); margin-bottom: 20px; font-size: 1.5rem; color: var(--text-main); }
 .input-group { margin-bottom: 15px; display: flex; flex-direction: column; gap: 8px; }
 label { font-size: 0.9rem; color: var(--text-muted); font-weight: 500; }
 input, select { width: 100%; background: var(--input-bg); border: 1px solid var(--card-border); color: var(--text-main); padding: 12px 15px; border-radius: var(--radius-md); font-size: 1rem; font-family: var(--font-main); transition: border-color 0.3s, box-shadow 0.3s; }
@@ -208,7 +187,7 @@ input:focus, select:focus { outline: none; border-color: var(--primary-color); b
     <div class="app-container">
         <header class="main-header">
             <div class="logo">
-                <h1>peakloads</h1>
+                <div class="logo-text">peakloads</div>
                 <span class="subtitle" data-i18n="subtitle">Powerlifting Command Center</span>
             </div>
             <div class="settings-bar">
@@ -225,12 +204,12 @@ input:focus, select:focus { outline: none; border-color: var(--primary-color); b
             </div>
         </header>
 
-        <nav class="main-nav">
-            <a href="#section-1rm" class="nav-btn active" data-i18n="nav_1rm">1RM Estimator</a>
+        <nav class="main-nav" aria-label="Powerlifting calculators">
+            <a href="#section-adv-warmup" class="nav-btn active" data-i18n="nav_adv_warmup">Warm-Up Planner</a>
+            <a href="#section-warmup" class="nav-btn" data-i18n="nav_warmup">Quick Warm-Up</a>
+            <a href="#section-1rm" class="nav-btn" data-i18n="nav_1rm">1RM Estimator</a>
             <a href="#section-adv-1rm" class="nav-btn" data-i18n="nav_adv_1rm">Advanced 1RM</a>
             <a href="#section-percentage" class="nav-btn" data-i18n="nav_percentage">Percentage Chart</a>
-            <a href="#section-warmup" class="nav-btn" data-i18n="nav_warmup">Warm-Up</a>
-            <a href="#section-adv-warmup" class="nav-btn" data-i18n="nav_adv_warmup">Advanced Warm Up</a>
             <a href="#section-rir" class="nav-btn" data-i18n="nav_rir">RIR Translator</a>
         </nav>
 
@@ -281,7 +260,7 @@ input:focus, select:focus { outline: none; border-color: var(--primary-color); b
             </section>
 
             <!-- 1RM Estimator Section -->
-            <section id="section-1rm" class="tool-section active">
+            <section id="section-1rm" class="tool-section">
                 <h2 data-i18n="title_1rm">1RM Estimator</h2>
                 <div class="input-group">
                     <label for="weight-1rm" data-i18n="label_weight">Weight Lifted</label>
@@ -411,10 +390,10 @@ input:focus, select:focus { outline: none; border-color: var(--primary-color); b
             </section>
 
             <!-- Advanced Warm-Up Section -->
-            <section id="section-adv-warmup" class="tool-section">
-                <h2 data-i18n="title_adv_warmup">Advanced Warm Up</h2>
-                <div class="intro-text" data-i18n="desc_adv_warmup">Generate a specific warm-up plan based on your main
-                    set.</div>
+            <section id="section-adv-warmup" class="tool-section active">
+                <h1 data-i18n="title_adv_warmup">Warm-Up Planner for Squat, Bench Press &amp; Deadlift</h1>
+                <div class="intro-text" data-i18n="desc_adv_warmup">Generate an evidence-based warm-up plan for squat,
+                    bench press, deadlift, or overhead press from your working weight and target reps.</div>
 
                 <div class="input-group">
                     <label for="adv-lift-select" data-i18n="label_adv_lift">Lift</label>

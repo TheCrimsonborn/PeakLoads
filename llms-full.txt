@@ -16,5 +16,5 @@ Direct `localStorage` access is forbidden due to Chromium `SecurityError` risks 
 ## 4. Privacy and Tracking
 The application uses "Engagement-Based Tracking" (Implicit Consent). Analytics scripts (GA4, Ahrefs) are not hardcoded in the HTML head. They are injected dynamically into the DOM strictly only after a user executes a calculation, ensuring passive visitors are not tracked.
 
-## 5. Routing Matrix
-PeakLoads acts as a Vanilla JS SPA. Server-side (Nginx/Vercel) rewrites direct all traffic to `index.html`. Client-side routing is handled via the `seoRoutes` object in `js/main.js`. Every route must be perfectly synchronized across `nginx.conf`, `vercel.json`, `sitemap.xml`, and the frontend state loader.
+## 5. Routing Model
+PeakLoads is a Vanilla JS one-page application with one canonical, indexable application URL: `https://peakloads.com/`. Hash navigation switches tools without creating additional indexable pages. Retired tool aliases permanently redirect to the root. `/privacy` and `/terms` remain standalone legal pages.

@@ -132,14 +132,6 @@ document.addEventListener('DOMContentLoaded', () => {
         weightRirInput
     ];
 
-    // Programmatic SEO Routes Map
-    const seoRoutes = {
-        '/squat-1rm-calculator': 'section-1rm',
-        '/advanced-1rm-estimator': 'section-adv-1rm',
-        '/bench-press-warm-up-planner': 'section-adv-warmup',
-        '/rpe-rir-translator': 'section-rir'
-    };
-
     function injectAnalytics() {
         if (analyticsLoaded) return;
         analyticsLoaded = true;
@@ -182,7 +174,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Navigation (Hash Routing)
     function activateSection(targetId) {
-        if (!targetId) targetId = 'section-1rm'; // Default
+        if (!targetId) targetId = 'section-adv-warmup'; // Default
 
         // ⚡ Bolt: Early return if the target section is already active to prevent redundant DOM mutations and layout thrashing
         if (currentActiveSectionId === targetId) return;
@@ -334,19 +326,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // Handle hash changes (back/forward buttons, direct links)
     globalThis.addEventListener('hashchange', () => {
         const hash = globalThis.location.hash.substring(1);
-        activateSection(hash || 'section-1rm');
+        activateSection(hash || 'section-adv-warmup');
         saveState();
     });
 
-    const currentPath = globalThis.location.pathname;
-
-    // Initial load: Check if there's an SEO path or a hash in the URL
-    if (seoRoutes[currentPath]) {
-        activateSection(seoRoutes[currentPath]);
-    } else if (globalThis.location.hash) {
+    // Initial load: Restore a tool hash or show the primary warm-up planner.
+    if (globalThis.location.hash) {
         activateSection(globalThis.location.hash.substring(1));
     } else {
-        activateSection('section-1rm');
+        activateSection('section-adv-warmup');
     }
 
     const calcBtns = [btnCalc1rm, btnCalcAdv1rm, btnGenPct, btnGenWarmup, btnGenAdvWarmup, btnCalcRir];
@@ -445,7 +433,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const state = {
             unit: currentUnit,
             language: langSelect.value,
-            hash: globalThis.location.hash || '#section-1rm',
+            hash: globalThis.location.hash || '#section-adv-warmup',
             inputs: {}
         };
 
@@ -467,7 +455,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 restoreLanguageState(state);
                 restoreUnitState(state);
                 restoreInputValues(state);
-                restoreRoutingState(state, seoRoutes);
+                restoreRoutingState(state);
                 triggerSavedCalculations();
 
             } catch (e) {
@@ -510,11 +498,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function restoreRoutingState(state, seoRoutes) {
-        // Prioritize explicit SEO URL over saved local state hash
-        if (seoRoutes[globalThis.location.pathname]) {
-            activateSection(seoRoutes[globalThis.location.pathname]);
-        } else if (state.hash) {
+    function restoreRoutingState(state) {
+        if (state.hash) {
             if (!globalThis.location.hash || globalThis.location.hash !== state.hash) {
                 globalThis.location.hash = state.hash;
             }
