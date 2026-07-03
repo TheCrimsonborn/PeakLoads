@@ -579,63 +579,68 @@ document.addEventListener('DOMContentLoaded', () => {
     const templateWarmupRow = document.getElementById('template-warmup-row');
     const templateAdvWarmupRow = document.getElementById('template-adv-warmup-row');
 
-    function renderPercentageTable(data) {
-        const start = performance.now();
-        const fragment = document.createDocumentFragment();
-        // NOSONAR - Zero-allocation architecture: index-based loop prevents Symbol.iterator memory overhead.
-        for (let i = 0; i < data.length; i++) {
-            const row = data[i];
-            const clone = templatePctRow.content.cloneNode(true);
-            clone.querySelector('.col-pct').textContent = `${row.percent}%`;
-            clone.querySelector('.val-weight').textContent = row.weight;
-            clone.querySelector('.unit-display').textContent = currentUnit;
-            fragment.appendChild(clone);
+    const PCT_UPDATERS = [
+        (tr, row) => { tr.children[0].textContent = `${row.percent}%`; },
+        (tr, row) => {
+            tr.children[1].children[0].textContent = row.weight;
+            tr.children[1].children[1].textContent = currentUnit;
         }
-        tableBodyPct.replaceChildren(fragment);
-        console.log(`⚡ Bolt Table Render Time (Pct): ${(performance.now() - start).toFixed(2)}ms`);
+    ];
+
+    function renderPercentageTable(data) {
+        renderTableData(tableBodyPct, data, templatePctRow, PCT_UPDATERS);
     }
+
+    const WARMUP_UPDATERS = [
+        (tr, row) => { tr.children[0].textContent = `${row.percent}%`; },
+        (tr, row) => {
+            tr.children[1].children[0].textContent = row.weight;
+            tr.children[1].children[1].textContent = currentUnit;
+        },
+        (tr, row) => { tr.children[2].textContent = row.reps; }
+    ];
 
     function renderWarmupTable(data) {
-        const start = performance.now();
-        const fragment = document.createDocumentFragment();
-        // NOSONAR - Zero-allocation architecture: index-based loop prevents Symbol.iterator memory overhead.
-        for (let i = 0; i < data.length; i++) {
-            const row = data[i];
-            const clone = templateWarmupRow.content.cloneNode(true);
-            clone.querySelector('.col-pct').textContent = `${row.percent}%`;
-            clone.querySelector('.val-weight').textContent = row.weight;
-            clone.querySelector('.unit-display').textContent = currentUnit;
-            clone.querySelector('.col-reps').textContent = row.reps;
-            fragment.appendChild(clone);
-        }
-        tableBodyWarmup.replaceChildren(fragment);
-        console.log(`⚡ Bolt Table Render Time (Warmup): ${(performance.now() - start).toFixed(2)}ms`);
+        renderTableData(tableBodyWarmup, data, templateWarmupRow, WARMUP_UPDATERS);
     }
 
+    const ADV_WARMUP_UPDATERS = [
+        (tr, row) => { tr.children[0].textContent = row.stage; },
+        (tr, row) => { tr.children[1].textContent = row.purposeStr; },
+        (tr, row) => { tr.children[2].textContent = row.percent === '-' ? '-' : `${row.percent}%`; },
+        (tr, row) => {
+            tr.children[3].children[0].textContent = row.weight;
+            if (row.percent !== '-') {
+                tr.children[3].children[2].textContent = currentUnit;
+            } else {
+                tr.children[3].children[1].textContent = '';
+            }
+        },
+        (tr, row) => { tr.children[4].textContent = row.reps; },
+        (tr, row) => { tr.children[5].textContent = row.notes; }
+    ];
+
     function renderAdvWarmupTable(data) {
+        renderTableData(tableBodyAdvWarmup, data, templateAdvWarmupRow, ADV_WARMUP_UPDATERS);
+    }
+
+    function renderTableData(tbody, data, template, updaters) {
         const start = performance.now();
         const fragment = document.createDocumentFragment();
         // NOSONAR - Zero-allocation architecture: index-based loop prevents Symbol.iterator memory overhead.
         for (let i = 0; i < data.length; i++) {
             const row = data[i];
-            const clone = templateAdvWarmupRow.content.cloneNode(true);
-            clone.querySelector('.col-stage').textContent = row.stage;
-            clone.querySelector('.col-purpose').textContent = row.purposeStr;
-            clone.querySelector('.col-pct').textContent = row.percent === '-' ? '-' : `${row.percent}%`;
-            clone.querySelector('.val-weight').textContent = row.weight;
-
-            if (row.percent !== '-') {
-                clone.querySelector('.unit-display').textContent = currentUnit;
-            } else {
-                clone.querySelector('.unit-space').textContent = '';
+            const clone = template.content.cloneNode(true);
+            // We assume the template's root element is a <tr>
+            const tr = clone.children[0];
+            // NOSONAR - Zero-allocation architecture: index-based loop prevents Symbol.iterator memory overhead.
+            for (let j = 0; j < updaters.length; j++) {
+                updaters[j](tr, row);
             }
-
-            clone.querySelector('.col-reps').textContent = row.reps;
-            clone.querySelector('.col-notes').textContent = row.notes;
             fragment.appendChild(clone);
         }
-        tableBodyAdvWarmup.replaceChildren(fragment);
-        console.log(`⚡ Bolt Table Render Time (AdvWarmup): ${(performance.now() - start).toFixed(2)}ms`);
+        tbody.replaceChildren(fragment);
+        console.log(`⚡ Bolt Table Render Time: ${(performance.now() - start).toFixed(2)}ms`);
     }
 
     // Set current year in footer

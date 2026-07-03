@@ -62,6 +62,24 @@ class MockElement {
         return this.attributes[key];
     }
     scrollIntoView() {}
+    cloneNode(deep) {
+        const clone = new MockElement(this.tagName);
+        clone.id = this.id;
+        clone.className = this.className;
+        clone.textContent = this.textContent;
+        clone.value = this.value;
+        // Basic shallow copy for attributes/dataset
+        Object.assign(clone.attributes, this.attributes);
+        Object.assign(clone.dataset, this.dataset);
+
+        if (deep) {
+            clone.children = this.children.map(c => c.cloneNode(true));
+        }
+        return clone;
+    }
+    querySelector() {
+        return new MockElement('mock');
+    }
 }
 
 class MockDocument extends MockElement {
@@ -84,12 +102,21 @@ class MockDocument extends MockElement {
         if (!el) {
             // Dynamically create elements on the fly to avoid hardcoding IDs
             let tagName = 'div';
-            if (id.includes('select')) tagName = 'select';
+            if (id.includes('template')) tagName = 'template';
+            else if (id.includes('select')) tagName = 'select';
             else if (id.includes('input') || id.includes('weight') || id.includes('reps') || id.includes('increment') || id.includes('min') || id.includes('max') || id.includes('top-set') || id === 'rir-rir') tagName = 'input';
             else if (id.includes('btn')) tagName = 'button';
 
             el = this.createElement(tagName);
             el.id = id;
+
+            if (tagName === 'template') {
+                el.content = new MockElement('fragment');
+                // Pre-populate children so index-based access works
+                const tr = new MockElement('tr');
+                tr.children = [new MockElement('td'), new MockElement('td'), new MockElement('td'), new MockElement('td'), new MockElement('td'), new MockElement('td')];
+                el.content.children.push(tr);
+            }
 
             // Add specific classes based on ID to simulate the real DOM
             if (id === 'btn-kg' || id === 'btn-lb') {
