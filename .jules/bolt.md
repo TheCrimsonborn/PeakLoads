@@ -84,3 +84,7 @@ You must not blindly apply fixes suggested by Qodana, CodeQL, or SonarCloud. Eve
 ## 2024-05-19 - Layout Thrashing in activateSection
 **Learning:** Functions that manage routing and UI updates (like `activateSection`) can be called multiple times during initialization. This can cause redundant DOM mutations, CSS class toggling, and layout recalculations (thrashing).
 **Action:** Implement a state variable (e.g., `currentActiveSectionId`) and add a strict equality early return condition to prevent duplicate execution when the target is already active.
+
+## 2026-07-01 - [Avoid String Concatenation for Batch DOM Updates]
+**Learning:** While batching DOM appends with string concatenation and `innerHTML` is often faster than looping `appendChild`, doing so in a hot UI loop forces the V8 engine to allocate temporary string memory for every row iteration, causing GC pressure (since JS strings are immutable).
+**Action:** Use native HTML `<template>` elements and `template.content.cloneNode(true)` in combination with a `DocumentFragment` and `replaceChildren()` to delegate DOM node construction directly to the browser's optimized C++ engine, strictly adhering to the zero-allocation architecture.
