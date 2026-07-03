@@ -65,15 +65,6 @@ const Calculator = {
     toKg: (value, unit) => (unit === 'kg' ? value : value / KG_TO_LB),
     fromKg: (valueKg, unit) => (unit === 'kg' ? valueKg : valueKg * KG_TO_LB),
 
-    // Rounding logic based on unit (2.5kg or 5lb steps)
-    roundWeight: (weight, unit) => {
-        if (unit === 'kg') {
-            return Math.round(weight / 2.5) * 2.5;
-        } else {
-            return Math.round(weight / 5) * 5; // Typically 5lb jumps in plates
-        }
-    },
-
     // 1RM Formulas (Expects input in current unit, returns in current unit)
     calculate1RM: (weight, reps, formula = 'epley') => {
         weight = +weight;

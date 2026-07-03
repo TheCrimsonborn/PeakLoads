@@ -91,21 +91,6 @@ test('Calculator - Unit Conversion', async (t) => {
     });
 });
 
-test('Calculator - roundWeight', async (t) => {
-    await t.test('rounds to 2.5kg for kg', () => {
-        assert.strictEqual(Calculator.roundWeight(101, 'kg'), 100);
-        assert.strictEqual(Calculator.roundWeight(101.5, 'kg'), 102.5);
-        assert.strictEqual(Calculator.roundWeight(104, 'kg'), 105);
-    });
-
-    await t.test('rounds to 5lb for lb', () => {
-        assert.strictEqual(Calculator.roundWeight(202, 'lb'), 200);
-        assert.strictEqual(Calculator.roundWeight(203, 'lb'), 205);
-        assert.strictEqual(Calculator.roundWeight(206, 'lb'), 205);
-        assert.strictEqual(Calculator.roundWeight(208, 'lb'), 210);
-    });
-});
-
 test('Calculator - calculate1RM', async (t) => {
     await t.test('handles invalid inputs', () => {
         assert.strictEqual(Calculator.calculate1RM(0, 5), 0);
@@ -273,7 +258,7 @@ console.log("Running Calculator.calculateRIR tests...");
 console.log("- It calculates est1RM and nextWeight correctly (kg)");
 // weight=100, reps=5, rir=1 -> failure at 6 reps -> 100 * (1 + 6/30) = 120
 // targetReps=3, targetRIR=1 -> failure at 4 reps -> 1 + 4/30 = 34/30
-// nextWeight = 120 / (34/30) = 105.882... -> roundWeight(105.882, 'kg') -> 105
+// nextWeight = 120 / (34/30) = 105.882... -> rounds to 105 (kg step 2.5)
 assert.deepEqual(
     Calculator.calculateRIR(100, 5, 1, 3, 1, 'kg'),
     { est1RM: 120, nextWeight: 105 }
@@ -281,7 +266,7 @@ assert.deepEqual(
 
 console.log("- It calculates est1RM and nextWeight correctly (lb)");
 // 120 * (1 + 6/30) = 144
-// nextWeight = 144 / (34/30) = 127.058... -> roundWeight(127.058, 'lb') -> 125
+// nextWeight = 144 / (34/30) = 127.058... -> rounds to 125 (lb step 5)
 assert.deepEqual(
     Calculator.calculateRIR(120, 5, 1, 3, 1, 'lb'),
     { est1RM: 144, nextWeight: 125 }
