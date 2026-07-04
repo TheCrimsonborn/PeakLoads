@@ -559,72 +559,94 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // ⚡ Bolt: Use Template Literals (String Builder pattern) for table cells to avoid createElement/appendChild overhead
-    function createWeightCell(weight, includeUnit = true) {
-        if (includeUnit) {
-            return `<td>${weight} <span class="unit-display">${currentUnit}</span></td>`;
-        }
-        return `<td>${weight} </td>`;
-    }
-
-    function createTextCell(text, styles = null) {
-        if (styles) {
-            return `<td style="${styles}">${text}</td>`;
-        }
-        return `<td>${text}</td>`;
-    }
-
-    function renderTableData(tbody, data, columns) {
+    function renderTableData(tbody, data, templateId, populateRow) {
         const start = performance.now();
-        // ⚡ Bolt: Construct the entire table body as a single long string in memory
-        let html = '';
+        const template = document.getElementById(templateId);
+        const fragment = document.createDocumentFragment();
+
         // NOSONAR - Zero-allocation architecture: index-based loop prevents Symbol.iterator memory overhead.
         for (let i = 0; i < data.length; i++) {
-            const row = data[i];
-            html += '<tr>';
-            // NOSONAR - Zero-allocation architecture: index-based loop prevents Symbol.iterator memory overhead.
-            for (let j = 0; j < columns.length; j++) {
-                html += columns[j](row);
-            }
-            html += '</tr>';
+            const clone = template.content.cloneNode(true);
+            const tr = clone.firstElementChild; // Expected to be <tr>
+            populateRow(tr, data[i]);
+            fragment.appendChild(clone);
         }
-        tbody.innerHTML = html;
+
+        // Clear existing rows but KEEP the template inside the tbody
+        while (tbody.lastChild && tbody.lastChild !== template) {
+            tbody.removeChild(tbody.lastChild);
+        }
+        // In case template was not the very first child or there were nodes before it
+        // A safer way is to remove all non-template nodes
+        const children = tbody.childNodes;
+        // NOSONAR - Reversing loop to safely remove live elements
+        for (let i = children.length - 1; i >= 0; i--) {
+            if (children[i] !== template) {
+                tbody.removeChild(children[i]);
+            }
+        }
+
+        tbody.appendChild(fragment);
         const end = performance.now();
         console.log(`⚡ Bolt Table Render Time: ${(end - start).toFixed(2)}ms`);
     }
 
-    // ⚡ Bolt: Hoist static column configurations to prevent redundant array/function allocations on each click
-    const PCT_COLUMNS = [
-        row => createTextCell(`${row.percent}%`),
-        row => createWeightCell(row.weight)
-    ];
-
     function renderPercentageTable(data) {
-        renderTableData(tableBodyPct, data, PCT_COLUMNS);
+        renderTableData(tableBodyPct, data, 'tpl-pct-row', (tr, row) => {
+            const td1 = tr.firstElementChild;
+            td1.textContent = `${row.percent}%`;
+
+            const td2 = td1.nextElementSibling;
+            td2.firstElementChild.textContent = row.weight;
+            td2.lastElementChild.textContent = currentUnit;
+        });
     }
 
-    const WARMUP_COLUMNS = [
-        row => createTextCell(`${row.percent}%`),
-        row => createWeightCell(row.weight),
-        row => createTextCell(row.reps)
-    ];
-
     function renderWarmupTable(data) {
-        renderTableData(tableBodyWarmup, data, WARMUP_COLUMNS);
+        renderTableData(tableBodyWarmup, data, 'tpl-warmup-row', (tr, row) => {
+            const td1 = tr.firstElementChild;
+            td1.textContent = `${row.percent}%`;
+
+            const td2 = td1.nextElementSibling;
+            td2.firstElementChild.textContent = row.weight;
+            td2.lastElementChild.textContent = currentUnit;
+
+            const td3 = td2.nextElementSibling;
+            td3.textContent = row.reps;
+        });
     }
 
     const ADV_WARMUP_NOTES_STYLE = 'font-size: 0.9em; opacity: 0.8;';
-    const ADV_WARMUP_COLUMNS = [
-        row => createTextCell(row.stage),
-        row => createTextCell(row.purposeStr),
-        row => createTextCell(row.percent === '-' ? '-' : `${row.percent}%`),
-        row => createWeightCell(row.weight, row.percent !== '-'),
-        row => createTextCell(row.reps),
-        row => createTextCell(row.notes, ADV_WARMUP_NOTES_STYLE)
-    ];
 
     function renderAdvWarmupTable(data) {
-        renderTableData(tableBodyAdvWarmup, data, ADV_WARMUP_COLUMNS);
+        renderTableData(tableBodyAdvWarmup, data, 'tpl-adv-warmup-row', (tr, row) => {
+            const td1 = tr.firstElementChild;
+            td1.textContent = row.stage;
+
+            const td2 = td1.nextElementSibling;
+            td2.textContent = row.purposeStr;
+
+            const td3 = td2.nextElementSibling;
+            td3.textContent = row.percent === '-' ? '-' : `${row.percent}%`;
+
+            const td4 = td3.nextElementSibling;
+            if (row.percent !== '-') {
+                td4.firstElementChild.textContent = row.weight;
+                td4.lastElementChild.textContent = currentUnit;
+                td4.lastElementChild.className = 'unit-display';
+            } else {
+                td4.firstElementChild.textContent = row.weight;
+                td4.lastElementChild.textContent = '';
+                td4.lastElementChild.className = '';
+            }
+
+            const td5 = td4.nextElementSibling;
+            td5.textContent = row.reps;
+
+            const td6 = td5.nextElementSibling;
+            td6.textContent = row.notes;
+            td6.setAttribute('style', ADV_WARMUP_NOTES_STYLE);
+        });
     }
 
     // Set current year in footer
