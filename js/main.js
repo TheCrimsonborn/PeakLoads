@@ -560,91 +560,68 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ⚡ Bolt: DocumentFragment and HTML <template> elements prevent intermediate string allocation (StringBuilder) and GC pauses
-    function renderPercentageTable(data) {
+    function renderTableBatch(tbody, tplId, data, rowRenderer) {
         const start = performance.now();
         const fragment = document.createDocumentFragment();
-        const tpl = document.getElementById('tpl-row-pct');
+        const tpl = document.getElementById(tplId);
         fragment.appendChild(tpl);
 
         for (let i = 0; i < data.length; i++) {
             const clone = tpl.content.cloneNode(true);
-            clone.querySelector('.col-pct').textContent = `${data[i].percent}%`;
-
-            const weightTd = clone.querySelector('.col-weight');
-            weightTd.textContent = `${data[i].weight} `;
-            const span = document.createElement('span');
-            span.className = 'unit-display';
-            span.textContent = currentUnit;
-            weightTd.appendChild(span);
-
+            rowRenderer(clone, data[i]);
             fragment.appendChild(clone);
         }
-        tableBodyPct.replaceChildren(fragment);
+        tbody.replaceChildren(fragment);
         const end = performance.now();
         console.log(`⚡ Bolt Table Render Time: ${(end - start).toFixed(2)}ms`);
     }
 
+    function populatePctRow(clone, rowData) {
+        clone.querySelector('.col-pct').textContent = `${rowData.percent}%`;
+        clone.querySelector('.weight-val').textContent = rowData.weight;
+        clone.querySelector('.unit-display').textContent = currentUnit;
+    }
+
+    function renderPercentageTable(data) {
+        renderTableBatch(tableBodyPct, 'tpl-row-pct', data, populatePctRow);
+    }
+
+    function populateWarmupRow(clone, rowData) {
+        clone.querySelector('.col-pct').textContent = `${rowData.percent}%`;
+        clone.querySelector('.weight-val').textContent = rowData.weight;
+        clone.querySelector('.unit-display').textContent = currentUnit;
+        clone.querySelector('.col-reps').textContent = rowData.reps;
+    }
+
     function renderWarmupTable(data) {
-        const start = performance.now();
-        const fragment = document.createDocumentFragment();
-        const tpl = document.getElementById('tpl-row-warmup');
-        fragment.appendChild(tpl);
-
-        for (let i = 0; i < data.length; i++) {
-            const clone = tpl.content.cloneNode(true);
-            clone.querySelector('.col-pct').textContent = `${data[i].percent}%`;
-
-            const weightTd = clone.querySelector('.col-weight');
-            weightTd.textContent = `${data[i].weight} `;
-            const span = document.createElement('span');
-            span.className = 'unit-display';
-            span.textContent = currentUnit;
-            weightTd.appendChild(span);
-
-            clone.querySelector('.col-reps').textContent = data[i].reps;
-            fragment.appendChild(clone);
-        }
-        tableBodyWarmup.replaceChildren(fragment);
-        const end = performance.now();
-        console.log(`⚡ Bolt Table Render Time: ${(end - start).toFixed(2)}ms`);
+        renderTableBatch(tableBodyWarmup, 'tpl-row-warmup', data, populateWarmupRow);
     }
 
     const ADV_WARMUP_NOTES_STYLE = 'font-size: 0.9em; opacity: 0.8;';
 
-    function renderAdvWarmupTable(data) {
-        const start = performance.now();
-        const fragment = document.createDocumentFragment();
-        const tpl = document.getElementById('tpl-row-adv-warmup');
-        fragment.appendChild(tpl);
+    function populateAdvWarmupRow(clone, rowData) {
+        clone.querySelector('.col-stage').textContent = rowData.stage;
+        clone.querySelector('.col-purpose').textContent = rowData.purposeStr;
+        clone.querySelector('.col-pct').textContent = rowData.percent === '-' ? '-' : `${rowData.percent}%`;
 
-        for (let i = 0; i < data.length; i++) {
-            const clone = tpl.content.cloneNode(true);
-            clone.querySelector('.col-stage').textContent = data[i].stage;
-            clone.querySelector('.col-purpose').textContent = data[i].purposeStr;
-            clone.querySelector('.col-pct').textContent = data[i].percent === '-' ? '-' : `${data[i].percent}%`;
-
-            const weightTd = clone.querySelector('.col-weight');
-            if (data[i].percent !== '-') {
-                weightTd.textContent = `${data[i].weight} `;
-                const span = document.createElement('span');
-                span.className = 'unit-display';
-                span.textContent = currentUnit;
-                weightTd.appendChild(span);
-            } else {
-                weightTd.textContent = `${data[i].weight} `;
-            }
-
-            clone.querySelector('.col-reps').textContent = data[i].reps;
-
-            const notesTd = clone.querySelector('.col-notes');
-            notesTd.textContent = data[i].notes;
-            notesTd.style = ADV_WARMUP_NOTES_STYLE;
-
-            fragment.appendChild(clone);
+        const weightVal = clone.querySelector('.weight-val');
+        const unitDisp = clone.querySelector('.unit-display');
+        weightVal.textContent = rowData.weight;
+        if (rowData.percent !== '-') {
+            unitDisp.textContent = currentUnit;
+        } else {
+            unitDisp.textContent = '';
         }
-        tableBodyAdvWarmup.replaceChildren(fragment);
-        const end = performance.now();
-        console.log(`⚡ Bolt Table Render Time: ${(end - start).toFixed(2)}ms`);
+
+        clone.querySelector('.col-reps').textContent = rowData.reps;
+
+        const notesTd = clone.querySelector('.col-notes');
+        notesTd.textContent = rowData.notes;
+        notesTd.style = ADV_WARMUP_NOTES_STYLE;
+    }
+
+    function renderAdvWarmupTable(data) {
+        renderTableBatch(tableBodyAdvWarmup, 'tpl-row-adv-warmup', data, populateAdvWarmupRow);
     }
 
     // Set current year in footer
