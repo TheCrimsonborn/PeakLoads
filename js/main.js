@@ -559,72 +559,92 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // ⚡ Bolt: Use Template Literals (String Builder pattern) for table cells to avoid createElement/appendChild overhead
-    function createWeightCell(weight, includeUnit = true) {
-        if (includeUnit) {
-            return `<td>${weight} <span class="unit-display">${currentUnit}</span></td>`;
-        }
-        return `<td>${weight} </td>`;
-    }
-
-    function createTextCell(text, styles = null) {
-        if (styles) {
-            return `<td style="${styles}">${text}</td>`;
-        }
-        return `<td>${text}</td>`;
-    }
-
-    function renderTableData(tbody, data, columns) {
+    // ⚡ Bolt: DocumentFragment and HTML <template> elements prevent intermediate string allocation (StringBuilder) and GC pauses
+    function renderPercentageTable(data) {
         const start = performance.now();
-        // ⚡ Bolt: Construct the entire table body as a single long string in memory
-        let html = '';
-        // NOSONAR - Zero-allocation architecture: index-based loop prevents Symbol.iterator memory overhead.
+        const fragment = document.createDocumentFragment();
+        const tpl = document.getElementById('tpl-row-pct');
+        fragment.appendChild(tpl);
+
         for (let i = 0; i < data.length; i++) {
-            const row = data[i];
-            html += '<tr>';
-            // NOSONAR - Zero-allocation architecture: index-based loop prevents Symbol.iterator memory overhead.
-            for (let j = 0; j < columns.length; j++) {
-                html += columns[j](row);
-            }
-            html += '</tr>';
+            const clone = tpl.content.cloneNode(true);
+            clone.querySelector('.col-pct').textContent = `${data[i].percent}%`;
+
+            const weightTd = clone.querySelector('.col-weight');
+            weightTd.textContent = `${data[i].weight} `;
+            const span = document.createElement('span');
+            span.className = 'unit-display';
+            span.textContent = currentUnit;
+            weightTd.appendChild(span);
+
+            fragment.appendChild(clone);
         }
-        tbody.innerHTML = html;
+        tableBodyPct.replaceChildren(fragment);
         const end = performance.now();
         console.log(`⚡ Bolt Table Render Time: ${(end - start).toFixed(2)}ms`);
     }
 
-    // ⚡ Bolt: Hoist static column configurations to prevent redundant array/function allocations on each click
-    const PCT_COLUMNS = [
-        row => createTextCell(`${row.percent}%`),
-        row => createWeightCell(row.weight)
-    ];
-
-    function renderPercentageTable(data) {
-        renderTableData(tableBodyPct, data, PCT_COLUMNS);
-    }
-
-    const WARMUP_COLUMNS = [
-        row => createTextCell(`${row.percent}%`),
-        row => createWeightCell(row.weight),
-        row => createTextCell(row.reps)
-    ];
-
     function renderWarmupTable(data) {
-        renderTableData(tableBodyWarmup, data, WARMUP_COLUMNS);
+        const start = performance.now();
+        const fragment = document.createDocumentFragment();
+        const tpl = document.getElementById('tpl-row-warmup');
+        fragment.appendChild(tpl);
+
+        for (let i = 0; i < data.length; i++) {
+            const clone = tpl.content.cloneNode(true);
+            clone.querySelector('.col-pct').textContent = `${data[i].percent}%`;
+
+            const weightTd = clone.querySelector('.col-weight');
+            weightTd.textContent = `${data[i].weight} `;
+            const span = document.createElement('span');
+            span.className = 'unit-display';
+            span.textContent = currentUnit;
+            weightTd.appendChild(span);
+
+            clone.querySelector('.col-reps').textContent = data[i].reps;
+            fragment.appendChild(clone);
+        }
+        tableBodyWarmup.replaceChildren(fragment);
+        const end = performance.now();
+        console.log(`⚡ Bolt Table Render Time: ${(end - start).toFixed(2)}ms`);
     }
 
     const ADV_WARMUP_NOTES_STYLE = 'font-size: 0.9em; opacity: 0.8;';
-    const ADV_WARMUP_COLUMNS = [
-        row => createTextCell(row.stage),
-        row => createTextCell(row.purposeStr),
-        row => createTextCell(row.percent === '-' ? '-' : `${row.percent}%`),
-        row => createWeightCell(row.weight, row.percent !== '-'),
-        row => createTextCell(row.reps),
-        row => createTextCell(row.notes, ADV_WARMUP_NOTES_STYLE)
-    ];
 
     function renderAdvWarmupTable(data) {
-        renderTableData(tableBodyAdvWarmup, data, ADV_WARMUP_COLUMNS);
+        const start = performance.now();
+        const fragment = document.createDocumentFragment();
+        const tpl = document.getElementById('tpl-row-adv-warmup');
+        fragment.appendChild(tpl);
+
+        for (let i = 0; i < data.length; i++) {
+            const clone = tpl.content.cloneNode(true);
+            clone.querySelector('.col-stage').textContent = data[i].stage;
+            clone.querySelector('.col-purpose').textContent = data[i].purposeStr;
+            clone.querySelector('.col-pct').textContent = data[i].percent === '-' ? '-' : `${data[i].percent}%`;
+
+            const weightTd = clone.querySelector('.col-weight');
+            if (data[i].percent !== '-') {
+                weightTd.textContent = `${data[i].weight} `;
+                const span = document.createElement('span');
+                span.className = 'unit-display';
+                span.textContent = currentUnit;
+                weightTd.appendChild(span);
+            } else {
+                weightTd.textContent = `${data[i].weight} `;
+            }
+
+            clone.querySelector('.col-reps').textContent = data[i].reps;
+
+            const notesTd = clone.querySelector('.col-notes');
+            notesTd.textContent = data[i].notes;
+            notesTd.style = ADV_WARMUP_NOTES_STYLE;
+
+            fragment.appendChild(clone);
+        }
+        tableBodyAdvWarmup.replaceChildren(fragment);
+        const end = performance.now();
+        console.log(`⚡ Bolt Table Render Time: ${(end - start).toFixed(2)}ms`);
     }
 
     // Set current year in footer
