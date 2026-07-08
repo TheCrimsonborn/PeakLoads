@@ -87,3 +87,6 @@ You must not blindly apply fixes suggested by Qodana, CodeQL, or SonarCloud. Eve
 ## 2026-07-04 - [Batch DOM Appends with DocumentFragment and HTML Templates]
 **Learning:** Constructing HTML tables via string concatenation (StringBuilder pattern) forces V8 to allocate massive intermediate strings in memory, leading to garbage collection pauses on hot render paths (like 'input' events).
 **Action:** Replace string builders with native HTML `<template>` elements inside the DOM. Use `template.content.cloneNode(true)` and append row elements to a `DocumentFragment`, and populate fields with `.textContent`. This completely avoids HTML parsing overhead and adheres strictly to the zero-allocation architecture.
+## 2024-07-07 - Replace explicit loop child removal with replaceChildren
+**Learning:** Removing DOM children sequentially with a while-loop and backwards for-loop (`removeChild`) is inefficient and scales linearly with the number of children.
+**Action:** Append the preserved elements (like the `<template>`) directly into the `DocumentFragment` containing the new items, and then use the native `Element.replaceChildren()` method. This allows the browser to perform O(1) DOM replacements directly in C++, significantly improving render performance and eliminating JavaScript loop overhead.

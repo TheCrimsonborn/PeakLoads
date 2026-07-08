@@ -572,21 +572,9 @@ document.addEventListener('DOMContentLoaded', () => {
             fragment.appendChild(clone);
         }
 
-        // Clear existing rows but KEEP the template inside the tbody
-        while (tbody.lastChild && tbody.lastChild !== template) {
-            tbody.removeChild(tbody.lastChild);
-        }
-        // In case template was not the very first child or there were nodes before it
-        // A safer way is to remove all non-template nodes
-        const children = tbody.childNodes;
-        // NOSONAR - Reversing loop to safely remove live elements
-        for (let i = children.length - 1; i >= 0; i--) {
-            if (children[i] !== template) {
-                tbody.removeChild(children[i]);
-            }
-        }
-
-        tbody.appendChild(fragment);
+        // ⚡ Bolt: Append template to fragment and use native replaceChildren for O(1) DOM replacement without loop overhead
+        fragment.appendChild(template);
+        tbody.replaceChildren(fragment);
         const end = performance.now();
         console.log(`⚡ Bolt Table Render Time: ${(end - start).toFixed(2)}ms`);
     }
