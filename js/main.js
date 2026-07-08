@@ -430,7 +430,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const tRir = Number.parseFloat(targetRirRirInput.value) || 0;
 
         if (weight && reps) {
-            const result = Calculator.calculateRIR(weight, reps, rir, tReps, tRir, currentUnit);
+            const result = Calculator.calculateRIR({ weight, reps, rir, targetReps: tReps, targetRIR: tRir, unit: currentUnit });
             valRir1rm.textContent = result.est1RM;
             valRirNext.textContent = result.nextWeight;
             resultRirCard.classList.remove('hidden');

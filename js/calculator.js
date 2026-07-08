@@ -249,7 +249,7 @@ const Calculator = {
     },
 
     // RIR Translator
-    calculateRIR: (weight, reps, rir, targetReps, targetRIR, unit) => {
+    calculateRIR: ({ weight, reps, rir, targetReps, targetRIR, unit }) => {
         weight = +weight;
         reps = Math.trunc(+reps);
         rir = +rir;
