@@ -388,7 +388,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const max = Number.parseFloat(rangeMaxPctInput.value);
 
         if (base && inc && min && max) {
-            const data = Calculator.generatePercentageTable(base, inc, min, max, currentUnit);
+            const data = Calculator.generatePercentageTable({ baseWeight: base, increment: inc, min, max, unit: currentUnit });
             renderPercentageTable(data);
             resultPctCard.classList.remove('hidden');
         }
@@ -415,7 +415,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (weight && reps) {
             const cuesObj = I18n.getAdvCues()[liftType];
             const purposesObj = I18n.getAdvPurposes();
-            const data = Calculator.generateAdvancedWarmUp(liftType, weight, reps, cuesObj, purposesObj, currentUnit);
+            const data = Calculator.generateAdvancedWarmUp({ liftType, mainWeight: weight, mainReps: reps, cuesObj, purposesObj, unit: currentUnit });
             renderAdvWarmupTable(data);
             resultAdvWarmupCard.classList.remove('hidden');
         }
@@ -430,7 +430,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const tRir = Number.parseFloat(targetRirRirInput.value) || 0;
 
         if (weight && reps) {
-            const result = Calculator.calculateRIR(weight, reps, rir, tReps, tRir, currentUnit);
+            const result = Calculator.calculateRIR({ weight, reps, rir, targetReps: tReps, targetRIR: tRir, unit: currentUnit });
             valRir1rm.textContent = result.est1RM;
             valRirNext.textContent = result.nextWeight;
             resultRirCard.classList.remove('hidden');

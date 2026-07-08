@@ -138,24 +138,24 @@ test('Calculator - calculate1RM', async (t) => {
 
 test('Calculator - generatePercentageTable', async (t) => {
     await t.test('handles invalid inputs', () => {
-        assert.deepStrictEqual(Calculator.generatePercentageTable(0, 5, 50, 100, 'kg'), []);
-        assert.deepStrictEqual(Calculator.generatePercentageTable(100, 0, 50, 100, 'kg'), []);
-        assert.deepStrictEqual(Calculator.generatePercentageTable(100, 5, 100, 50, 'kg'), []);
-        assert.deepStrictEqual(Calculator.generatePercentageTable(100, 5, -10, 100, 'kg'), []);
-        assert.deepStrictEqual(Calculator.generatePercentageTable(100, 5, 0, -10, 'kg'), []);
-        assert.deepStrictEqual(Calculator.generatePercentageTable(100, 5, NaN, 100, 'kg'), []);
-        assert.deepStrictEqual(Calculator.generatePercentageTable(100, 5, 0, NaN, 'kg'), []);
+        assert.deepStrictEqual(Calculator.generatePercentageTable({ baseWeight: 0, increment: 5, min: 50, max: 100, unit: 'kg' }), []);
+        assert.deepStrictEqual(Calculator.generatePercentageTable({ baseWeight: 100, increment: 0, min: 50, max: 100, unit: 'kg' }), []);
+        assert.deepStrictEqual(Calculator.generatePercentageTable({ baseWeight: 100, increment: 5, min: 100, max: 50, unit: 'kg' }), []);
+        assert.deepStrictEqual(Calculator.generatePercentageTable({ baseWeight: 100, increment: 5, min: -10, max: 100, unit: 'kg' }), []);
+        assert.deepStrictEqual(Calculator.generatePercentageTable({ baseWeight: 100, increment: 5, min: 0, max: -10, unit: 'kg' }), []);
+        assert.deepStrictEqual(Calculator.generatePercentageTable({ baseWeight: 100, increment: 5, min: NaN, max: 100, unit: 'kg' }), []);
+        assert.deepStrictEqual(Calculator.generatePercentageTable({ baseWeight: 100, increment: 5, min: 0, max: NaN, unit: 'kg' }), []);
     });
 
     await t.test('prevents infinite loops', () => {
-        assert.deepStrictEqual(Calculator.generatePercentageTable(100, 0.009, 0, 100, 'kg'), []); // < 0.01 limit
-        assert.strictEqual(Calculator.generatePercentageTable(100, 0.01, 0, 0.1, 'kg').length, 11); // exactly 0.01 increment allowed
-        assert.deepStrictEqual(Calculator.generatePercentageTable(100, 0.099, 0, 100, 'kg'), []); // > 1000 iterations limit exactly
-        assert.strictEqual(Calculator.generatePercentageTable(100, 0.1, 0, 100, 'kg').length, 1001); // exactly 1000 iterations allowed
+        assert.deepStrictEqual(Calculator.generatePercentageTable({ baseWeight: 100, increment: 0.009, min: 0, max: 100, unit: 'kg' }), []); // < 0.01 limit
+        assert.strictEqual(Calculator.generatePercentageTable({ baseWeight: 100, increment: 0.01, min: 0, max: 0.1, unit: 'kg' }).length, 11); // exactly 0.01 increment allowed
+        assert.deepStrictEqual(Calculator.generatePercentageTable({ baseWeight: 100, increment: 0.099, min: 0, max: 100, unit: 'kg' }), []); // > 1000 iterations limit exactly
+        assert.strictEqual(Calculator.generatePercentageTable({ baseWeight: 100, increment: 0.1, min: 0, max: 100, unit: 'kg' }).length, 1001); // exactly 1000 iterations allowed
     });
 
     await t.test('generates valid table for kg', () => {
-        const table = Calculator.generatePercentageTable(100, 5, 90, 100, 'kg');
+        const table = Calculator.generatePercentageTable({ baseWeight: 100, increment: 5, min: 90, max: 100, unit: 'kg' });
         assert.deepStrictEqual(table, [
             { percent: 90, weight: 90 },
             { percent: 95, weight: 95 },
@@ -164,7 +164,7 @@ test('Calculator - generatePercentageTable', async (t) => {
     });
 
     await t.test('generates valid table for lb', () => {
-        const table = Calculator.generatePercentageTable(200, 10, 80, 100, 'lb');
+        const table = Calculator.generatePercentageTable({ baseWeight: 200, increment: 10, min: 80, max: 100, unit: 'lb' });
         assert.deepStrictEqual(table, [
             { percent: 80, weight: 160 },
             { percent: 90, weight: 180 },
@@ -219,12 +219,12 @@ test('Calculator - generateAdvancedWarmUp', async (t) => {
     };
 
     await t.test('handles invalid input', () => {
-        assert.deepStrictEqual(Calculator.generateAdvancedWarmUp('squat', 0, 5, cuesObj, purposesObj, 'kg'), []);
-        assert.deepStrictEqual(Calculator.generateAdvancedWarmUp('squat', 100, 0, cuesObj, purposesObj, 'kg'), []);
+        assert.deepStrictEqual(Calculator.generateAdvancedWarmUp({ liftType: 'squat', mainWeight: 0, mainReps: 5, cuesObj, purposesObj, unit: 'kg' }), []);
+        assert.deepStrictEqual(Calculator.generateAdvancedWarmUp({ liftType: 'squat', mainWeight: 100, mainReps: 0, cuesObj, purposesObj, unit: 'kg' }), []);
     });
 
     await t.test('generates plan using standard reps for low mainReps (< 6)', () => {
-        const plan = Calculator.generateAdvancedWarmUp('squat', 100, 5, cuesObj, purposesObj, 'kg');
+        const plan = Calculator.generateAdvancedWarmUp({ liftType: 'squat', mainWeight: 100, mainReps: 5, cuesObj, purposesObj, unit: 'kg' });
         assert.strictEqual(plan.length, 5);
         assert.strictEqual(plan[0].percent, "-");
         assert.strictEqual(plan[0].weight, 20); // Empty bar in kg
@@ -238,7 +238,7 @@ test('Calculator - generateAdvancedWarmUp', async (t) => {
     });
 
     await t.test('generates plan using high reps for mainReps (>= 6)', () => {
-        const plan = Calculator.generateAdvancedWarmUp('squat', 100, 8, cuesObj, purposesObj, 'lb');
+        const plan = Calculator.generateAdvancedWarmUp({ liftType: 'squat', mainWeight: 100, mainReps: 8, cuesObj, purposesObj, unit: 'lb' });
         assert.strictEqual(plan[0].weight, 45); // Empty bar in lb
         assert.strictEqual(plan[0].reps, "10-15");
 
@@ -250,11 +250,11 @@ test('Calculator - generateAdvancedWarmUp', async (t) => {
 
 test('Calculator - calculateRIR', async (t) => {
     await t.test('handles invalid inputs', () => {
-        assert.deepStrictEqual(Calculator.calculateRIR(0, 5, 2, 5, 2, 'kg'), { est1RM: 0, nextWeight: 0 });
-        assert.deepStrictEqual(Calculator.calculateRIR(100, 0, 2, 5, 2, 'kg'), { est1RM: 0, nextWeight: 0 });
-        assert.deepStrictEqual(Calculator.calculateRIR(100, 5, -1, 5, 2, 'kg'), { est1RM: 0, nextWeight: 0 });
-        assert.deepStrictEqual(Calculator.calculateRIR(100, 5, 2, 0, 2, 'kg'), { est1RM: 0, nextWeight: 0 });
-        assert.deepStrictEqual(Calculator.calculateRIR(100, 5, 2, 5, -1, 'kg'), { est1RM: 0, nextWeight: 0 });
+        assert.deepStrictEqual(Calculator.calculateRIR({ weight: 0, reps: 5, rir: 2, targetReps: 5, targetRIR: 2, unit: 'kg' }), { est1RM: 0, nextWeight: 0 });
+        assert.deepStrictEqual(Calculator.calculateRIR({ weight: 100, reps: 0, rir: 2, targetReps: 5, targetRIR: 2, unit: 'kg' }), { est1RM: 0, nextWeight: 0 });
+        assert.deepStrictEqual(Calculator.calculateRIR({ weight: 100, reps: 5, rir: -1, targetReps: 5, targetRIR: 2, unit: 'kg' }), { est1RM: 0, nextWeight: 0 });
+        assert.deepStrictEqual(Calculator.calculateRIR({ weight: 100, reps: 5, rir: 2, targetReps: 0, targetRIR: 2, unit: 'kg' }), { est1RM: 0, nextWeight: 0 });
+        assert.deepStrictEqual(Calculator.calculateRIR({ weight: 100, reps: 5, rir: 2, targetReps: 5, targetRIR: -1, unit: 'kg' }), { est1RM: 0, nextWeight: 0 });
     });
 
     await t.test('calculates correct next weight and est1RM', () => {
@@ -264,7 +264,7 @@ test('Calculator - calculateRIR', async (t) => {
         // denominator = 1 + 9/30 = 1.3
         // nextWeightRaw = 123.333 / 1.3 = 94.87 -> round to 95
 
-        const result = Calculator.calculateRIR(100, 5, 2, 8, 1, 'kg');
+        const result = Calculator.calculateRIR({ weight: 100, reps: 5, rir: 2, targetReps: 8, targetRIR: 1, unit: 'kg' });
         assert.strictEqual(result.est1RM, 123.3);
         assert.strictEqual(result.nextWeight, 95);
     });
@@ -275,7 +275,7 @@ console.log("- It calculates est1RM and nextWeight correctly (kg)");
 // targetReps=3, targetRIR=1 -> failure at 4 reps -> 1 + 4/30 = 34/30
 // nextWeight = 120 / (34/30) = 105.882... -> roundWeight(105.882, 'kg') -> 105
 assert.deepEqual(
-    Calculator.calculateRIR(100, 5, 1, 3, 1, 'kg'),
+    Calculator.calculateRIR({ weight: 100, reps: 5, rir: 1, targetReps: 3, targetRIR: 1, unit: 'kg' }),
     { est1RM: 120, nextWeight: 105 }
 );
 
@@ -283,38 +283,38 @@ console.log("- It calculates est1RM and nextWeight correctly (lb)");
 // 120 * (1 + 6/30) = 144
 // nextWeight = 144 / (34/30) = 127.058... -> roundWeight(127.058, 'lb') -> 125
 assert.deepEqual(
-    Calculator.calculateRIR(120, 5, 1, 3, 1, 'lb'),
+    Calculator.calculateRIR({ weight: 120, reps: 5, rir: 1, targetReps: 3, targetRIR: 1, unit: 'lb' }),
     { est1RM: 144, nextWeight: 125 }
 );
 
 // 2. Parsing string inputs
 console.log("- It handles string inputs by parsing them to numbers");
 assert.deepEqual(
-    Calculator.calculateRIR("100", "5", "1", "3", "1", 'kg'),
+    Calculator.calculateRIR({ weight: "100", reps: "5", rir: "1", targetReps: "3", targetRIR: "1", unit: 'kg' }),
     { est1RM: 120, nextWeight: 105 }
 );
 
 // 3. Invalid inputs
 console.log("- It handles missing, zero, or negative inputs");
 const invalidCases = [
-    [0, 5, 1, 3, 1, 'kg'],       // zero weight
-    [-100, 5, 1, 3, 1, 'kg'],    // negative weight
-    [100, 0, 1, 3, 1, 'kg'],     // zero reps
-    [100, -5, 1, 3, 1, 'kg'],    // negative reps
-    [100, 5, -1, 3, 1, 'kg'],    // negative rir
-    [100, 5, 1, 0, 1, 'kg'],     // zero target reps
-    [100, 5, 1, -3, 1, 'kg'],    // negative target reps
-    [100, 5, 1, 3, -1, 'kg'],    // negative target rir
-    [undefined, 5, 1, 3, 1, 'kg'], // undefined weight
-    [null, 5, 1, 3, 1, 'kg'],    // null weight
-    [NaN, 5, 1, 3, 1, 'kg'],     // NaN weight
-    ["invalid", 5, 1, 3, 1, 'kg'] // non-numeric string
+    { weight: 0, reps: 5, rir: 1, targetReps: 3, targetRIR: 1, unit: 'kg' },       // zero weight
+    { weight: -100, reps: 5, rir: 1, targetReps: 3, targetRIR: 1, unit: 'kg' },    // negative weight
+    { weight: 100, reps: 0, rir: 1, targetReps: 3, targetRIR: 1, unit: 'kg' },     // zero reps
+    { weight: 100, reps: -5, rir: 1, targetReps: 3, targetRIR: 1, unit: 'kg' },    // negative reps
+    { weight: 100, reps: 5, rir: -1, targetReps: 3, targetRIR: 1, unit: 'kg' },    // negative rir
+    { weight: 100, reps: 5, rir: 1, targetReps: 0, targetRIR: 1, unit: 'kg' },     // zero target reps
+    { weight: 100, reps: 5, rir: 1, targetReps: -3, targetRIR: 1, unit: 'kg' },    // negative target reps
+    { weight: 100, reps: 5, rir: 1, targetReps: 3, targetRIR: -1, unit: 'kg' },    // negative target rir
+    { weight: undefined, reps: 5, rir: 1, targetReps: 3, targetRIR: 1, unit: 'kg' }, // undefined weight
+    { weight: null, reps: 5, rir: 1, targetReps: 3, targetRIR: 1, unit: 'kg' },    // null weight
+    { weight: NaN, reps: 5, rir: 1, targetReps: 3, targetRIR: 1, unit: 'kg' },     // NaN weight
+    { weight: "invalid", reps: 5, rir: 1, targetReps: 3, targetRIR: 1, unit: 'kg' } // non-numeric string
 ];
 
 // NOSONAR - Array forEach is acceptable in unit tests arrays to run test cases concisely
 invalidCases.forEach(args => {
     assert.deepEqual(
-        Calculator.calculateRIR(...args),
+        Calculator.calculateRIR(args),
         { est1RM: 0, nextWeight: 0 }
     );
 });

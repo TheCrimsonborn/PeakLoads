@@ -137,7 +137,7 @@ const Calculator = {
     },
 
     // Percentage Chart Generator (Base weight in current unit)
-    generatePercentageTable: (baseWeight, increment, min, max, unit) => {
+    generatePercentageTable: ({ baseWeight, increment, min, max, unit }) => {
         baseWeight = +baseWeight;
         increment = +increment;
         min = +min;
@@ -210,7 +210,7 @@ const Calculator = {
     },
 
     // Advanced Warm Up Generator
-    generateAdvancedWarmUp: (liftType, mainWeight, mainReps, cuesObj, purposesObj, unit) => {
+    generateAdvancedWarmUp: ({ liftType, mainWeight, mainReps, cuesObj, purposesObj, unit }) => {
         mainWeight = +mainWeight;
         mainReps = Math.trunc(+mainReps);
         if (!mainWeight || mainWeight <= 0 || !mainReps || mainReps <= 0) return [];
@@ -249,7 +249,7 @@ const Calculator = {
     },
 
     // RIR Translator
-    calculateRIR: (weight, reps, rir, targetReps, targetRIR, unit) => {
+    calculateRIR: ({ weight, reps, rir, targetReps, targetRIR, unit }) => {
         weight = +weight;
         reps = Math.trunc(+reps);
         rir = +rir;
