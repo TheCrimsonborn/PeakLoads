@@ -43,6 +43,16 @@ export const SafeStorage = {
             }
         }
         this._memoryFallback[key] = value;
+    },
+
+    removeItem(key) {
+        delete this._memoryFallback[key];
+        delete this._lastWritten[key];
+        if (!this.checkAvailability()) return;
+        try {
+            localStorage.removeItem(key);
+        } catch (e) { // NOSONAR - Exception is expected when storage is blocked; we ignore.
+        }
     }
 };
 
@@ -460,7 +470,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             } catch (e) {
                 console.error("Failed to restore state", e);
-                SafeStorage.setItem('peakloads_state', ''); // removeItem equivalent, uses empty string so if (saved) falsy handles it
+                SafeStorage.removeItem('peakloads_state');
                 globalThis.alert("Failed to restore previous session state. Your session has been reset.");
             }
         }
