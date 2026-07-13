@@ -428,6 +428,11 @@ select:focus-visible {
   border-bottom: none;
 }
 
+.adv-warmup-notes {
+  font-size: 0.9em;
+  opacity: 0.8;
+}
+
 /* RIR Results */
 .rir-results {
   display: flex;
