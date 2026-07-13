@@ -235,7 +235,6 @@ document.addEventListener('DOMContentLoaded', () => {
         'Backspace': true, 'Tab': true, 'Delete': true, 'ArrowLeft': true, 'ArrowRight': true, 
         'ArrowUp': true, 'ArrowDown': true, 'Home': true, 'End': true, 'Enter': true, 'Escape': true
     };
-    const VALID_NUMBER_CHAR = /^[0-9.]$/;
     const SYNTHETIC_INPUT_EVENT = new Event('input', { bubbles: true });
 
     // Global input restriction: only numbers and dots allowed. Comma is converted to dot.
@@ -260,7 +259,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            if (!VALID_NUMBER_CHAR.test(e.key)) {
+            // ⚡ Bolt: Replace Regex with charCodeAt to avoid V8 state machine overhead, converting to native ALU CMP instructions
+            const isSingleChar = e.key.length === 1;
+            const code = isSingleChar ? e.key.charCodeAt(0) : 0;
+            const isValid = isSingleChar && ((code >= 48 && code <= 57) || code === 46);
+
+            if (!isValid) {
                 e.preventDefault();
             }
         }
