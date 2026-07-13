@@ -439,11 +439,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Helper Functions ---
 
+    // ⚡ Bolt: Primitive cache for upstream dirty check to prevent redundant JSON.stringify allocations
+    const _lastStateValues = { inputs: {} };
+
     function saveState() {
+        let isDirty = false;
+        const currentHash = globalThis.location.hash || '#section-adv-warmup';
+
+        if (_lastStateValues.unit !== currentUnit) { _lastStateValues.unit = currentUnit; isDirty = true; }
+        if (_lastStateValues.language !== langSelect.value) { _lastStateValues.language = langSelect.value; isDirty = true; }
+        if (_lastStateValues.hash !== currentHash) { _lastStateValues.hash = currentHash; isDirty = true; }
+
+        // NOSONAR - Zero-allocation architecture: index-based loop prevents Symbol.iterator memory overhead.
+        for (let i = 0; i < cachedStateInputs.length; i++) {
+            const el = cachedStateInputs[i];
+            if (_lastStateValues.inputs[el.id] !== el.value) {
+                _lastStateValues.inputs[el.id] = el.value;
+                isDirty = true;
+            }
+        }
+
+        // ⚡ Bolt: Return early if no state has changed, saving a full object allocation and JSON stringification
+        if (!isDirty) return;
+
         const state = {
             unit: currentUnit,
             language: langSelect.value,
-            hash: globalThis.location.hash || '#section-adv-warmup',
+            hash: currentHash,
             inputs: {}
         };
 
