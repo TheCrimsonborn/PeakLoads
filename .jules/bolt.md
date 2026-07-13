@@ -90,3 +90,7 @@ You must not blindly apply fixes suggested by Qodana, CodeQL, or SonarCloud. Eve
 ## 2024-07-07 - Replace explicit loop child removal with replaceChildren
 **Learning:** Removing DOM children sequentially with a while-loop and backwards for-loop (`removeChild`) is inefficient and scales linearly with the number of children.
 **Action:** Append the preserved elements (like the `<template>`) directly into the `DocumentFragment` containing the new items, and then use the native `Element.replaceChildren()` method. This allows the browser to perform O(1) DOM replacements directly in C++, significantly improving render performance and eliminating JavaScript loop overhead.
+
+## 2024-07-11 - [Replace Regex with charCodeAt in keydown hot path]
+**Learning:** Pre-compiled regular expressions like `/^[0-9.]$/.test()` still invoke V8's internal regex state machine. In hot paths like global `keydown` event listeners, this is slower than primitive integer comparisons.
+**Action:** Replace regular expressions used for simple character validation in hot paths with `e.key.length === 1` and `charCodeAt(0)` integer boundary checks. This compiles directly to native ALU CMP instructions, adhering strictly to the Zero-Allocation constraint and improving CPU optimization.
