@@ -640,8 +640,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    const ADV_WARMUP_NOTES_STYLE = 'font-size: 0.9em; opacity: 0.8;';
-
     function renderAdvWarmupTable(data) {
         renderTableData(tableBodyAdvWarmup, data, 'tpl-adv-warmup-row', (tr, row) => {
             const td1 = tr.firstElementChild;
@@ -669,7 +667,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const td6 = td5.nextElementSibling;
             td6.textContent = row.notes;
-            td6.setAttribute('style', ADV_WARMUP_NOTES_STYLE);
         });
     }
 
