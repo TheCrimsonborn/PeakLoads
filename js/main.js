@@ -77,6 +77,19 @@ document.addEventListener('DOMContentLoaded', () => {
     // Using static NodeList over live HTMLCollection to avoid redundant DOM writes
     // on ephemeral elements that are immediately destroyed and re-rendered.
     const staticUnitDisplays = document.querySelectorAll('.unit-display');
+
+    // ⚡ Bolt: Cache unit displays inside templates to update them statically,
+    // avoiding redundant unit text content assignments on every row render.
+    const templateUnitDisplays = [];
+    const templates = document.querySelectorAll('template');
+    // NOSONAR - Zero-allocation architecture: index-based loop prevents Symbol.iterator memory overhead.
+    for (let i = 0; i < templates.length; i++) {
+        const units = templates[i].content.querySelectorAll('.unit-display');
+        for (let j = 0; j < units.length; j++) {
+            templateUnitDisplays.push(units[j]);
+        }
+    }
+
     const unitBtns = document.querySelectorAll('.unit-btn');
     const langSelect = document.getElementById('lang-select');
     const navBtns = document.querySelectorAll('.nav-btn');
@@ -560,6 +573,11 @@ document.addEventListener('DOMContentLoaded', () => {
         for (let i = 0; i < staticUnitDisplays.length; i++) {
             staticUnitDisplays[i].textContent = currentUnit;
         }
+
+        // Update hoisted template variables
+        for (let i = 0; i < templateUnitDisplays.length; i++) {
+            templateUnitDisplays[i].textContent = currentUnit;
+        }
     }
 
     function convertAllInputs(oldUnit, newUnit) {
@@ -622,7 +640,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const td2 = td1.nextElementSibling;
             td2.firstElementChild.textContent = row.weight;
-            td2.lastElementChild.textContent = currentUnit;
+            // ⚡ Bolt: unit is natively cloned from template
         });
     }
 
@@ -633,7 +651,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const td2 = td1.nextElementSibling;
             td2.firstElementChild.textContent = row.weight;
-            td2.lastElementChild.textContent = currentUnit;
+            // ⚡ Bolt: unit is natively cloned from template
 
             const td3 = td2.nextElementSibling;
             td3.textContent = row.reps;
