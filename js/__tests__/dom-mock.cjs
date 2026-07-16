@@ -27,6 +27,11 @@ class MockElement {
         this._listeners = {};
         this.attributes = {};
         this.dataset = {};
+        if (tagName === 'template') {
+            this.content = {
+                querySelectorAll: () => []
+            };
+        }
     }
     appendChild(child) {
         this.children.push(child);
@@ -84,6 +89,9 @@ class MockDocument extends MockElement {
         if (!el) {
             // Dynamically create elements on the fly to avoid hardcoding IDs
             let tagName = 'div';
+            if (id.startsWith('tpl-')) {
+                tagName = 'template';
+            }
             if (id.includes('select')) tagName = 'select';
             else if (id.includes('input') || id.includes('weight') || id.includes('reps') || id.includes('increment') || id.includes('min') || id.includes('max') || id.includes('top-set') || id === 'rir-rir') tagName = 'input';
             else if (id.includes('btn')) tagName = 'button';
