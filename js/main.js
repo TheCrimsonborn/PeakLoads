@@ -560,6 +560,17 @@ document.addEventListener('DOMContentLoaded', () => {
         for (let i = 0; i < staticUnitDisplays.length; i++) {
             staticUnitDisplays[i].textContent = currentUnit;
         }
+
+        // ⚡ Bolt: Pre-fill shared state (units) on the HTML template content itself.
+        // This allows cloneNode(true) to natively duplicate the correct strings in C++,
+        // preventing redundant textContent assignments and memory allocations in JS hot render loops.
+        const tpls = document.querySelectorAll('template');
+        for (let i = 0; i < tpls.length; i++) {
+            const displays = tpls[i].content.querySelectorAll('.unit-display');
+            for (let j = 0; j < displays.length; j++) {
+                displays[j].textContent = currentUnit;
+            }
+        }
     }
 
     function convertAllInputs(oldUnit, newUnit) {
@@ -622,7 +633,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const td2 = td1.nextElementSibling;
             td2.firstElementChild.textContent = row.weight;
-            td2.lastElementChild.textContent = currentUnit;
         });
     }
 
@@ -633,7 +643,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const td2 = td1.nextElementSibling;
             td2.firstElementChild.textContent = row.weight;
-            td2.lastElementChild.textContent = currentUnit;
 
             const td3 = td2.nextElementSibling;
             td3.textContent = row.reps;

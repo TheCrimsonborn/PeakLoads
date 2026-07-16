@@ -97,3 +97,7 @@ You must not blindly apply fixes suggested by Qodana, CodeQL, or SonarCloud. Eve
 ## 2024-07-13 - [Avoid DOM setAttribute in render loops]
 **Learning:** Calling `setAttribute` (e.g., `setAttribute('style', ...)` or `setAttribute('class', ...)`) on cloned HTML `<template>` nodes inside a hot render loop incurs a severe performance penalty. This forces the browser's JavaScript engine to repeatedly parse the style strings and cross the JS-C++ boundary for each DOM node, leading to major layout thrashing and garbage collection overhead.
 **Action:** Always embed static attributes (like CSS classes) directly into the HTML `<template>` definition. By predefining these attributes, `cloneNode(true)` duplicates them natively in C++ without any JavaScript intervention, completely eliminating loop execution overhead and strictly adhering to the zero-allocation architecture.
+
+## 2024-07-16 - [Pre-fill shared state on HTML Template content]
+**Learning:** When cloning HTML `<template>` elements in hot loops (e.g., generating data tables), assigning shared or static state (like current unit strings) inside the loop for every row using JavaScript introduces redundant DOM text manipulations and memory allocations.
+**Action:** Pre-fill the shared or static state directly on the `<template>` content itself outside the loop. This enables `cloneNode(true)` to natively duplicate the correct strings directly in C++, completely avoiding redundant JS-side assignments.
