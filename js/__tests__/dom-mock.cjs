@@ -14,9 +14,28 @@ class MockClassList {
     }
 }
 
+class MockDocumentFragment {
+    constructor() {
+        this.elements = [];
+    }
+    querySelectorAll(selector) {
+        if (selector === 'template') {
+            return this.elements.filter(el => el.tagName === 'TEMPLATE');
+        }
+        if (selector.startsWith('.')) {
+            const cls = selector.substring(1);
+            return this.elements.filter(el => el.classList.contains(cls));
+        }
+        return [];
+    }
+}
+
 class MockElement {
     constructor(tagName = 'div') {
         this.tagName = tagName.toUpperCase();
+        if (this.tagName === 'TEMPLATE') {
+            this.content = new MockDocumentFragment();
+        }
         this.id = '';
         this.className = '';
         this.classList = new MockClassList();
@@ -141,6 +160,21 @@ function setupMockDOM() {
     const unitDisplay1 = doc.createElement('span'); unitDisplay1.classList.add('unit-display');
     const unitDisplay2 = doc.createElement('span'); unitDisplay2.classList.add('unit-display');
     doc.elements.push(unitDisplay1, unitDisplay2);
+
+    // Pre-populate templates
+    const tpl1 = doc.createElement('template'); tpl1.id = 'tpl-pct-row';
+    const span1 = doc.createElement('span'); span1.classList.add('unit-display');
+    tpl1.content.elements.push(span1);
+
+    const tpl2 = doc.createElement('template'); tpl2.id = 'tpl-warmup-row';
+    const span2 = doc.createElement('span'); span2.classList.add('unit-display');
+    tpl2.content.elements.push(span2);
+
+    const tpl3 = doc.createElement('template'); tpl3.id = 'tpl-adv-warmup-row';
+    const span3 = doc.createElement('span'); span3.classList.add('unit-display');
+    tpl3.content.elements.push(span3);
+
+    doc.elements.push(tpl1, tpl2, tpl3);
 
     // Pre-populate inputs so querySelectorAll('input, select') finds them
     const inputsToPrePopulate = [

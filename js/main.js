@@ -76,7 +76,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     // Using static NodeList over live HTMLCollection to avoid redundant DOM writes
     // on ephemeral elements that are immediately destroyed and re-rendered.
-    const staticUnitDisplays = document.querySelectorAll('.unit-display');
+    const staticUnitDisplays = [];
+    const mainDisplays = document.querySelectorAll('.unit-display');
+    for (let i = 0; i < mainDisplays.length; i++) {
+        staticUnitDisplays.push(mainDisplays[i]);
+    }
+    const templates = document.querySelectorAll('template');
+    for (let i = 0; i < templates.length; i++) {
+        const tplDisplays = templates[i].content.querySelectorAll('.unit-display');
+        for (let j = 0; j < tplDisplays.length; j++) {
+            staticUnitDisplays.push(tplDisplays[j]);
+        }
+    }
     const unitBtns = document.querySelectorAll('.unit-btn');
     const langSelect = document.getElementById('lang-select');
     const navBtns = document.querySelectorAll('.nav-btn');
@@ -622,7 +633,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const td2 = td1.nextElementSibling;
             td2.firstElementChild.textContent = row.weight;
-            td2.lastElementChild.textContent = currentUnit;
+            // td2.lastElementChild.textContent = currentUnit; // Pre-filled on template
         });
     }
 
@@ -633,7 +644,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const td2 = td1.nextElementSibling;
             td2.firstElementChild.textContent = row.weight;
-            td2.lastElementChild.textContent = currentUnit;
+            // td2.lastElementChild.textContent = currentUnit; // Pre-filled on template
 
             const td3 = td2.nextElementSibling;
             td3.textContent = row.reps;
@@ -654,8 +665,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const td4 = td3.nextElementSibling;
             if (row.percent !== '-') {
                 td4.firstElementChild.textContent = row.weight;
-                td4.lastElementChild.textContent = currentUnit;
-                td4.lastElementChild.className = 'unit-display';
+                // td4.lastElementChild.textContent = currentUnit; // Pre-filled on template
+                // td4.lastElementChild.className = 'unit-display'; // Pre-filled on template
             } else {
                 td4.firstElementChild.textContent = row.weight;
                 td4.lastElementChild.textContent = '';
