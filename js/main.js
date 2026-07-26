@@ -78,16 +78,19 @@ document.addEventListener('DOMContentLoaded', () => {
     // on ephemeral elements that are immediately destroyed and re-rendered.
     const rawStaticUnitDisplays = document.querySelectorAll('.unit-display');
     const staticUnitDisplays = new Array(rawStaticUnitDisplays.length);
+    // NOSONAR - Zero-allocation architecture: index-based loop prevents Symbol.iterator memory overhead.
     for (let i = 0; i < rawStaticUnitDisplays.length; i++) {
         staticUnitDisplays[i] = rawStaticUnitDisplays[i];
     }
 
     // ⚡ Bolt: Pre-cache static template unit displays once on load
     const templatesList = ['tpl-pct-row', 'tpl-warmup-row', 'tpl-adv-warmup-row'];
+    // NOSONAR - Zero-allocation architecture: index-based loop prevents Symbol.iterator memory overhead.
     for (let i = 0; i < templatesList.length; i++) {
         const template = document.getElementById(templatesList[i]);
         if (template) {
             const templateDisplays = template.content.querySelectorAll('.unit-display');
+            // NOSONAR - Zero-allocation architecture: index-based loop prevents Symbol.iterator memory overhead.
             for (let j = 0; j < templateDisplays.length; j++) {
                 staticUnitDisplays.push(templateDisplays[j]);
             }
