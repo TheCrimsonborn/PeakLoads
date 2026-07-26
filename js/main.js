@@ -560,6 +560,18 @@ document.addEventListener('DOMContentLoaded', () => {
         for (let i = 0; i < staticUnitDisplays.length; i++) {
             staticUnitDisplays[i].textContent = currentUnit;
         }
+
+        // ⚡ Bolt: Pre-fill static elements inside templates to enable native C++ cloning in hot paths
+        const templates = ['tpl-pct-row', 'tpl-warmup-row', 'tpl-adv-warmup-row'];
+        for (let i = 0; i < templates.length; i++) {
+            const template = document.getElementById(templates[i]);
+            if (template) {
+                const templateDisplays = template.content.querySelectorAll('.unit-display');
+                for (let j = 0; j < templateDisplays.length; j++) {
+                    templateDisplays[j].textContent = currentUnit;
+                }
+            }
+        }
     }
 
     function convertAllInputs(oldUnit, newUnit) {
@@ -618,22 +630,20 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderPercentageTable(data) {
         renderTableData(tableBodyPct, data, 'tpl-pct-row', (tr, row) => {
             const td1 = tr.firstElementChild;
-            td1.textContent = `${row.percent}%`;
+            td1.firstElementChild.textContent = row.percent;
 
             const td2 = td1.nextElementSibling;
             td2.firstElementChild.textContent = row.weight;
-            td2.lastElementChild.textContent = currentUnit;
         });
     }
 
     function renderWarmupTable(data) {
         renderTableData(tableBodyWarmup, data, 'tpl-warmup-row', (tr, row) => {
             const td1 = tr.firstElementChild;
-            td1.textContent = `${row.percent}%`;
+            td1.firstElementChild.textContent = row.percent;
 
             const td2 = td1.nextElementSibling;
             td2.firstElementChild.textContent = row.weight;
-            td2.lastElementChild.textContent = currentUnit;
 
             const td3 = td2.nextElementSibling;
             td3.textContent = row.reps;
@@ -649,7 +659,13 @@ document.addEventListener('DOMContentLoaded', () => {
             td2.textContent = row.purposeStr;
 
             const td3 = td2.nextElementSibling;
-            td3.textContent = row.percent === '-' ? '-' : `${row.percent}%`;
+            td3.firstElementChild.textContent = row.percent === '-' ? '-' : row.percent;
+            // Clear the percent sign if empty
+            if (row.percent === '-') {
+                 td3.lastChild.nodeValue = ''; // Clear text node after span
+            } else {
+                 td3.lastChild.nodeValue = '%';
+            }
 
             const td4 = td3.nextElementSibling;
             if (row.percent !== '-') {

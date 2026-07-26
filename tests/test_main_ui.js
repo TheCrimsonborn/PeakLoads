@@ -90,6 +90,40 @@ global.document = {
     })
 };
 
+// Add template mock structure for main.js
+['tpl-pct-row', 'tpl-warmup-row', 'tpl-adv-warmup-row'].forEach(id => {
+    mockElements[id] = createMockElement(id);
+    mockElements[id].content = {
+        querySelectorAll: (selector) => {
+             if (selector === '.unit-display') return [];
+             return [];
+        },
+        cloneNode: () => ({
+            firstElementChild: {
+                firstElementChild: { textContent: '' },
+                nextElementSibling: {
+                    firstElementChild: { textContent: '' },
+                    nextElementSibling: {
+                        firstElementChild: { textContent: '' },
+                        lastChild: { nodeValue: '' },
+                        nextElementSibling: {
+                             firstElementChild: { textContent: '' },
+                             lastElementChild: { textContent: '', className: '' },
+                             nextElementSibling: {
+                                 textContent: '',
+                                 nextElementSibling: { textContent: '' }
+                             }
+                        },
+                        textContent: ''
+                    },
+                    textContent: ''
+                },
+                textContent: ''
+            }
+        })
+    };
+});
+
 global.localStorage = {
     getItem: (key) => {
         if (key === 'peakloads_state') {

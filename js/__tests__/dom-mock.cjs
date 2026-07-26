@@ -27,6 +27,9 @@ class MockElement {
         this._listeners = {};
         this.attributes = {};
         this.dataset = {};
+        if (tagName.toLowerCase() === 'template') {
+            this.content = new MockElement('fragment');
+        }
     }
     appendChild(child) {
         this.children.push(child);
@@ -104,6 +107,12 @@ class MockDocument extends MockElement {
     }
 
     querySelectorAll(selector) {
+        if (this.tagName === 'FRAGMENT') {
+            if (selector === '.unit-display') {
+                return [];
+            }
+        }
+
         if (selector === 'input, select') {
             // NOSONAR - Array filter is acceptable in test mocks and doesn't affect production zero-allocation
             return this.elements.filter(el => el.tagName === 'INPUT' || el.tagName === 'SELECT');
