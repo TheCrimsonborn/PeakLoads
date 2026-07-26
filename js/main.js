@@ -563,10 +563,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // ⚡ Bolt: Pre-fill static elements inside templates to enable native C++ cloning in hot paths
         const templates = ['tpl-pct-row', 'tpl-warmup-row', 'tpl-adv-warmup-row'];
+        // NOSONAR - Zero-allocation architecture: index-based loop prevents Symbol.iterator memory overhead.
         for (let i = 0; i < templates.length; i++) {
             const template = document.getElementById(templates[i]);
             if (template) {
                 const templateDisplays = template.content.querySelectorAll('.unit-display');
+                // NOSONAR - Zero-allocation architecture: index-based loop prevents Symbol.iterator memory overhead.
                 for (let j = 0; j < templateDisplays.length; j++) {
                     templateDisplays[j].textContent = currentUnit;
                 }
