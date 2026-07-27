@@ -560,6 +560,19 @@ document.addEventListener('DOMContentLoaded', () => {
         for (let i = 0; i < staticUnitDisplays.length; i++) {
             staticUnitDisplays[i].textContent = currentUnit;
         }
+
+        // ⚡ Bolt: Pre-fill HTML <template> units to completely avoid dynamic text assignment inside hot row-generation loops.
+        const templatesWithUnits = ['tpl-pct-row', 'tpl-warmup-row', 'tpl-adv-warmup-row'];
+        for (let i = 0; i < templatesWithUnits.length; i++) {
+            const tpl = document.getElementById(templatesWithUnits[i]);
+            if (tpl) {
+                const spans = tpl.content.querySelectorAll('.unit-display');
+                // NOSONAR - Zero-allocation loop
+                for (let j = 0; j < spans.length; j++) {
+                    spans[j].textContent = currentUnit;
+                }
+            }
+        }
     }
 
     function convertAllInputs(oldUnit, newUnit) {
@@ -622,7 +635,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const td2 = td1.nextElementSibling;
             td2.firstElementChild.textContent = row.weight;
-            td2.lastElementChild.textContent = currentUnit;
+            // ⚡ Bolt: unit is statically pre-filled on the template, avoiding assignment here
         });
     }
 
@@ -633,7 +646,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const td2 = td1.nextElementSibling;
             td2.firstElementChild.textContent = row.weight;
-            td2.lastElementChild.textContent = currentUnit;
+            // ⚡ Bolt: unit is statically pre-filled on the template, avoiding assignment here
 
             const td3 = td2.nextElementSibling;
             td3.textContent = row.reps;
@@ -654,8 +667,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const td4 = td3.nextElementSibling;
             if (row.percent !== '-') {
                 td4.firstElementChild.textContent = row.weight;
-                td4.lastElementChild.textContent = currentUnit;
                 td4.lastElementChild.className = 'unit-display';
+                // ⚡ Bolt: conditional write, avoids DOM boundary crossing if identical
+                if (td4.lastElementChild.textContent !== currentUnit) {
+                    td4.lastElementChild.textContent = currentUnit;
+                }
             } else {
                 td4.firstElementChild.textContent = row.weight;
                 td4.lastElementChild.textContent = '';
