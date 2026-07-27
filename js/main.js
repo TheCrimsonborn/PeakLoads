@@ -379,7 +379,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const formula = formulaSelect.value;
 
         if (weight && reps) {
-            val1rm.textContent = Calculator.calculate1RM(weight, reps, formula);
+            const result = String(Calculator.calculate1RM(weight, reps, formula));
+            if (val1rm.textContent !== result) val1rm.textContent = result;
             result1rmCard.classList.remove('hidden');
         }
     });
@@ -391,8 +392,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const rpe = rpeAdv1rmInput.value;
 
         if (weight && reps && rpe) {
-            const result = Calculator.calculateAdvanced1RM(weight, reps, rpe);
-            valAdv1rm.textContent = result;
+            const result = String(Calculator.calculateAdvanced1RM(weight, reps, rpe));
+            if (valAdv1rm.textContent !== result) valAdv1rm.textContent = result;
             resultAdv1rmCard.classList.remove('hidden');
         }
     });
@@ -448,8 +449,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (weight && reps) {
             const result = Calculator.calculateRIR(weight, reps, rir, tReps, tRir, currentUnit);
-            valRir1rm.textContent = result.est1RM;
-            valRirNext.textContent = result.nextWeight;
+            const est1RMStr = String(result.est1RM);
+            const nextWeightStr = String(result.nextWeight);
+            if (valRir1rm.textContent !== est1RMStr) valRir1rm.textContent = est1RMStr;
+            if (valRirNext.textContent !== nextWeightStr) valRirNext.textContent = nextWeightStr;
             resultRirCard.classList.remove('hidden');
         }
     });
@@ -571,12 +574,16 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateUnitDisplays() {
         // NOSONAR - Zero-allocation architecture: index-based loop prevents Symbol.iterator memory overhead.
         for (let i = 0; i < staticUnitDisplays.length; i++) {
-            staticUnitDisplays[i].textContent = currentUnit;
+            if (staticUnitDisplays[i].textContent !== currentUnit) {
+                staticUnitDisplays[i].textContent = currentUnit;
+            }
         }
 
         // Update hoisted template variables
         for (let i = 0; i < templateUnitDisplays.length; i++) {
-            templateUnitDisplays[i].textContent = currentUnit;
+            if (templateUnitDisplays[i].textContent !== currentUnit) {
+                templateUnitDisplays[i].textContent = currentUnit;
+            }
         }
     }
 
@@ -636,10 +643,12 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderPercentageTable(data) {
         renderTableData(tableBodyPct, data, 'tpl-pct-row', (tr, row) => {
             const td1 = tr.firstElementChild;
-            td1.textContent = `${row.percent}%`;
+            const pctStr = `${row.percent}%`;
+            if (td1.textContent !== pctStr) td1.textContent = pctStr;
 
             const td2 = td1.nextElementSibling;
-            td2.firstElementChild.textContent = row.weight;
+            const weightStr = String(row.weight);
+            if (td2.firstElementChild.textContent !== weightStr) td2.firstElementChild.textContent = weightStr;
             // ⚡ Bolt: unit is natively cloned from template
         });
     }
@@ -647,51 +656,61 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderWarmupTable(data) {
         renderTableData(tableBodyWarmup, data, 'tpl-warmup-row', (tr, row) => {
             const td1 = tr.firstElementChild;
-            td1.textContent = `${row.percent}%`;
+            const pctStr = `${row.percent}%`;
+            if (td1.textContent !== pctStr) td1.textContent = pctStr;
 
             const td2 = td1.nextElementSibling;
-            td2.firstElementChild.textContent = row.weight;
+            const weightStr = String(row.weight);
+            if (td2.firstElementChild.textContent !== weightStr) td2.firstElementChild.textContent = weightStr;
             // ⚡ Bolt: unit is natively cloned from template
 
             const td3 = td2.nextElementSibling;
-            td3.textContent = row.reps;
+            const repsStr = String(row.reps);
+            if (td3.textContent !== repsStr) td3.textContent = repsStr;
         });
     }
 
     function renderAdvWarmupTable(data) {
         renderTableData(tableBodyAdvWarmup, data, 'tpl-adv-warmup-row', (tr, row) => {
             const td1 = tr.firstElementChild;
-            td1.textContent = row.stage;
+            const stageStr = String(row.stage);
+            if (td1.textContent !== stageStr) td1.textContent = stageStr;
 
             const td2 = td1.nextElementSibling;
-            td2.textContent = row.purposeStr;
+            if (td2.textContent !== row.purposeStr) td2.textContent = row.purposeStr;
 
             const td3 = td2.nextElementSibling;
-            td3.textContent = row.percent === '-' ? '-' : `${row.percent}%`;
+            const pctStr = row.percent === '-' ? '-' : `${row.percent}%`;
+            if (td3.textContent !== pctStr) td3.textContent = pctStr;
 
             const td4 = td3.nextElementSibling;
+            const weightStr = String(row.weight);
             if (row.percent !== '-') {
-                td4.firstElementChild.textContent = row.weight;
-                td4.lastElementChild.textContent = currentUnit;
-                td4.lastElementChild.className = 'unit-display';
+                if (td4.firstElementChild.textContent !== weightStr) td4.firstElementChild.textContent = weightStr;
+                if (td4.lastElementChild.textContent !== currentUnit) td4.lastElementChild.textContent = currentUnit;
+                if (td4.lastElementChild.className !== 'unit-display') td4.lastElementChild.className = 'unit-display';
             } else {
-                td4.firstElementChild.textContent = row.weight;
-                td4.lastElementChild.textContent = '';
-                td4.lastElementChild.className = '';
+                if (td4.firstElementChild.textContent !== weightStr) td4.firstElementChild.textContent = weightStr;
+                if (td4.lastElementChild.textContent !== '') td4.lastElementChild.textContent = '';
+                if (td4.lastElementChild.className !== '') td4.lastElementChild.className = '';
             }
 
             const td5 = td4.nextElementSibling;
-            td5.textContent = row.reps;
+            const repsStr = String(row.reps);
+            if (td5.textContent !== repsStr) td5.textContent = repsStr;
 
             const td6 = td5.nextElementSibling;
-            td6.textContent = row.notes;
+            if (td6.textContent !== row.notes) td6.textContent = row.notes;
         });
     }
 
     // Set current year in footer
     const currentYearEl = document.getElementById('current-year');
     if (currentYearEl) {
-        currentYearEl.textContent = new Date().getFullYear();
+        const currentYearStr = String(new Date().getFullYear());
+        if (currentYearEl.textContent !== currentYearStr) {
+            currentYearEl.textContent = currentYearStr;
+        }
     }
 
     // Register Service Worker
