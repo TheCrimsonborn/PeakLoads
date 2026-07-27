@@ -5,7 +5,6 @@ const mockElements = {};
 
 const createMockElement = (id) => ({
     id,
-    content: { querySelector: () => ({ textContent: '' }), querySelectorAll: () => [{ textContent: '' }] },
     value: '',
     textContent: '',
     attributes: {},
