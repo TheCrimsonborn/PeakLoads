@@ -27,6 +27,17 @@ class MockElement {
         this._listeners = {};
         this.attributes = {};
         this.dataset = {};
+        if (tagName.toLowerCase() === 'template') {
+            this.content = new MockElement('fragment');
+            this.content.querySelectorAll = (selector) => {
+                if (selector === '.unit-display') {
+                    const mockDisplay = new MockElement('span');
+                    mockDisplay.classList.add('unit-display');
+                    return [mockDisplay];
+                }
+                return [];
+            };
+        }
     }
     appendChild(child) {
         this.children.push(child);
