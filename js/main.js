@@ -560,6 +560,15 @@ document.addEventListener('DOMContentLoaded', () => {
         for (let i = 0; i < staticUnitDisplays.length; i++) {
             staticUnitDisplays[i].textContent = currentUnit;
         }
+
+        // ⚡ Bolt: Pre-fill shared state on template contents for zero-allocation cloning in hot loops
+        const templates = document.querySelectorAll("template");
+        for (let i = 0; i < templates.length; i++) {
+            const displays = templates[i].content.querySelectorAll(".unit-display");
+            for (let j = 0; j < displays.length; j++) {
+                displays[j].textContent = currentUnit;
+            }
+        }
     }
 
     function convertAllInputs(oldUnit, newUnit) {
@@ -622,7 +631,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const td2 = td1.nextElementSibling;
             td2.firstElementChild.textContent = row.weight;
-            td2.lastElementChild.textContent = currentUnit;
         });
     }
 
@@ -633,7 +641,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const td2 = td1.nextElementSibling;
             td2.firstElementChild.textContent = row.weight;
-            td2.lastElementChild.textContent = currentUnit;
 
             const td3 = td2.nextElementSibling;
             td3.textContent = row.reps;
@@ -654,12 +661,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const td4 = td3.nextElementSibling;
             if (row.percent !== '-') {
                 td4.firstElementChild.textContent = row.weight;
-                td4.lastElementChild.textContent = currentUnit;
-                td4.lastElementChild.className = 'unit-display';
             } else {
                 td4.firstElementChild.textContent = row.weight;
                 td4.lastElementChild.textContent = '';
-                td4.lastElementChild.className = '';
             }
 
             const td5 = td4.nextElementSibling;

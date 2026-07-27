@@ -16,6 +16,9 @@ class MockClassList {
 
 class MockElement {
     constructor(tagName = 'div') {
+        if (tagName === 'template') {
+            this.content = new MockDocument();
+        }
         this.tagName = tagName.toUpperCase();
         this.id = '';
         this.className = '';
@@ -124,6 +127,8 @@ class MockDocument extends MockElement {
                 }
                 return el.attributes[attr] !== undefined;
             });
+        } else if (selector === 'template') {
+            return this.elements.filter(el => el.tagName === 'TEMPLATE');
         }
         return [];
     }
@@ -159,6 +164,11 @@ function setupMockDOM() {
     doc.getElementById('section-1rm');
     doc.getElementById('section-adv-warmup');
     doc.getElementById('section-rir');
+
+    const template1 = doc.createElement('template');
+    const tdSpan1 = template1.content.createElement('span'); tdSpan1.classList.add('unit-display');
+    template1.content.elements.push(tdSpan1);
+    doc.elements.push(template1);
 
 
     global.document = doc;
