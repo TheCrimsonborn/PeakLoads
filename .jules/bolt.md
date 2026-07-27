@@ -97,3 +97,7 @@ You must not blindly apply fixes suggested by Qodana, CodeQL, or SonarCloud. Eve
 ## 2024-07-13 - [Avoid DOM setAttribute in render loops]
 **Learning:** Calling `setAttribute` (e.g., `setAttribute('style', ...)` or `setAttribute('class', ...)`) on cloned HTML `<template>` nodes inside a hot render loop incurs a severe performance penalty. This forces the browser's JavaScript engine to repeatedly parse the style strings and cross the JS-C++ boundary for each DOM node, leading to major layout thrashing and garbage collection overhead.
 **Action:** Always embed static attributes (like CSS classes) directly into the HTML `<template>` definition. By predefining these attributes, `cloneNode(true)` duplicates them natively in C++ without any JavaScript intervention, completely eliminating loop execution overhead and strictly adhering to the zero-allocation architecture.
+
+## 2024-07-20 - [Zero-Allocation Primitive Memoization]
+**Learning:** For heavy mathematical functions that are called repeatedly with the same numerical inputs, standard memoization using string keys (e.g., \`\${weight}_\${reps}\`) causes memory allocations and GC overhead on every lookup due to string concatenation.
+**Action:** Implement strict zero-allocation memoization by storing results in a null-prototype object (\`Object.create(null)\`) and generating primitive integer keys using simple arithmetic (e.g., \`(Math.round(weight * 10) * 10000) + (reps * 10)\`). This ensures O(1) lookups without any string allocation overhead.

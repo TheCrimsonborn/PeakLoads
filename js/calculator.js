@@ -60,6 +60,9 @@ const RTS_MATRIX = (() => {
     return arr;
 })();
 
+const _cache1RM = Object.create(null);
+const _cacheAdv1RM = Object.create(null);
+
 const Calculator = {
     // Unit Conversion
     toKg: (value, unit) => (unit === 'kg' ? value : value / KG_TO_LB),
@@ -82,10 +85,17 @@ const Calculator = {
         if (!weight || weight <= 0 || !reps || reps <= 0) return 0;
         if (reps === 1) return weight;
 
+        const formulaCode = formula === 'brzycki' ? 1 : formula === 'lombardi' ? 2 : 0;
+        const cacheKey = (Math.round(weight * 10) * 10000) + (reps * 10) + formulaCode;
+        if (_cache1RM[cacheKey] !== undefined) return _cache1RM[cacheKey];
+
         let oneRM = 0;
         switch (formula) {
             case 'brzycki':
-                if (reps >= 37) return 0;
+                if (reps >= 37) {
+                    _cache1RM[cacheKey] = 0;
+                    return 0;
+                }
                 oneRM = weight * (36 / (37 - reps));
                 break;
             case 'lombardi':
@@ -98,7 +108,9 @@ const Calculator = {
         }
 
         // Return rounded value (not necessarily plate rounded for 1RM estimate, just integer or 1 decimal)
-        return Math.round(oneRM * 10) / 10;
+        const result = Math.round(oneRM * 10) / 10;
+        _cache1RM[cacheKey] = result;
+        return result;
     },
 
     // Advanced 1RM Estimator (Ultimate Hybrid Model)
@@ -114,6 +126,9 @@ const Calculator = {
         ) {
             return 0;
         }
+
+        const cacheKey = (Math.round(weight * 10) * 10000) + (reps * 100) + Math.round(rpe * 10);
+        if (_cacheAdv1RM[cacheKey] !== undefined) return _cacheAdv1RM[cacheKey];
 
         let percentage = 0;
 
@@ -133,7 +148,9 @@ const Calculator = {
 
         const raw1RM = weight / (percentage / 100);
 
-        return Math.round(raw1RM * 10) / 10;
+        const result = Math.round(raw1RM * 10) / 10;
+        _cacheAdv1RM[cacheKey] = result;
+        return result;
     },
 
     // Percentage Chart Generator (Base weight in current unit)
