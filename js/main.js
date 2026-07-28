@@ -379,7 +379,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const formula = formulaSelect.value;
 
         if (weight && reps) {
-            val1rm.textContent = Calculator.calculate1RM(weight, reps, formula);
+            const res = String(Calculator.calculate1RM(weight, reps, formula));
+            if (val1rm.textContent !== res) val1rm.textContent = res;
             result1rmCard.classList.remove('hidden');
         }
     });
@@ -392,7 +393,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (weight && reps && rpe) {
             const result = Calculator.calculateAdvanced1RM(weight, reps, rpe);
-            valAdv1rm.textContent = result;
+            const res = String(result);
+            if (valAdv1rm.textContent !== res) valAdv1rm.textContent = res;
             resultAdv1rmCard.classList.remove('hidden');
         }
     });
@@ -448,8 +450,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (weight && reps) {
             const result = Calculator.calculateRIR(weight, reps, rir, tReps, tRir, currentUnit);
-            valRir1rm.textContent = result.est1RM;
-            valRirNext.textContent = result.nextWeight;
+            const res1 = String(result.est1RM);
+            if (valRir1rm.textContent !== res1) valRir1rm.textContent = res1;
+            const res2 = String(result.nextWeight);
+            if (valRirNext.textContent !== res2) valRirNext.textContent = res2;
             resultRirCard.classList.remove('hidden');
         }
     });
@@ -571,12 +575,12 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateUnitDisplays() {
         // NOSONAR - Zero-allocation architecture: index-based loop prevents Symbol.iterator memory overhead.
         for (let i = 0; i < staticUnitDisplays.length; i++) {
-            staticUnitDisplays[i].textContent = currentUnit;
+            if (staticUnitDisplays[i].textContent !== currentUnit) staticUnitDisplays[i].textContent = currentUnit;
         }
 
         // Update hoisted template variables
         for (let i = 0; i < templateUnitDisplays.length; i++) {
-            templateUnitDisplays[i].textContent = currentUnit;
+            if (templateUnitDisplays[i].textContent !== currentUnit) templateUnitDisplays[i].textContent = currentUnit;
         }
     }
 
