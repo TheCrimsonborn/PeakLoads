@@ -1,0 +1,11 @@
+--- js/main.js
++++ js/main.js
+@@ -628,8 +628,7 @@
+             if (row.percent !== '-') {
+                 td4.firstElementChild.textContent = row.weight;
+-                td4.lastElementChild.textContent = currentUnit;
+-                td4.lastElementChild.className = 'unit-display';
++                // ⚡ Bolt: unit is natively cloned from template and pre-filled, so we don't need to set it here!
+             } else {
+                 td4.firstElementChild.textContent = row.weight;
+                 td4.lastElementChild.textContent = '';

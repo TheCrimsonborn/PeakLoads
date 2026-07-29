@@ -245,7 +245,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Zero-allocation: Pre-allocate constants and objects outside hot event paths
     const ALLOWED_KEYS = {
-        'Backspace': true, 'Tab': true, 'Delete': true, 'ArrowLeft': true, 'ArrowRight': true, 
+        'Backspace': true, 'Tab': true, 'Delete': true, 'ArrowLeft': true, 'ArrowRight': true,
         'ArrowUp': true, 'ArrowDown': true, 'Home': true, 'End': true, 'Enter': true, 'Escape': true
     };
     const SYNTHETIC_INPUT_EVENT = new Event('input', { bubbles: true });
@@ -672,7 +672,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const td4 = td3.nextElementSibling;
             if (row.percent !== '-') {
                 td4.firstElementChild.textContent = row.weight;
-                // ⚡ Bolt: unit is natively cloned from template and pre-filled, so we don't need to set it here!
+                td4.lastElementChild.textContent = currentUnit;
+                td4.lastElementChild.className = 'unit-display';
             } else {
                 td4.firstElementChild.textContent = row.weight;
                 td4.lastElementChild.textContent = '';
