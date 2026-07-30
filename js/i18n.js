@@ -274,7 +274,11 @@ const I18n = {
             // ⚡ Bolt: Use getAttribute instead of dataset to avoid DOMStringMap proxy allocation overhead.
             const key = el.getAttribute('data-i18n'); // NOSONAR - Avoid dataset overhead for performance
             if (currentTranslations[key]) {
-                el.textContent = currentTranslations[key];
+                const targetText = currentTranslations[key];
+                // ⚡ Bolt: Conditional DOM write to prevent layout thrashing
+                if (el.textContent !== targetText) {
+                    el.textContent = targetText;
+                }
             }
         }
     },

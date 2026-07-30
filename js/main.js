@@ -379,7 +379,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const formula = formulaSelect.value;
 
         if (weight && reps) {
-            val1rm.textContent = Calculator.calculate1RM(weight, reps, formula);
+            const resultStr = String(Calculator.calculate1RM(weight, reps, formula));
+            // ⚡ Bolt: Conditional DOM write to prevent layout thrashing
+            if (val1rm.textContent !== resultStr) val1rm.textContent = resultStr;
             result1rmCard.classList.remove('hidden');
         }
     });
@@ -391,8 +393,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const rpe = rpeAdv1rmInput.value;
 
         if (weight && reps && rpe) {
-            const result = Calculator.calculateAdvanced1RM(weight, reps, rpe);
-            valAdv1rm.textContent = result;
+            const resultStr = String(Calculator.calculateAdvanced1RM(weight, reps, rpe));
+            // ⚡ Bolt: Conditional DOM write to prevent layout thrashing
+            if (valAdv1rm.textContent !== resultStr) valAdv1rm.textContent = resultStr;
             resultAdv1rmCard.classList.remove('hidden');
         }
     });
@@ -448,8 +451,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (weight && reps) {
             const result = Calculator.calculateRIR(weight, reps, rir, tReps, tRir, currentUnit);
-            valRir1rm.textContent = result.est1RM;
-            valRirNext.textContent = result.nextWeight;
+            const est1RMStr = String(result.est1RM);
+            const nextWeightStr = String(result.nextWeight);
+
+            // ⚡ Bolt: Conditional DOM write to prevent layout thrashing
+            if (valRir1rm.textContent !== est1RMStr) valRir1rm.textContent = est1RMStr;
+            if (valRirNext.textContent !== nextWeightStr) valRirNext.textContent = nextWeightStr;
+
             resultRirCard.classList.remove('hidden');
         }
     });
@@ -571,12 +579,18 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateUnitDisplays() {
         // NOSONAR - Zero-allocation architecture: index-based loop prevents Symbol.iterator memory overhead.
         for (let i = 0; i < staticUnitDisplays.length; i++) {
-            staticUnitDisplays[i].textContent = currentUnit;
+            // ⚡ Bolt: Conditional DOM write to prevent layout thrashing
+            if (staticUnitDisplays[i].textContent !== currentUnit) {
+                staticUnitDisplays[i].textContent = currentUnit;
+            }
         }
 
         // Update hoisted template variables
         for (let i = 0; i < templateUnitDisplays.length; i++) {
-            templateUnitDisplays[i].textContent = currentUnit;
+            // ⚡ Bolt: Conditional DOM write to prevent layout thrashing
+            if (templateUnitDisplays[i].textContent !== currentUnit) {
+                templateUnitDisplays[i].textContent = currentUnit;
+            }
         }
     }
 
