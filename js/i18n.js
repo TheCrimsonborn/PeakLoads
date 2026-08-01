@@ -273,7 +273,7 @@ const I18n = {
             const el = I18n._elementsCache[i];
             // ⚡ Bolt: Use getAttribute instead of dataset to avoid DOMStringMap proxy allocation overhead.
             const key = el.getAttribute('data-i18n'); // NOSONAR - Avoid dataset overhead for performance
-            if (currentTranslations[key]) {
+            if (currentTranslations[key] && el.textContent !== currentTranslations[key]) {
                 el.textContent = currentTranslations[key];
             }
         }
