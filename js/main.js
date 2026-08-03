@@ -379,8 +379,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const formula = formulaSelect.value;
 
         if (weight && reps) {
-            val1rm.textContent = Calculator.calculate1RM(weight, reps, formula);
-            result1rmCard.classList.remove('hidden');
+            const calculated = String(Calculator.calculate1RM(weight, reps, formula));
+            if (val1rm.textContent !== calculated) {
+                val1rm.textContent = calculated;
+            }
+            if (result1rmCard.classList.contains('hidden')) {
+                result1rmCard.classList.remove('hidden');
+            }
         }
     });
 
@@ -391,9 +396,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const rpe = rpeAdv1rmInput.value;
 
         if (weight && reps && rpe) {
-            const result = Calculator.calculateAdvanced1RM(weight, reps, rpe);
-            valAdv1rm.textContent = result;
-            resultAdv1rmCard.classList.remove('hidden');
+            const result = String(Calculator.calculateAdvanced1RM(weight, reps, rpe));
+            if (valAdv1rm.textContent !== result) {
+                valAdv1rm.textContent = result;
+            }
+            if (resultAdv1rmCard.classList.contains('hidden')) {
+                resultAdv1rmCard.classList.remove('hidden');
+            }
         }
     });
 
@@ -448,9 +457,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (weight && reps) {
             const result = Calculator.calculateRIR(weight, reps, rir, tReps, tRir, currentUnit);
-            valRir1rm.textContent = result.est1RM;
-            valRirNext.textContent = result.nextWeight;
-            resultRirCard.classList.remove('hidden');
+            const est1RM = String(result.est1RM);
+            const nextWeight = String(result.nextWeight);
+            if (valRir1rm.textContent !== est1RM) {
+                valRir1rm.textContent = est1RM;
+            }
+            if (valRirNext.textContent !== nextWeight) {
+                valRirNext.textContent = nextWeight;
+            }
+            if (resultRirCard.classList.contains('hidden')) {
+                resultRirCard.classList.remove('hidden');
+            }
         }
     });
 
@@ -571,12 +588,16 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateUnitDisplays() {
         // NOSONAR - Zero-allocation architecture: index-based loop prevents Symbol.iterator memory overhead.
         for (let i = 0; i < staticUnitDisplays.length; i++) {
-            staticUnitDisplays[i].textContent = currentUnit;
+            if (staticUnitDisplays[i].textContent !== currentUnit) {
+                staticUnitDisplays[i].textContent = currentUnit;
+            }
         }
 
         // Update hoisted template variables
         for (let i = 0; i < templateUnitDisplays.length; i++) {
-            templateUnitDisplays[i].textContent = currentUnit;
+            if (templateUnitDisplays[i].textContent !== currentUnit) {
+                templateUnitDisplays[i].textContent = currentUnit;
+            }
         }
     }
 
