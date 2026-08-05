@@ -571,12 +571,18 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateUnitDisplays() {
         // NOSONAR - Zero-allocation architecture: index-based loop prevents Symbol.iterator memory overhead.
         for (let i = 0; i < staticUnitDisplays.length; i++) {
-            staticUnitDisplays[i].textContent = currentUnit;
+            // ⚡ Bolt: Conditional DOM write prevents expensive C++ boundary crossing when the text already matches
+            if (staticUnitDisplays[i].textContent !== currentUnit) {
+                staticUnitDisplays[i].textContent = currentUnit;
+            }
         }
 
         // Update hoisted template variables
         for (let i = 0; i < templateUnitDisplays.length; i++) {
-            templateUnitDisplays[i].textContent = currentUnit;
+            // ⚡ Bolt: Conditional DOM write prevents expensive C++ boundary crossing when the text already matches
+            if (templateUnitDisplays[i].textContent !== currentUnit) {
+                templateUnitDisplays[i].textContent = currentUnit;
+            }
         }
     }
 
