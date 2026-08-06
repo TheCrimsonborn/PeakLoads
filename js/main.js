@@ -379,7 +379,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const formula = formulaSelect.value;
 
         if (weight && reps) {
-            val1rm.textContent = Calculator.calculate1RM(weight, reps, formula);
+            const calcResult = Calculator.calculate1RM(weight, reps, formula);
+            if (val1rm.textContent !== String(calcResult)) { val1rm.textContent = calcResult; } // ⚡ Bolt: Conditional DOM write avoids thrashing
             result1rmCard.classList.remove('hidden');
         }
     });
@@ -392,7 +393,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (weight && reps && rpe) {
             const result = Calculator.calculateAdvanced1RM(weight, reps, rpe);
-            valAdv1rm.textContent = result;
+            if (valAdv1rm.textContent !== String(result)) { valAdv1rm.textContent = result; } // ⚡ Bolt: Conditional DOM write avoids thrashing
             resultAdv1rmCard.classList.remove('hidden');
         }
     });
@@ -448,8 +449,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (weight && reps) {
             const result = Calculator.calculateRIR(weight, reps, rir, tReps, tRir, currentUnit);
-            valRir1rm.textContent = result.est1RM;
-            valRirNext.textContent = result.nextWeight;
+            if (valRir1rm.textContent !== String(result.est1RM)) { valRir1rm.textContent = result.est1RM; } // ⚡ Bolt: Conditional DOM write avoids thrashing
+            if (valRirNext.textContent !== String(result.nextWeight)) { valRirNext.textContent = result.nextWeight; } // ⚡ Bolt: Conditional DOM write avoids thrashing
             resultRirCard.classList.remove('hidden');
         }
     });
@@ -571,12 +572,12 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateUnitDisplays() {
         // NOSONAR - Zero-allocation architecture: index-based loop prevents Symbol.iterator memory overhead.
         for (let i = 0; i < staticUnitDisplays.length; i++) {
-            staticUnitDisplays[i].textContent = currentUnit;
+            if (staticUnitDisplays[i].textContent !== currentUnit) { staticUnitDisplays[i].textContent = currentUnit; } // ⚡ Bolt: Conditional DOM write avoids thrashing
         }
 
         // Update hoisted template variables
         for (let i = 0; i < templateUnitDisplays.length; i++) {
-            templateUnitDisplays[i].textContent = currentUnit;
+            if (templateUnitDisplays[i].textContent !== currentUnit) { templateUnitDisplays[i].textContent = currentUnit; } // ⚡ Bolt: Conditional DOM write avoids thrashing
         }
     }
 
