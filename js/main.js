@@ -80,13 +80,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ⚡ Bolt: Cache unit displays inside templates to update them statically,
     // avoiding redundant unit text content assignments on every row render.
-    const templateUnitDisplays = [];
     const templates = document.querySelectorAll('template');
+
+    // First, count total required capacity to avoid dynamic array resizing / push() overhead
+    let totalUnitDisplays = staticUnitDisplays.length;
+    // NOSONAR - Zero-allocation architecture: index-based loop prevents Symbol.iterator memory overhead.
+    for (let i = 0; i < templates.length; i++) {
+        totalUnitDisplays += templates[i].content.querySelectorAll('.unit-display').length;
+    }
+
+    // ⚡ Bolt: Pre-allocate a single flat array for all unit displays (document + templates)
+    const allUnitDisplays = new Array(totalUnitDisplays);
+    let unitDisplayIdx = 0;
+
+    // NOSONAR - Zero-allocation architecture: index-based loop prevents Symbol.iterator memory overhead.
+    for (let i = 0; i < staticUnitDisplays.length; i++) {
+        allUnitDisplays[unitDisplayIdx++] = staticUnitDisplays[i];
+    }
+
+    const templateUnitDisplays = [];
     // NOSONAR - Zero-allocation architecture: index-based loop prevents Symbol.iterator memory overhead.
     for (let i = 0; i < templates.length; i++) {
         const units = templates[i].content.querySelectorAll('.unit-display');
         for (let j = 0; j < units.length; j++) {
-            templateUnitDisplays.push(units[j]);
+            allUnitDisplays[unitDisplayIdx++] = units[j];
+            templateUnitDisplays.push(units[j]); // Keep for backwards compatibility with tests / logic
         }
     }
 
@@ -570,13 +588,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateUnitDisplays() {
         // NOSONAR - Zero-allocation architecture: index-based loop prevents Symbol.iterator memory overhead.
-        for (let i = 0; i < staticUnitDisplays.length; i++) {
-            staticUnitDisplays[i].textContent = currentUnit;
-        }
-
-        // Update hoisted template variables
-        for (let i = 0; i < templateUnitDisplays.length; i++) {
-            templateUnitDisplays[i].textContent = currentUnit;
+        for (let i = 0; i < allUnitDisplays.length; i++) {
+            // ⚡ Bolt: Conditional early return before crossing JS/DOM boundary
+            if (allUnitDisplays[i].textContent !== currentUnit) {
+                allUnitDisplays[i].textContent = currentUnit;
+            }
         }
     }
 

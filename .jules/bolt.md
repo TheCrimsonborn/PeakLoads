@@ -100,3 +100,7 @@ You must not blindly apply fixes suggested by Qodana, CodeQL, or SonarCloud. Eve
 ## 2026-11-10 - [Hoist Template Inner Content to Avoid Render Redundancy]
 **Learning:** When using HTML `<template>` elements inside hot loops, manipulating fixed properties like units (`kg`/`lb`) per row forces a JavaScript execution payload per cloned item. Since `cloneNode(true)` clones elements exactly as they are in C++, pre-filling these attributes or contents on the `<template>` element directly removes this operation from the row iteration loop.
 **Action:** Always pre-fill stable variables (like current unit labels or static icons) in the underlying `<template>` elements *before* cloning, rather than manipulating them in the `.cloneNode()` instantiation loop, adhering rigidly to mechanical sympathy and Zero-Allocation optimizations.
+
+## 2026-11-20 - [Combine NodeLists to avoid iteration duplication]
+**Learning:** Iterating over multiple `NodeList`s (e.g. elements in main document and elements inside templates) to apply the same operation introduces duplicate loop overhead and code duplication warnings in SonarCloud. Creating a dynamic array using `.push()` inside the loops causes memory allocations.
+**Action:** Combine the elements into a single pre-allocated array (e.g., `new Array(totalLength)`) during initialization. This allows hot paths to use a single index-based loop over the combined array, adhering strictly to Zero-Allocation constraints.
