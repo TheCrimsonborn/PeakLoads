@@ -1,8 +1,12 @@
 docker-compose.yml
+docker-compose.*.yml
+compose.yaml
+compose.yml
 Dockerfile
 .git
 node_modules
 .env
+.env.*
 .tar
 .github
 .vscode
