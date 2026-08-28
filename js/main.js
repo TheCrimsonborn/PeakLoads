@@ -571,12 +571,12 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateUnitDisplays() {
         // NOSONAR - Zero-allocation architecture: index-based loop prevents Symbol.iterator memory overhead.
         for (let i = 0; i < staticUnitDisplays.length; i++) {
-            staticUnitDisplays[i].textContent = currentUnit;
+            if (staticUnitDisplays[i].textContent !== currentUnit) staticUnitDisplays[i].textContent = currentUnit;
         }
 
         // Update hoisted template variables
         for (let i = 0; i < templateUnitDisplays.length; i++) {
-            templateUnitDisplays[i].textContent = currentUnit;
+            if (templateUnitDisplays[i].textContent !== currentUnit) templateUnitDisplays[i].textContent = currentUnit;
         }
     }
 
@@ -672,12 +672,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const td4 = td3.nextElementSibling;
             if (row.percent !== '-') {
                 td4.firstElementChild.textContent = row.weight;
-                td4.lastElementChild.textContent = currentUnit;
-                td4.lastElementChild.className = 'unit-display';
+                if (td4.lastElementChild.textContent !== currentUnit) td4.lastElementChild.textContent = currentUnit;
+                if (td4.lastElementChild.className !== 'unit-display') td4.lastElementChild.className = 'unit-display';
             } else {
                 td4.firstElementChild.textContent = row.weight;
-                td4.lastElementChild.textContent = '';
-                td4.lastElementChild.className = '';
+                if (td4.lastElementChild.textContent !== '') td4.lastElementChild.textContent = '';
+                if (td4.lastElementChild.className !== '') td4.lastElementChild.className = '';
             }
 
             const td5 = td4.nextElementSibling;
