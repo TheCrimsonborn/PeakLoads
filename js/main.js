@@ -636,10 +636,12 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderPercentageTable(data) {
         renderTableData(tableBodyPct, data, 'tpl-pct-row', (tr, row) => {
             const td1 = tr.firstElementChild;
-            td1.textContent = `${row.percent}%`;
+            const strPct = `${row.percent}%`;
+            if (td1.textContent !== strPct) td1.textContent = strPct;
 
             const td2 = td1.nextElementSibling;
-            td2.firstElementChild.textContent = row.weight;
+            const strWeight = String(row.weight);
+            if (td2.firstElementChild.textContent !== strWeight) td2.firstElementChild.textContent = strWeight;
             // ⚡ Bolt: unit is natively cloned from template
         });
     }
@@ -647,44 +649,52 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderWarmupTable(data) {
         renderTableData(tableBodyWarmup, data, 'tpl-warmup-row', (tr, row) => {
             const td1 = tr.firstElementChild;
-            td1.textContent = `${row.percent}%`;
+            const strPct = `${row.percent}%`;
+            if (td1.textContent !== strPct) td1.textContent = strPct;
 
             const td2 = td1.nextElementSibling;
-            td2.firstElementChild.textContent = row.weight;
+            const strWeight = String(row.weight);
+            if (td2.firstElementChild.textContent !== strWeight) td2.firstElementChild.textContent = strWeight;
             // ⚡ Bolt: unit is natively cloned from template
 
             const td3 = td2.nextElementSibling;
-            td3.textContent = row.reps;
+            const strReps = String(row.reps);
+            if (td3.textContent !== strReps) td3.textContent = strReps;
         });
     }
 
     function renderAdvWarmupTable(data) {
         renderTableData(tableBodyAdvWarmup, data, 'tpl-adv-warmup-row', (tr, row) => {
             const td1 = tr.firstElementChild;
-            td1.textContent = row.stage;
+            if (td1.textContent !== row.stage) td1.textContent = row.stage;
 
             const td2 = td1.nextElementSibling;
-            td2.textContent = row.purposeStr;
+            if (td2.textContent !== row.purposeStr) td2.textContent = row.purposeStr;
 
             const td3 = td2.nextElementSibling;
-            td3.textContent = row.percent === '-' ? '-' : `${row.percent}%`;
+            const strPct = row.percent === '-' ? '-' : `${row.percent}%`;
+            if (td3.textContent !== strPct) td3.textContent = strPct;
 
             const td4 = td3.nextElementSibling;
+            const strWeight = String(row.weight);
             if (row.percent !== '-') {
-                td4.firstElementChild.textContent = row.weight;
-                td4.lastElementChild.textContent = currentUnit;
-                td4.lastElementChild.className = 'unit-display';
+                if (td4.firstElementChild.textContent !== strWeight) td4.firstElementChild.textContent = strWeight;
+                // ⚡ Bolt: Conditional DOM writes to prevent crossing JS-C++ boundary when value matches template default
+                if (td4.lastElementChild.textContent !== currentUnit) td4.lastElementChild.textContent = currentUnit;
+                if (td4.lastElementChild.className !== 'unit-display') td4.lastElementChild.className = 'unit-display';
             } else {
-                td4.firstElementChild.textContent = row.weight;
-                td4.lastElementChild.textContent = '';
-                td4.lastElementChild.className = '';
+                if (td4.firstElementChild.textContent !== strWeight) td4.firstElementChild.textContent = strWeight;
+                // ⚡ Bolt: Conditional DOM writes for fluctuating state
+                if (td4.lastElementChild.textContent !== '') td4.lastElementChild.textContent = '';
+                if (td4.lastElementChild.className !== '') td4.lastElementChild.className = '';
             }
 
             const td5 = td4.nextElementSibling;
-            td5.textContent = row.reps;
+            const strReps = String(row.reps);
+            if (td5.textContent !== strReps) td5.textContent = strReps;
 
             const td6 = td5.nextElementSibling;
-            td6.textContent = row.notes;
+            if (td6.textContent !== row.notes) td6.textContent = row.notes;
         });
     }
 
