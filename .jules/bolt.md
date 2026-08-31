@@ -100,3 +100,7 @@ You must not blindly apply fixes suggested by Qodana, CodeQL, or SonarCloud. Eve
 ## 2026-11-10 - [Hoist Template Inner Content to Avoid Render Redundancy]
 **Learning:** When using HTML `<template>` elements inside hot loops, manipulating fixed properties like units (`kg`/`lb`) per row forces a JavaScript execution payload per cloned item. Since `cloneNode(true)` clones elements exactly as they are in C++, pre-filling these attributes or contents on the `<template>` element directly removes this operation from the row iteration loop.
 **Action:** Always pre-fill stable variables (like current unit labels or static icons) in the underlying `<template>` elements *before* cloning, rather than manipulating them in the `.cloneNode()` instantiation loop, adhering rigidly to mechanical sympathy and Zero-Allocation optimizations.
+
+## 2026-12-05 - [Conditional Checks for DOM Writes]
+**Learning:** Performing unconditional DOM property assignments (like `node.textContent = 'val'` or `node.className = 'val'`) in hot render loops forces the browser's JavaScript engine to cross the JS-C++ boundary and potentially trigger layout recalculations, even if the new value is identical to the current value.
+**Action:** Always wrap DOM property assignments in conditional checks (e.g., `if (node.textContent !== val) node.textContent = val`). This leverages the CPU's branch predictor to bypass the expensive DOM operation entirely when the value hasn't changed, significantly improving render performance.
