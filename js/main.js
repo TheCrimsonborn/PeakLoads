@@ -636,10 +636,12 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderPercentageTable(data) {
         renderTableData(tableBodyPct, data, 'tpl-pct-row', (tr, row) => {
             const td1 = tr.firstElementChild;
-            td1.textContent = `${row.percent}%`;
+            const pctText = `${row.percent}%`;
+            if (td1.textContent !== pctText) td1.textContent = pctText;
 
             const td2 = td1.nextElementSibling;
-            td2.firstElementChild.textContent = row.weight;
+            const weightText = String(row.weight);
+            if (td2.firstElementChild.textContent !== weightText) td2.firstElementChild.textContent = weightText;
             // ⚡ Bolt: unit is natively cloned from template
         });
     }
@@ -647,44 +649,51 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderWarmupTable(data) {
         renderTableData(tableBodyWarmup, data, 'tpl-warmup-row', (tr, row) => {
             const td1 = tr.firstElementChild;
-            td1.textContent = `${row.percent}%`;
+            const pctText = `${row.percent}%`;
+            if (td1.textContent !== pctText) td1.textContent = pctText;
 
             const td2 = td1.nextElementSibling;
-            td2.firstElementChild.textContent = row.weight;
+            const weightText = String(row.weight);
+            if (td2.firstElementChild.textContent !== weightText) td2.firstElementChild.textContent = weightText;
             // ⚡ Bolt: unit is natively cloned from template
 
             const td3 = td2.nextElementSibling;
-            td3.textContent = row.reps;
+            const repsText = String(row.reps);
+            if (td3.textContent !== repsText) td3.textContent = repsText;
         });
     }
 
     function renderAdvWarmupTable(data) {
         renderTableData(tableBodyAdvWarmup, data, 'tpl-adv-warmup-row', (tr, row) => {
             const td1 = tr.firstElementChild;
-            td1.textContent = row.stage;
+            const stageText = String(row.stage);
+            if (td1.textContent !== stageText) td1.textContent = stageText;
 
             const td2 = td1.nextElementSibling;
-            td2.textContent = row.purposeStr;
+            if (td2.textContent !== row.purposeStr) td2.textContent = row.purposeStr;
 
             const td3 = td2.nextElementSibling;
-            td3.textContent = row.percent === '-' ? '-' : `${row.percent}%`;
+            const pctText = row.percent === '-' ? '-' : `${row.percent}%`;
+            if (td3.textContent !== pctText) td3.textContent = pctText;
 
             const td4 = td3.nextElementSibling;
+            const weightText = String(row.weight);
             if (row.percent !== '-') {
-                td4.firstElementChild.textContent = row.weight;
-                td4.lastElementChild.textContent = currentUnit;
-                td4.lastElementChild.className = 'unit-display';
+                if (td4.firstElementChild.textContent !== weightText) td4.firstElementChild.textContent = weightText;
+                if (td4.lastElementChild.textContent !== currentUnit) td4.lastElementChild.textContent = currentUnit;
+                if (td4.lastElementChild.className !== 'unit-display') td4.lastElementChild.className = 'unit-display';
             } else {
-                td4.firstElementChild.textContent = row.weight;
-                td4.lastElementChild.textContent = '';
-                td4.lastElementChild.className = '';
+                if (td4.firstElementChild.textContent !== weightText) td4.firstElementChild.textContent = weightText;
+                if (td4.lastElementChild.textContent !== '') td4.lastElementChild.textContent = '';
+                if (td4.lastElementChild.className !== '') td4.lastElementChild.className = '';
             }
 
             const td5 = td4.nextElementSibling;
-            td5.textContent = row.reps;
+            const repsText = String(row.reps);
+            if (td5.textContent !== repsText) td5.textContent = repsText;
 
             const td6 = td5.nextElementSibling;
-            td6.textContent = row.notes;
+            if (td6.textContent !== row.notes) td6.textContent = row.notes;
         });
     }
 
