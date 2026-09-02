@@ -61,6 +61,7 @@ let analyticsLoaded = false;
 document.addEventListener('DOMContentLoaded', () => {
     // State
     let currentUnit = 'kg'; // 'kg' or 'lb'
+    let _lastUnitDisplay = null; // ⚡ Bolt: Cache current string value to prevent redundant DOM assignments and layout thrashing
 
     // DOM Elements
     const cachedStateInputs = [];
@@ -569,6 +570,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateUnitDisplays() {
+        // ⚡ Bolt: Early return prevents crossing JS-C++ boundary for redundant DOM writes
+        if (_lastUnitDisplay === currentUnit) return;
+        _lastUnitDisplay = currentUnit;
+
         // NOSONAR - Zero-allocation architecture: index-based loop prevents Symbol.iterator memory overhead.
         for (let i = 0; i < staticUnitDisplays.length; i++) {
             staticUnitDisplays[i].textContent = currentUnit;
