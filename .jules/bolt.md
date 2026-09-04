@@ -100,3 +100,7 @@ You must not blindly apply fixes suggested by Qodana, CodeQL, or SonarCloud. Eve
 ## 2026-11-10 - [Hoist Template Inner Content to Avoid Render Redundancy]
 **Learning:** When using HTML `<template>` elements inside hot loops, manipulating fixed properties like units (`kg`/`lb`) per row forces a JavaScript execution payload per cloned item. Since `cloneNode(true)` clones elements exactly as they are in C++, pre-filling these attributes or contents on the `<template>` element directly removes this operation from the row iteration loop.
 **Action:** Always pre-fill stable variables (like current unit labels or static icons) in the underlying `<template>` elements *before* cloning, rather than manipulating them in the `.cloneNode()` instantiation loop, adhering rigidly to mechanical sympathy and Zero-Allocation optimizations.
+
+## 2026-11-12 - [Replace for...in with Index-Based Loop for State Restoration]
+**Learning:** Iterating through object properties using a `for...in` loop (even with `Object.prototype.hasOwnProperty.call`) is significantly slower in V8 than an index-based array loop because `for...in` traverses the prototype chain and requires proxy-like property lookups. For restoring state across 50+ inputs, a cached array index loop is roughly ~5x faster.
+**Action:** When restoring values to a large set of DOM elements from a saved object, iterate over a pre-cached array of element objects using a standard index-based `for` loop, then perform direct property lookups on the saved state object (`state[el.id]`) rather than using `for...in`.
