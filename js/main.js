@@ -77,16 +77,29 @@ document.addEventListener('DOMContentLoaded', () => {
     // Using static NodeList over live HTMLCollection to avoid redundant DOM writes
     // on ephemeral elements that are immediately destroyed and re-rendered.
     const staticUnitDisplays = document.querySelectorAll('.unit-display');
-
-    // ⚡ Bolt: Cache unit displays inside templates to update them statically,
-    // avoiding redundant unit text content assignments on every row render.
-    const templateUnitDisplays = [];
     const templates = document.querySelectorAll('template');
-    // NOSONAR - Zero-allocation architecture: index-based loop prevents Symbol.iterator memory overhead.
+
+    // ⚡ Bolt: Combine static and template unit displays into a single pre-allocated array
+    // to avoid dynamic array resizing overhead and de-duplicate the update loop.
+    let totalUnitDisplays = staticUnitDisplays.length;
+    const templateUnits = new Array(templates.length);
     for (let i = 0; i < templates.length; i++) {
         const units = templates[i].content.querySelectorAll('.unit-display');
+        templateUnits[i] = units;
+        totalUnitDisplays += units.length;
+    }
+
+    const allUnitDisplays = new Array(totalUnitDisplays);
+    let allUnitsIdx = 0;
+
+    for (let i = 0; i < staticUnitDisplays.length; i++) {
+        allUnitDisplays[allUnitsIdx++] = staticUnitDisplays[i];
+    }
+
+    for (let i = 0; i < templateUnits.length; i++) {
+        const units = templateUnits[i];
         for (let j = 0; j < units.length; j++) {
-            templateUnitDisplays.push(units[j]);
+            allUnitDisplays[allUnitsIdx++] = units[j];
         }
     }
 
@@ -570,13 +583,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateUnitDisplays() {
         // NOSONAR - Zero-allocation architecture: index-based loop prevents Symbol.iterator memory overhead.
-        for (let i = 0; i < staticUnitDisplays.length; i++) {
-            staticUnitDisplays[i].textContent = currentUnit;
-        }
-
-        // Update hoisted template variables
-        for (let i = 0; i < templateUnitDisplays.length; i++) {
-            templateUnitDisplays[i].textContent = currentUnit;
+        for (let i = 0; i < allUnitDisplays.length; i++) {
+            allUnitDisplays[i].textContent = currentUnit;
         }
     }
 
