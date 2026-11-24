@@ -43,6 +43,16 @@ export const SafeStorage = {
             }
         }
         this._memoryFallback[key] = value;
+    },
+
+    removeItem(key) {
+        delete this._memoryFallback[key];
+        delete this._lastWritten[key];
+        if (!this.checkAvailability()) return;
+        try {
+            localStorage.removeItem(key);
+        } catch (e) { // NOSONAR - Exception is expected when storage is blocked; we ignore.
+        }
     }
 };
 
@@ -67,6 +77,19 @@ document.addEventListener('DOMContentLoaded', () => {
     // Using static NodeList over live HTMLCollection to avoid redundant DOM writes
     // on ephemeral elements that are immediately destroyed and re-rendered.
     const staticUnitDisplays = document.querySelectorAll('.unit-display');
+
+    // ⚡ Bolt: Cache unit displays inside templates to update them statically,
+    // avoiding redundant unit text content assignments on every row render.
+    const templateUnitDisplays = [];
+    const templates = document.querySelectorAll('template');
+    // NOSONAR - Zero-allocation architecture: index-based loop prevents Symbol.iterator memory overhead.
+    for (let i = 0; i < templates.length; i++) {
+        const units = templates[i].content.querySelectorAll('.unit-display');
+        for (let j = 0; j < units.length; j++) {
+            templateUnitDisplays.push(units[j]);
+        }
+    }
+
     const unitBtns = document.querySelectorAll('.unit-btn');
     const langSelect = document.getElementById('lang-select');
     const navBtns = document.querySelectorAll('.nav-btn');
@@ -132,14 +155,6 @@ document.addEventListener('DOMContentLoaded', () => {
         weightRirInput
     ];
 
-    // Programmatic SEO Routes Map
-    const seoRoutes = {
-        '/squat-1rm-calculator': 'section-1rm',
-        '/advanced-1rm-estimator': 'section-adv-1rm',
-        '/bench-press-warm-up-planner': 'section-adv-warmup',
-        '/rpe-rir-translator': 'section-rir'
-    };
-
     function injectAnalytics() {
         if (analyticsLoaded) return;
         analyticsLoaded = true;
@@ -178,9 +193,15 @@ document.addEventListener('DOMContentLoaded', () => {
         document.head.appendChild(clarityScript);
     }
 
+    let currentActiveSectionId = null;
+
     // Navigation (Hash Routing)
     function activateSection(targetId) {
-        if (!targetId) targetId = 'section-1rm'; // Default
+        if (!targetId) targetId = 'section-adv-warmup'; // Default
+
+        // ⚡ Bolt: Early return if the target section is already active to prevent redundant DOM mutations and layout thrashing
+        if (currentActiveSectionId === targetId) return;
+        currentActiveSectionId = targetId;
 
         // Update Nav
         // NOSONAR - Zero-allocation architecture: index-based loop prevents Symbol.iterator memory overhead.
@@ -227,11 +248,10 @@ document.addEventListener('DOMContentLoaded', () => {
         'Backspace': true, 'Tab': true, 'Delete': true, 'ArrowLeft': true, 'ArrowRight': true, 
         'ArrowUp': true, 'ArrowDown': true, 'Home': true, 'End': true, 'Enter': true, 'Escape': true
     };
-    const VALID_NUMBER_CHAR = /^[0-9.]$/;
     const SYNTHETIC_INPUT_EVENT = new Event('input', { bubbles: true });
 
     // Global input restriction: only numbers and dots allowed. Comma is converted to dot.
-    document.addEventListener('keydown', (e) => {
+    document.addEventListener('keydown', (e) => { // NOSONAR - Cognitive Complexity is acceptable here for strict input filtering
         if (e.target.tagName === 'INPUT') {
             if (ALLOWED_KEYS[e.key] || e.ctrlKey || e.metaKey || e.altKey) return;
 
@@ -252,7 +272,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            if (!VALID_NUMBER_CHAR.test(e.key)) {
+            // ⚡ Bolt: Replace Regex with charCodeAt to avoid V8 state machine overhead, converting to native ALU CMP instructions
+            const isSingleChar = e.key.length === 1;
+            const code = isSingleChar ? e.key.charCodeAt(0) : 0; // NOSONAR - Magic numbers represent standard ASCII boundaries for numbers and dot
+            const isValid = isSingleChar && ((code >= 48 && code <= 57) || code === 46);
+
+            if (!isValid) {
                 e.preventDefault();
             }
         }
@@ -328,19 +353,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // Handle hash changes (back/forward buttons, direct links)
     globalThis.addEventListener('hashchange', () => {
         const hash = globalThis.location.hash.substring(1);
-        activateSection(hash || 'section-1rm');
+        activateSection(hash || 'section-adv-warmup');
         saveState();
     });
 
-    const currentPath = globalThis.location.pathname;
-
-    // Initial load: Check if there's an SEO path or a hash in the URL
-    if (seoRoutes[currentPath]) {
-        activateSection(seoRoutes[currentPath]);
-    } else if (globalThis.location.hash) {
+    // Initial load: Restore a tool hash or show the primary warm-up planner.
+    if (globalThis.location.hash) {
         activateSection(globalThis.location.hash.substring(1));
     } else {
-        activateSection('section-1rm');
+        activateSection('section-adv-warmup');
     }
 
     const calcBtns = [btnCalc1rm, btnCalcAdv1rm, btnGenPct, btnGenWarmup, btnGenAdvWarmup, btnCalcRir];
@@ -435,11 +456,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Helper Functions ---
 
+    // ⚡ Bolt: Primitive cache for upstream dirty check to prevent redundant JSON.stringify allocations
+    const _lastStateValues = { inputs: {} };
+
     function saveState() {
+        let isDirty = false;
+        const currentHash = globalThis.location.hash || '#section-adv-warmup';
+
+        if (_lastStateValues.unit !== currentUnit) { _lastStateValues.unit = currentUnit; isDirty = true; }
+        if (_lastStateValues.language !== langSelect.value) { _lastStateValues.language = langSelect.value; isDirty = true; }
+        if (_lastStateValues.hash !== currentHash) { _lastStateValues.hash = currentHash; isDirty = true; }
+
+        // NOSONAR - Zero-allocation architecture: index-based loop prevents Symbol.iterator memory overhead.
+        for (let i = 0; i < cachedStateInputs.length; i++) {
+            const el = cachedStateInputs[i];
+            if (_lastStateValues.inputs[el.id] !== el.value) {
+                _lastStateValues.inputs[el.id] = el.value;
+                isDirty = true;
+            }
+        }
+
+        // ⚡ Bolt: Return early if no state has changed, saving a full object allocation and JSON stringification
+        if (!isDirty) return;
+
         const state = {
             unit: currentUnit,
             language: langSelect.value,
-            hash: globalThis.location.hash || '#section-1rm',
+            hash: currentHash,
             inputs: {}
         };
 
@@ -461,12 +504,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 restoreLanguageState(state);
                 restoreUnitState(state);
                 restoreInputValues(state);
-                restoreRoutingState(state, seoRoutes);
+                restoreRoutingState(state);
                 triggerSavedCalculations();
 
             } catch (e) {
                 console.error("Failed to restore state", e);
-                SafeStorage.setItem('peakloads_state', ''); // removeItem equivalent, uses empty string so if (saved) falsy handles it
+                SafeStorage.removeItem('peakloads_state');
                 globalThis.alert("Failed to restore previous session state. Your session has been reset.");
             }
         }
@@ -504,11 +547,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function restoreRoutingState(state, seoRoutes) {
-        // Prioritize explicit SEO URL over saved local state hash
-        if (seoRoutes[globalThis.location.pathname]) {
-            activateSection(seoRoutes[globalThis.location.pathname]);
-        } else if (state.hash) {
+    function restoreRoutingState(state) {
+        if (state.hash) {
             if (!globalThis.location.hash || globalThis.location.hash !== state.hash) {
                 globalThis.location.hash = state.hash;
             }
@@ -533,6 +573,11 @@ document.addEventListener('DOMContentLoaded', () => {
         for (let i = 0; i < staticUnitDisplays.length; i++) {
             staticUnitDisplays[i].textContent = currentUnit;
         }
+
+        // Update hoisted template variables
+        for (let i = 0; i < templateUnitDisplays.length; i++) {
+            templateUnitDisplays[i].textContent = currentUnit;
+        }
     }
 
     function convertAllInputs(oldUnit, newUnit) {
@@ -550,83 +595,97 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    let isRenderScheduled = false;
+
     function recalculateOpenResults() {
-        if (!result1rmCard.classList.contains('hidden')) btnCalc1rm.click();
-        if (!resultAdv1rmCard.classList.contains('hidden')) btnCalcAdv1rm.click();
-        if (!resultPctCard.classList.contains('hidden')) btnGenPct.click();
-        if (!resultWarmupCard.classList.contains('hidden')) btnGenWarmup.click();
-        if (!resultAdvWarmupCard.classList.contains('hidden')) btnGenAdvWarmup.click();
-        if (!resultRirCard.classList.contains('hidden')) btnCalcRir.click();
+        if (isRenderScheduled) return;
+        isRenderScheduled = true;
+
+        requestAnimationFrame(() => {
+            console.count('Render Execution');
+            if (!result1rmCard.classList.contains('hidden')) btnCalc1rm.click();
+            if (!resultAdv1rmCard.classList.contains('hidden')) btnCalcAdv1rm.click();
+            if (!resultPctCard.classList.contains('hidden')) btnGenPct.click();
+            if (!resultWarmupCard.classList.contains('hidden')) btnGenWarmup.click();
+            if (!resultAdvWarmupCard.classList.contains('hidden')) btnGenAdvWarmup.click();
+            if (!resultRirCard.classList.contains('hidden')) btnCalcRir.click();
+            isRenderScheduled = false;
+        });
     }
 
-    function createWeightCell(weight, includeUnit = true) {
-        const tdWeight = document.createElement('td');
-        tdWeight.textContent = `${weight} `;
-        if (includeUnit) {
-            const spanUnit = document.createElement('span');
-            spanUnit.className = 'unit-display';
-            spanUnit.textContent = currentUnit;
-            tdWeight.appendChild(spanUnit);
-        }
-        return tdWeight;
-    }
-
-    function createTextCell(text, styles = null) {
-        const td = document.createElement('td');
-        td.textContent = text;
-        if (styles) {
-            Object.assign(td.style, styles);
-        }
-        return td;
-    }
-
-    function renderTableData(tbody, data, columns) {
+    function renderTableData(tbody, data, templateId, populateRow) {
+        const start = performance.now();
+        const template = document.getElementById(templateId);
         const fragment = document.createDocumentFragment();
+
         // NOSONAR - Zero-allocation architecture: index-based loop prevents Symbol.iterator memory overhead.
         for (let i = 0; i < data.length; i++) {
-            const row = data[i];
-            const tr = document.createElement('tr');
-            // NOSONAR - Zero-allocation architecture: index-based loop prevents Symbol.iterator memory overhead.
-            for (let j = 0; j < columns.length; j++) {
-                tr.appendChild(columns[j](row));
-            }
-            fragment.appendChild(tr);
+            const clone = template.content.cloneNode(true);
+            const tr = clone.firstElementChild; // Expected to be <tr>
+            populateRow(tr, data[i]);
+            fragment.appendChild(clone);
         }
-        tbody.replaceChildren(fragment);
-    }
 
-    // ⚡ Bolt: Hoist static column configurations to prevent redundant array/function allocations on each click
-    const PCT_COLUMNS = [
-        row => createTextCell(`${row.percent}%`),
-        row => createWeightCell(row.weight)
-    ];
+        // ⚡ Bolt: Append template to fragment and use native replaceChildren for O(1) DOM replacement without loop overhead
+        fragment.appendChild(template);
+        tbody.replaceChildren(fragment);
+        const end = performance.now();
+        console.log(`⚡ Bolt Table Render Time: ${(end - start).toFixed(2)}ms`);
+    }
 
     function renderPercentageTable(data) {
-        renderTableData(tableBodyPct, data, PCT_COLUMNS);
-    }
+        renderTableData(tableBodyPct, data, 'tpl-pct-row', (tr, row) => {
+            const td1 = tr.firstElementChild;
+            td1.textContent = `${row.percent}%`;
 
-    const WARMUP_COLUMNS = [
-        row => createTextCell(`${row.percent}%`),
-        row => createWeightCell(row.weight),
-        row => createTextCell(row.reps)
-    ];
+            const td2 = td1.nextElementSibling;
+            td2.firstElementChild.textContent = row.weight;
+            // ⚡ Bolt: unit is natively cloned from template
+        });
+    }
 
     function renderWarmupTable(data) {
-        renderTableData(tableBodyWarmup, data, WARMUP_COLUMNS);
+        renderTableData(tableBodyWarmup, data, 'tpl-warmup-row', (tr, row) => {
+            const td1 = tr.firstElementChild;
+            td1.textContent = `${row.percent}%`;
+
+            const td2 = td1.nextElementSibling;
+            td2.firstElementChild.textContent = row.weight;
+            // ⚡ Bolt: unit is natively cloned from template
+
+            const td3 = td2.nextElementSibling;
+            td3.textContent = row.reps;
+        });
     }
 
-    const ADV_WARMUP_NOTES_STYLE = { fontSize: '0.9em', opacity: '0.8' };
-    const ADV_WARMUP_COLUMNS = [
-        row => createTextCell(row.stage),
-        row => createTextCell(row.purposeStr),
-        row => createTextCell(row.percent === '-' ? '-' : `${row.percent}%`),
-        row => createWeightCell(row.weight, row.percent !== '-'),
-        row => createTextCell(row.reps),
-        row => createTextCell(row.notes, ADV_WARMUP_NOTES_STYLE)
-    ];
-
     function renderAdvWarmupTable(data) {
-        renderTableData(tableBodyAdvWarmup, data, ADV_WARMUP_COLUMNS);
+        renderTableData(tableBodyAdvWarmup, data, 'tpl-adv-warmup-row', (tr, row) => {
+            const td1 = tr.firstElementChild;
+            td1.textContent = row.stage;
+
+            const td2 = td1.nextElementSibling;
+            td2.textContent = row.purposeStr;
+
+            const td3 = td2.nextElementSibling;
+            td3.textContent = row.percent === '-' ? '-' : `${row.percent}%`;
+
+            const td4 = td3.nextElementSibling;
+            if (row.percent !== '-') {
+                td4.firstElementChild.textContent = row.weight;
+                td4.lastElementChild.textContent = currentUnit;
+                td4.lastElementChild.className = 'unit-display';
+            } else {
+                td4.firstElementChild.textContent = row.weight;
+                td4.lastElementChild.textContent = '';
+                td4.lastElementChild.className = '';
+            }
+
+            const td5 = td4.nextElementSibling;
+            td5.textContent = row.reps;
+
+            const td6 = td5.nextElementSibling;
+            td6.textContent = row.notes;
+        });
     }
 
     // Set current year in footer

@@ -28,7 +28,7 @@ PeakLoads implements an **Engagement-Based Tracking** (Implicit Consent) model. 
 PeakLoads utilizes modern web operations to deliver a lightning-fast experience:
 - **Local Development:** The app requires zero build steps—simply open `index.html`.
 - **Docker Integration & Nginx:** The project includes custom Docker and `nginx.conf` configurations ensuring stringent security headers (CSP, HSTS, X-Frame-Options) and proper compression.
-- **Cloud Deployment:** Seamlessly deployed, the cloud configuration (`vercel.json`, `_redirects`) includes programmatic SEO rewrite rules to map multiple semantic URLs to the SPA client-side routing model flawlessly.
+- **Cloud Deployment:** The application uses one canonical, indexable URL (`https://peakloads.com/`). Retired tool aliases permanently redirect to the root, while `/privacy` and `/terms` remain standalone legal pages.
 
 ## AI & GEO Integration
 Embracing the era of Generative Engine Optimization (GEO) and AI crawler context, the repository integrates `llms.txt` and `llms-full.txt` standards. These files expose strict architectural philosophies and project capabilities directly to LLMs, ensuring accurate context and representation in AI-generated summaries and autonomous developer workflows.

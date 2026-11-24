@@ -56,6 +56,7 @@ body {
 .app-container {
   width: 100%;
   max-width: 600px;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -212,7 +213,8 @@ body {
 /* Main Content */
 .content-area {
   position: relative;
-  min-height: 400px;
+  min-height: 750px;
+  flex-grow: 1;
 }
 
 .tool-section {
@@ -236,6 +238,7 @@ body {
   }
 }
 
+h1,
 h2 {
   font-family: var(--font-display);
   margin-bottom: 20px;
@@ -423,6 +426,11 @@ select:focus-visible {
 
 .data-table tr:last-child td {
   border-bottom: none;
+}
+
+.adv-warmup-notes {
+  font-size: 0.9em;
+  opacity: 0.8;
 }
 
 /* RIR Results */

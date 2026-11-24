@@ -74,3 +74,29 @@ You must not blindly apply fixes suggested by Qodana, CodeQL, or SonarCloud. Eve
 ## 2026-10-31 - [Hoist UI Render Configurations]
 **Learning:** Defining inline column configurations (arrays of rendering functions) or inline style objects directly within `render` functions causes unnecessary memory reallocation and garbage collection (GC) overhead every time the table is re-rendered (e.g., on button click).
 **Action:** Extract static UI render configurations, such as arrays of column generator functions and style objects, into constants defined outside the frequently called functions to adhere to the zero-allocation architecture.
+
+## 2026-11-01 - [IIFE Typed Arrays and Float Math]
+**Learning:** Initializing a TypedArray from an object literal causes the object literal to persist in memory unnecessarily. Furthermore, floating point increments in `for` loops can cause severe compounding rounding errors and infinite loop edge cases.
+**Action:** Always wrap memory-intensive TypedArray initializations in an IIFE (`(() => { ... })()`) to ensure temporary helper objects fall out of scope and are garbage collected. Convert all loop boundaries and increments to integers (e.g. `Math.round(val * 100)`) before iterating over them to ensure mathematical safety.
+## 2024-05-18 - Avoid Synchronous Render Cascades
+**Learning:** When functions like state loaders or form resets modify multiple inputs sequentially, the `input`/`change` event listeners trigger the heavy table rendering functions multiple times within the exact same JavaScript execution tick. This causes severe layout thrashing, wastes CPU cycles on abandoned renders, and heavily impacts the Interaction to Next Paint (INP) Core Web Vital.
+**Action:** Implement "Frame Batching" (Render Debouncing) for main UI update functions. Wrap DOM update execution in a scheduling mechanism using `requestAnimationFrame` and a module-level state flag (e.g., `let isRenderScheduled = false;`) to ensure the DOM is only updated once per frame, significantly reducing main-thread blocking time.
+## 2024-05-19 - Layout Thrashing in activateSection
+**Learning:** Functions that manage routing and UI updates (like `activateSection`) can be called multiple times during initialization. This can cause redundant DOM mutations, CSS class toggling, and layout recalculations (thrashing).
+**Action:** Implement a state variable (e.g., `currentActiveSectionId`) and add a strict equality early return condition to prevent duplicate execution when the target is already active.
+## 2026-07-04 - [Batch DOM Appends with DocumentFragment and HTML Templates]
+**Learning:** Constructing HTML tables via string concatenation (StringBuilder pattern) forces V8 to allocate massive intermediate strings in memory, leading to garbage collection pauses on hot render paths (like 'input' events).
+**Action:** Replace string builders with native HTML `<template>` elements inside the DOM. Use `template.content.cloneNode(true)` and append row elements to a `DocumentFragment`, and populate fields with `.textContent`. This completely avoids HTML parsing overhead and adheres strictly to the zero-allocation architecture.
+## 2024-07-07 - Replace explicit loop child removal with replaceChildren
+**Learning:** Removing DOM children sequentially with a while-loop and backwards for-loop (`removeChild`) is inefficient and scales linearly with the number of children.
+**Action:** Append the preserved elements (like the `<template>`) directly into the `DocumentFragment` containing the new items, and then use the native `Element.replaceChildren()` method. This allows the browser to perform O(1) DOM replacements directly in C++, significantly improving render performance and eliminating JavaScript loop overhead.
+
+## 2024-07-11 - [Replace Regex with charCodeAt in keydown hot path]
+**Learning:** Pre-compiled regular expressions like `/^[0-9.]$/.test()` still invoke V8's internal regex state machine. In hot paths like global `keydown` event listeners, this is slower than primitive integer comparisons.
+**Action:** Replace regular expressions used for simple character validation in hot paths with `e.key.length === 1` and `charCodeAt(0)` integer boundary checks. This compiles directly to native ALU CMP instructions, adhering strictly to the Zero-Allocation constraint and improving CPU optimization.
+## 2024-07-13 - [Avoid DOM setAttribute in render loops]
+**Learning:** Calling `setAttribute` (e.g., `setAttribute('style', ...)` or `setAttribute('class', ...)`) on cloned HTML `<template>` nodes inside a hot render loop incurs a severe performance penalty. This forces the browser's JavaScript engine to repeatedly parse the style strings and cross the JS-C++ boundary for each DOM node, leading to major layout thrashing and garbage collection overhead.
+**Action:** Always embed static attributes (like CSS classes) directly into the HTML `<template>` definition. By predefining these attributes, `cloneNode(true)` duplicates them natively in C++ without any JavaScript intervention, completely eliminating loop execution overhead and strictly adhering to the zero-allocation architecture.
+## 2026-11-10 - [Hoist Template Inner Content to Avoid Render Redundancy]
+**Learning:** When using HTML `<template>` elements inside hot loops, manipulating fixed properties like units (`kg`/`lb`) per row forces a JavaScript execution payload per cloned item. Since `cloneNode(true)` clones elements exactly as they are in C++, pre-filling these attributes or contents on the `<template>` element directly removes this operation from the row iteration loop.
+**Action:** Always pre-fill stable variables (like current unit labels or static icons) in the underlying `<template>` elements *before* cloning, rather than manipulating them in the `.cloneNode()` instantiation loop, adhering rigidly to mechanical sympathy and Zero-Allocation optimizations.

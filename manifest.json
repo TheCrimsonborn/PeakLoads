@@ -1,11 +1,11 @@
 {
   "name": "peakloads",
   "short_name": "peakloads",
-  "start_url": "./index.html",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#050505",
   "theme_color": "#dc2626",
-  "description": "Powerlifting Command Center. 1RM Estimator, Percentage Chart, Warm-Up Planner.",
+  "description": "Evidence-based warm-up planner for squat, bench press and deadlift, plus 1RM and RIR/RPE tools.",
   "categories": ["fitness", "health", "sports"],
   "screenshots": [
     {
