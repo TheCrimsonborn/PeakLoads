@@ -67,6 +67,12 @@
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(220, 38, 38, 0.4);
         }
+
+        @media (prefers-reduced-motion: reduce) {
+            .error-home-btn {
+                transition: none;
+            }
+        }
     </style>
 </head>
 

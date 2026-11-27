@@ -24,6 +24,22 @@ self.addEventListener('install', event => {
     );
 });
 
+async function fetchAndCache(request, url) {
+    try {
+        const networkResponse = await fetch(request);
+        if (networkResponse.ok && url.origin === self.location.origin && !url.search) {
+            const cache = await caches.open(CACHE_NAME);
+            await cache.put(request, networkResponse.clone());
+        }
+        return networkResponse;
+    } catch {
+        if (request.mode === 'navigate') {
+            return caches.match('/');
+        }
+        return Response.error();
+    }
+}
+
 self.addEventListener('fetch', event => {
     if (event.request.method !== 'GET') {
         return;
@@ -34,27 +50,11 @@ self.addEventListener('fetch', event => {
         return;
     }
 
+    const fetchPromise = fetchAndCache(event.request, url);
+    event.waitUntil(fetchPromise);
+
     event.respondWith(
-        caches.match(event.request).then(cachedResponse => {
-            const fetchPromise = fetch(event.request)
-                .then(async networkResponse => {
-                    if (networkResponse.ok && url.origin === self.location.origin && !url.search) {
-                        const cache = await caches.open(CACHE_NAME);
-                        await cache.put(event.request, networkResponse.clone());
-                    }
-                    return networkResponse;
-                })
-                .catch(() => {
-                    if (event.request.mode === 'navigate') {
-                        return caches.match('/');
-                    }
-                    return Response.error();
-                });
-
-            event.waitUntil(fetchPromise);
-
-            return cachedResponse || fetchPromise;
-        })
+        caches.match(event.request).then(cachedResponse => cachedResponse || fetchPromise)
     );
 });
 
