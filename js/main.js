@@ -248,7 +248,6 @@ document.addEventListener('DOMContentLoaded', () => {
         'Backspace': true, 'Tab': true, 'Delete': true, 'ArrowLeft': true, 'ArrowRight': true, 
         'ArrowUp': true, 'ArrowDown': true, 'Home': true, 'End': true, 'Enter': true, 'Escape': true
     };
-    const SYNTHETIC_INPUT_EVENT = new Event('input', { bubbles: true });
 
     // Global input restriction: only numbers and dots allowed. Comma is converted to dot.
     document.addEventListener('keydown', (e) => { // NOSONAR - Cognitive Complexity is acceptable here for strict input filtering
@@ -267,7 +266,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (isComma) {
                     e.preventDefault();
-                    document.execCommand('insertText', false, '.');
+                    const start = e.target.selectionStart;
+                    const end = e.target.selectionEnd;
+                    e.target.setRangeText('.', start, end, 'end');
+                    e.target.dispatchEvent(new Event('input', { bubbles: true }));
                     return;
                 }
             }
@@ -291,10 +293,22 @@ document.addEventListener('DOMContentLoaded', () => {
         numberInputs[i].inputMode = 'decimal';
     }
 
-    // Completely disable pasting in input fields
+    // Sanitize pasted text in input fields to numeric values only
     document.addEventListener('paste', (e) => {
         if (e.target.tagName === 'INPUT') {
             e.preventDefault();
+            const raw = (e.clipboardData || globalThis.clipboardData)?.getData('text') || '';
+            const normalized = raw.replace(',', '.').replace(/[^0-9.]/g, '');
+            const dotIdx = normalized.indexOf('.');
+            const cleaned = dotIdx === -1
+                ? normalized
+                : normalized.slice(0, dotIdx + 1) + normalized.slice(dotIdx + 1).replace(/\./g, '');
+            if (!cleaned) return;
+            const start = e.target.selectionStart ?? e.target.value.length;
+            const end = e.target.selectionEnd ?? e.target.value.length;
+            if (start === 0 && cleaned.startsWith('.')) return;
+            e.target.setRangeText(cleaned, start, end, 'end');
+            e.target.dispatchEvent(new Event('input', { bubbles: true }));
         }
     });
 
@@ -404,7 +418,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const min = Number.parseFloat(rangeMinPctInput.value);
         const max = Number.parseFloat(rangeMaxPctInput.value);
 
-        if (base && inc && min && max) {
+        if (base > 0 && inc > 0 && !Number.isNaN(min) && !Number.isNaN(max) && min >= 0 && max >= min) {
             const data = Calculator.generatePercentageTable(base, inc, min, max, currentUnit);
             renderPercentageTable(data);
             resultPctCard.classList.remove('hidden');
@@ -602,7 +616,6 @@ document.addEventListener('DOMContentLoaded', () => {
         isRenderScheduled = true;
 
         requestAnimationFrame(() => {
-            console.count('Render Execution');
             if (!result1rmCard.classList.contains('hidden')) btnCalc1rm.click();
             if (!resultAdv1rmCard.classList.contains('hidden')) btnCalcAdv1rm.click();
             if (!resultPctCard.classList.contains('hidden')) btnGenPct.click();
@@ -614,7 +627,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderTableData(tbody, data, templateId, populateRow) {
-        const start = performance.now();
         const template = document.getElementById(templateId);
         const fragment = document.createDocumentFragment();
 
@@ -629,8 +641,6 @@ document.addEventListener('DOMContentLoaded', () => {
         // ⚡ Bolt: Append template to fragment and use native replaceChildren for O(1) DOM replacement without loop overhead
         fragment.appendChild(template);
         tbody.replaceChildren(fragment);
-        const end = performance.now();
-        console.log(`⚡ Bolt Table Render Time: ${(end - start).toFixed(2)}ms`);
     }
 
     function renderPercentageTable(data) {
@@ -686,12 +696,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const td6 = td5.nextElementSibling;
             td6.textContent = row.notes;
         });
-    }
-
-    // Set current year in footer
-    const currentYearEl = document.getElementById('current-year');
-    if (currentYearEl) {
-        currentYearEl.textContent = new Date().getFullYear();
     }
 
     // Register Service Worker

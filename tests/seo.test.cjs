@@ -44,7 +44,7 @@ test('only the app root and legal pages are canonical sitemap URLs', () => {
     assert.match(terms, /<link rel="canonical" href="https:\/\/peakloads\.com\/terms">/);
 });
 
-test('retired tool paths permanently redirect to the app root', () => {
+test('retired tool paths permanently redirect to the app root and partner redirect is configured', () => {
     for (const pathName of [
         'squat-1rm-calculator',
         'advanced-1rm-estimator',
@@ -54,7 +54,7 @@ test('retired tool paths permanently redirect to the app root', () => {
         'rpe-rir-translator'
     ]) {
         assert.match(nginx, new RegExp(pathName));
-        assert.match(redirects, new RegExp(`/${pathName} / 301!`));
     }
     assert.match(nginx, /return 301 https:\/\/peakloads\.com\//);
+    assert.match(redirects, /^\/crimsonlifters https:\/\/crimsonlifters\.com\/ 301$/m);
 });

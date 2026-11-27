@@ -1,0 +1,29 @@
+name: Unit & SEO Tests
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Run unit and SEO tests
+        run: |
+          for f in tests/*.js tests/*.cjs js/__tests__/*.test.cjs; do
+            echo "Running $f"
+            node "$f"
+          done
