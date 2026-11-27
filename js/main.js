@@ -82,10 +82,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // avoiding redundant unit text content assignments on every row render.
     const templateUnitDisplays = [];
     const templates = document.querySelectorAll('template');
-    // NOSONAR - Zero-allocation architecture: index-based loop prevents Symbol.iterator memory overhead.
-    for (let i = 0; i < templates.length; i++) {
+    for (let i = 0; i < templates.length; i++) { // NOSONAR - Zero-allocation index loop
         const units = templates[i].content.querySelectorAll('.unit-display');
-        for (let j = 0; j < units.length; j++) {
+        for (let j = 0; j < units.length; j++) { // NOSONAR - Zero-allocation index loop
             templateUnitDisplays.push(units[j]);
         }
     }
@@ -287,8 +286,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Convert number inputs to text for exact cursor position control without browser quirks
     const numberInputs = document.querySelectorAll('input[type="number"]');
-    // NOSONAR - Zero-allocation architecture: index-based loop prevents Symbol.iterator memory overhead.
-    for (let i = 0; i < numberInputs.length; i++) {
+    for (let i = 0; i < numberInputs.length; i++) { // NOSONAR - Zero-allocation index loop
         numberInputs[i].type = 'text';
         numberInputs[i].inputMode = 'decimal';
     }
@@ -302,7 +300,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const dotIdx = normalized.indexOf('.');
             const cleaned = dotIdx === -1
                 ? normalized
-                : normalized.slice(0, dotIdx + 1) + normalized.slice(dotIdx + 1).replace(/\./g, '');
+                : normalized.slice(0, dotIdx + 1) + normalized.slice(dotIdx + 1).replaceAll('.', '');
             if (!cleaned) return;
             const start = e.target.selectionStart ?? e.target.value.length;
             const end = e.target.selectionEnd ?? e.target.value.length;
@@ -379,8 +377,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const calcBtns = [btnCalc1rm, btnCalcAdv1rm, btnGenPct, btnGenWarmup, btnGenAdvWarmup, btnCalcRir];
-    // NOSONAR - Zero-allocation architecture: index-based loop prevents Symbol.iterator memory overhead.
-    for (let i = 0; i < calcBtns.length; i++) {
+    for (let i = 0; i < calcBtns.length; i++) { // NOSONAR - Zero-allocation index loop
         calcBtns[i].addEventListener('click', (e) => {
             if (e.isTrusted) injectAnalytics();
         });
@@ -481,8 +478,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (_lastStateValues.language !== langSelect.value) { _lastStateValues.language = langSelect.value; isDirty = true; }
         if (_lastStateValues.hash !== currentHash) { _lastStateValues.hash = currentHash; isDirty = true; }
 
-        // NOSONAR - Zero-allocation architecture: index-based loop prevents Symbol.iterator memory overhead.
-        for (let i = 0; i < cachedStateInputs.length; i++) {
+        for (let i = 0; i < cachedStateInputs.length; i++) { // NOSONAR - Zero-allocation index loop
             const el = cachedStateInputs[i];
             if (_lastStateValues.inputs[el.id] !== el.value) {
                 _lastStateValues.inputs[el.id] = el.value;
@@ -588,8 +584,7 @@ document.addEventListener('DOMContentLoaded', () => {
             staticUnitDisplays[i].textContent = currentUnit;
         }
 
-        // Update hoisted template variables
-        for (let i = 0; i < templateUnitDisplays.length; i++) {
+        for (let i = 0; i < templateUnitDisplays.length; i++) { // NOSONAR - Zero-allocation index loop
             templateUnitDisplays[i].textContent = currentUnit;
         }
     }

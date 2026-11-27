@@ -113,7 +113,7 @@ body {
   cursor: pointer;
   font-size: 0.8rem;
   font-weight: 600;
-  transition: all 0.3s ease;
+  transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .unit-btn.active {
@@ -149,7 +149,7 @@ body {
   align-items: center;
   justify-content: center;
   white-space: nowrap;
-  transition: all 0.3s ease;
+  transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .guide-btn:hover {
@@ -189,7 +189,7 @@ body {
   cursor: pointer;
   font-weight: 500;
   white-space: nowrap;
-  transition: all 0.3s ease;
+  transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
   text-decoration: none;
   text-align: center;
 }
@@ -648,7 +648,7 @@ h4 {
     padding: 8px 16px;
     border: 1px solid var(--primary-color);
     border-radius: var(--radius-md);
-    transition: all 0.3s ease;
+    transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
     background: rgba(220, 38, 38, 0.05);
 }
 
@@ -656,4 +656,19 @@ h4 {
     background: var(--primary-color);
     color: #fff;
     box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .tool-section,
+    .result-card {
+        animation: none;
+    }
+
+    .action-btn,
+    .unit-btn,
+    .guide-btn,
+    .nav-btn,
+    .developer-link {
+        transition: none;
+    }
 }

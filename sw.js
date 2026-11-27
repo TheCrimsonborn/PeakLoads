@@ -36,22 +36,20 @@ self.addEventListener('fetch', event => {
 
     event.respondWith(
         caches.match(event.request).then(cachedResponse => {
-            const fetchPromise = fetch(event.request).then(networkResponse => {
-                return caches.open(CACHE_NAME).then(cache => {
-                    if (networkResponse.ok) {
-                        const url = new URL(event.request.url);
-                        if (url.origin === self.location.origin && !url.search) {
-                            cache.put(event.request, networkResponse.clone());
-                        }
+            const fetchPromise = fetch(event.request)
+                .then(async networkResponse => {
+                    if (networkResponse.ok && url.origin === self.location.origin && !url.search) {
+                        const cache = await caches.open(CACHE_NAME);
+                        await cache.put(event.request, networkResponse.clone());
                     }
                     return networkResponse;
+                })
+                .catch(() => {
+                    if (event.request.mode === 'navigate') {
+                        return caches.match('/');
+                    }
+                    return Response.error();
                 });
-            }).catch(() => {
-                if (event.request.mode === 'navigate') {
-                    return caches.match('/');
-                }
-                return Response.error();
-            });
 
             event.waitUntil(fetchPromise);
 

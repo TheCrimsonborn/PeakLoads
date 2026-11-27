@@ -40,4 +40,4 @@ jobs:
           SHORT_SHA="${GITHUB_SHA::7}"
 
           # Only commit if there are staged changes
-          git diff --quiet && git diff --staged --quiet || (git commit -m "chore: bump sw cache to ${APP_VERSION}.${SHORT_SHA} [skip ci]" && git push)
+          git diff --quiet && git diff --staged --quiet || (git commit -m "chore: bump sw cache to ${APP_VERSION}.${SHORT_SHA}" && git push)
