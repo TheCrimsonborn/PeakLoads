@@ -1,20 +1,37 @@
-# PeakLoads: Full Context and Architectural Guidelines
+# PeakLoads — Complete Product, Protocol & Formula Reference
 
-## 1. Project Philosophy
-PeakLoads is an elite powerlifting calculator suite. It strictly follows International Powerlifting Federation (IPF) standards and limits inputs to physiologically accurate ranges (e.g., maximum RPE is strictly 10).
+- Website: https://peakloads.com/
+- Category: Powerlifting & Strength Training Web Application (PWA)
+- Cost: Free, no sign-up, works offline
+- Supported Units: Kilograms (rounded to 2.5 kg) and Pounds (rounded to 5 lb)
+- Supported Languages: English (`en`), Turkish (`tr`), Russian (`ru`)
 
-## 2. Architecture: Zero-Allocation Rule
-The most critical engineering directive in this project is "Zero-Allocation". To prevent Garbage Collection pauses and V8 overhead on hot paths:
-- Never use `for...of` or `forEach` on arrays; use traditional `for (let i = 0; ...)` loops.
-- Do not use `Object.assign()` or `Object.keys()`; iterate properties with `for...in` and `Object.hasOwn()`.
-- Avoid the `DOMStringMap` proxy; strictly use native `getAttribute()` and `setAttribute()` instead of `element.dataset`.
-- Suppress specific SonarQube false positives regarding these rules using inline `// NOSONAR` tags.
+## 1. 5-Stage Warm-Up Planner (`#section-adv-warmup`)
+Designed for High-Bar Squat, Low-Bar Squat, Bench Press, Conventional Deadlift, Sumo Deadlift, Overhead Press, and general compound lifts.
 
-## 3. Storage and Resilience
-Direct `localStorage` access is forbidden due to Chromium `SecurityError` risks when third-party data is blocked. All storage operations must route through the `SafeStorage` adapter, which provides an in-memory fallback to prevent fatal DOM aborts.
+Given a working set weight and target reps, PeakLoads generates 5 progressive warm-up sets:
+1. **Joint Prep (Empty Bar):** 20 kg (or 45 lb), 10–15 reps.
+2. **Activation (45%):** 5 reps (if main set < 6 reps) or 8 reps (if main set ≥ 6 reps).
+3. **Skill & Speed (65%):** 3 reps (< 6) or 5 reps (≥ 6).
+4. **Acclimatization (80%):** 2 reps (< 6) or 3 reps (≥ 6).
+5. **Potentiation (90%):** 1 rep.
 
-## 4. Privacy and Tracking
-The application uses "Engagement-Based Tracking" (Implicit Consent). Analytics scripts (GA4, Ahrefs) are not hardcoded in the HTML head. They are injected dynamically into the DOM strictly only after a user executes a calculation, ensuring passive visitors are not tracked.
+Each stage includes lift-specific technical cues (e.g., stance check, leg drive, pulling slack out of the bar, bracing) in English, Turkish, or Russian.
 
-## 5. Routing Model
-PeakLoads is a Vanilla JS one-page application with one canonical, indexable application URL: `https://peakloads.com/`. Hash navigation switches tools without creating additional indexable pages. Retired tool aliases permanently redirect to the root. `/privacy` and `/terms` remain standalone legal pages.
+## 2. Quick Warm-Up Templates (`#section-warmup`)
+- **Classic Ramp:** 40%×5, 55%×5, 65%×3, 75%×3, 85%×2
+- **Heavy Single Prep:** 30%×5, 50%×3, 65%×3, 75%×2, 85%×1, 92%×1
+- **Volume Builder:** 35%×8, 45%×6, 55%×5, 65%×5, 70%×3
+
+## 3. 1RM & RPE/RIR Formulas
+- **Epley (`#section-1rm`):** `1RM = weight * (1 + reps / 30)`
+- **Brzycki (`#section-1rm`):** `1RM = weight * (36 / (37 - reps))` (for `reps < 37`)
+- **Lombardi (`#section-1rm`):** `1RM = weight * (reps ^ 0.1)`
+- **Advanced RPE 1RM (`#section-adv-1rm`):** Uses the Reactive Training Systems (RTS) RPE matrix for 1–10 reps and RPE 6.5–10; falls back to asymptotic decay `percentage = 15.7 + 84.3 * exp(-0.0346 * (reps + (10 - rpe)))` outside the matrix.
+- **RIR Translator (`#section-rir`):** Estimates 1RM via `weight * (1 + (reps + rir) / 30)` and solves for next-set load using `est1RM / (1 + (targetReps + targetRIR) / 30)`, rounded to plate increments.
+
+## 4. Architecture & Privacy
+- Vanilla JavaScript, zero external runtime dependencies, offline-capable Service Worker.
+- All user inputs are stored locally in the browser (`localStorage` with in-memory fallback).
+- Engagement-based analytics: no analytics scripts load for passive visitors; scripts initialize only after a user executes a calculation.
+- Canonical URLs: `https://peakloads.com/`, `https://peakloads.com/privacy`, `https://peakloads.com/terms`.

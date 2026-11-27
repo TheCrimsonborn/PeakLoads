@@ -606,8 +606,30 @@ h4 {
     margin-bottom: 15px;
 }
 
-.developer-content .developer-text strong {
+.developer-content .developer-text strong,
+.methodology-content .developer-text strong {
     color: var(--text-main);
+}
+
+.methodology-section {
+    text-align: left;
+}
+
+.methodology-section h2 {
+    font-size: 1.2rem;
+    margin-bottom: 12px;
+    color: var(--text-main);
+}
+
+.methodology-content .developer-text {
+    color: var(--text-muted);
+    font-size: 0.92rem;
+    line-height: 1.6;
+    margin-bottom: 12px;
+}
+
+.methodology-content .developer-text:last-child {
+    margin-bottom: 0;
 }
 
 .developer-links {

@@ -1,16 +1,21 @@
 # PeakLoads
 
-> High-performance, Zero-Allocation web application for IPF-standard powerlifting strength calculations and programming.
+> Free, offline-capable powerlifting warm-up planner and strength calculator suite for squat, bench press, deadlift, and overhead press.
 
-## Overview
-PeakLoads provides advanced tools for strength athletes, focusing on 1RM estimations, RPE/RIR translations, and warm-up planning. The application is built with strictly Vanilla JS, adhering to a "Zero-Allocation" architecture to maximize V8 engine performance.
+- Canonical URL: https://peakloads.com/
+- Languages: English, Turkish, Russian
+- Units: Kilograms (2.5 kg plate rounding) and Pounds (5 lb plate rounding)
+- Privacy: Client-side only (LocalStorage), no account required, no passive visitor tracking
 
 ## Core Tools
-- [Warm-up Planner](https://peakloads.com/#section-adv-warmup): Evidence-based progression for squat, bench press, deadlift, and overhead press.
-- [1RM Estimator](https://peakloads.com/#section-1rm): Standard one-rep max estimations.
-- [Advanced 1RM Estimator](https://peakloads.com/#section-adv-1rm): Asymptotic decay estimations integrating RPE.
-- [RPE / RIR Translator](https://peakloads.com/#section-rir): Conversions between Rate of Perceived Exertion and Reps in Reserve.
+- [Warm-Up Planner](https://peakloads.com/#section-adv-warmup): 5-stage evidence-based warm-up progression (empty bar, 45%, 65%, 80%, 90%) with lift-specific technical cues for high-bar squat, low-bar squat, bench press, conventional deadlift, sumo deadlift, and overhead press.
+- [Quick Warm-Up](https://peakloads.com/#section-warmup): Preset warm-up templates (Classic Ramp, Heavy Single Prep, Volume Builder).
+- [1RM Estimator](https://peakloads.com/#section-1rm): One-rep max calculator supporting Epley, Brzycki, and Lombardi formulas.
+- [Advanced 1RM Estimator](https://peakloads.com/#section-adv-1rm): RPE-calibrated 1RM calculator using the RTS percentage matrix (reps 1–10, RPE 6.5–10) with an asymptotic decay fallback.
+- [Percentage Chart](https://peakloads.com/#section-percentage): Plate-ready working weight table generator from any base 1RM, range, and percentage increment.
+- [RIR Translator](https://peakloads.com/#section-rir): Estimates 1RM from your last set's weight, reps, and Reps in Reserve (RIR) and calculates the target weight for your next set.
 
 ## Full Documentation
-For complete architectural guidelines, JavaScript standards, and internal routing logic, see the full documentation:
-[PeakLoads Full Context](https://peakloads.com/llms-full.txt)
+- [PeakLoads Full Context & Formulas](https://peakloads.com/llms-full.txt)
+- [Privacy Policy](https://peakloads.com/privacy)
+- [Terms of Service](https://peakloads.com/terms)

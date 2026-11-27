@@ -9,32 +9,69 @@
         content="Generate evidence-based warm-up sets for squat, bench press and deadlift. Enter your working weight and reps to get plate-ready loads in kg or lb.">
     <meta name="author" content="peakloads">
     <meta name="theme-color" content="#dc2626">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="canonical" href="https://peakloads.com/">
 
-    <!-- Structured Data (JSON-LD) for SEO -->
+    <!-- Structured Data (JSON-LD) for SEO & GEO -->
     <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "WebApplication",
-  "name": "PeakLoads Warm-Up Planner",
-  "alternateName": "PeakLoads",
-  "url": "https://peakloads.com/",
-  "applicationCategory": "HealthAndFitnessApplication",
-  "operatingSystem": "Any",
-  "browserRequirements": "Requires JavaScript",
-  "isAccessibleForFree": true,
-  "offers": {
-    "@type": "Offer",
-    "price": "0",
-    "priceCurrency": "USD"
-  },
-  "description": "Evidence-based warm-up planner for squat, bench press, deadlift and overhead press, with plate-ready loads in kilograms or pounds.",
-  "featureList": [
-    "Warm-up planning for squat, bench press, deadlift and overhead press",
-    "Plate-ready loads in kilograms and pounds",
-    "1RM estimation and RIR/RPE translation"
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://peakloads.com/#website",
+      "url": "https://peakloads.com/",
+      "name": "PeakLoads",
+      "description": "Evidence-based warm-up planner and powerlifting calculator suite for squat, bench press, deadlift and overhead press.",
+      "inLanguage": ["en", "tr", "ru"],
+      "publisher": { "@id": "https://peakloads.com/#organization" }
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://peakloads.com/#organization",
+      "name": "PeakLoads",
+      "url": "https://peakloads.com/",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://peakloads.com/assets/icons/icon-512.png",
+        "width": 512,
+        "height": 512
+      },
+      "sameAs": [
+        "https://github.com/TheCrimsonborn/PeakLoads",
+        "https://www.linkedin.com/company/peakloads-com/",
+        "https://www.instagram.com/unsettled.power/"
+      ]
+    },
+    {
+      "@type": "WebApplication",
+      "@id": "https://peakloads.com/#app",
+      "name": "PeakLoads Warm-Up Planner",
+      "alternateName": "PeakLoads",
+      "url": "https://peakloads.com/",
+      "applicationCategory": "HealthAndFitnessApplication",
+      "operatingSystem": "Any",
+      "browserRequirements": "Requires JavaScript",
+      "inLanguage": ["en", "tr", "ru"],
+      "isAccessibleForFree": true,
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "creator": { "@id": "https://peakloads.com/#organization" },
+      "description": "Evidence-based warm-up planner for squat, bench press, deadlift and overhead press, with plate-ready loads in kilograms or pounds, plus 1RM, RPE and RIR calculators.",
+      "featureList": [
+        "5-stage warm-up planning for squat, bench press, deadlift and overhead press",
+        "Plate-ready load rounding (2.5 kg or 5 lb increments)",
+        "1RM estimation using Epley, Brzycki and Lombardi formulas",
+        "RPE-calibrated 1RM estimation using the RTS matrix and asymptotic decay",
+        "Percentage chart generator and RIR-to-weight translator",
+        "Offline-capable PWA with client-side LocalStorage"
+      ]
+    }
   ]
 }
     </script>
@@ -47,6 +84,7 @@
     <meta property="og:description"
         content="Generate evidence-based, plate-ready warm-up sets for squat, bench press and deadlift in kg or lb.">
     <meta property="og:image" itemprop="image" content="https://peakloads.com/assets/icons/icon-512.png">
+    <meta property="og:image:alt" content="PeakLoads Warm-Up Planner and Powerlifting Calculator">
     <meta property="og:image:type" content="image/png">
     <meta property="og:image:width" content="512">
     <meta property="og:image:height" content="512">
@@ -58,6 +96,7 @@
     <meta name="twitter:description"
         content="Generate evidence-based, plate-ready warm-up sets for squat, bench press and deadlift in kg or lb.">
     <meta name="twitter:image" content="https://peakloads.com/assets/icons/icon-512.png">
+    <meta name="twitter:image:alt" content="PeakLoads Warm-Up Planner and Powerlifting Calculator">
 
     <!-- PWA -->
     <link rel="manifest" href="manifest.json">
@@ -413,6 +452,19 @@
                                     class="unit-display">kg</span></span>
                         </div>
                     </div>
+                </div>
+            </section>
+
+            <!-- Methodology & Reference Section (SEO & GEO) -->
+            <section id="methodology" class="developer-section methodology-section" aria-labelledby="methodology-title">
+                <h2 id="methodology-title">How PeakLoads Calculates Warm-Up Sets &amp; 1RM</h2>
+                <div class="methodology-content">
+                    <p class="developer-text">
+                        <strong>5-Stage Warm-Up Progression:</strong> Every warm-up plan scales from an empty standard barbell (20 kg / 45 lb) through 45% (activation), 65% (skill &amp; speed), 80% (acclimatization), and 90% (potentiation) of your working weight. All loads automatically round to plate-ready increments (2.5 kg or 5 lb), and rep counts adapt based on whether your main set is below 6 reps (strength/peaking) or 6+ reps (hypertrophy/volume).
+                    </p>
+                    <p class="developer-text">
+                        <strong>1RM, RPE &amp; RIR Models:</strong> Standard 1RM estimation supports Epley, Brzycki, and Lombardi equations. The Advanced 1RM Estimator uses the Reactive Training Systems (RTS) RPE percentage matrix for sets up to 10 reps at RPE 6.5–10, with an asymptotic decay fallback for higher-rep or lower-RPE sets. The RIR Translator converts your last set's weight, reps, and Reps in Reserve into a target load for your next set.
+                    </p>
                 </div>
             </section>
 
