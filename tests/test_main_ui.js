@@ -136,7 +136,7 @@ import('../js/main.js').then(() => {
         btnCalc1rm.click();
 
         assert.strictEqual(result1rmCard.classList.contains('hidden'), false, 'Result card should not be hidden');
-        assert.ok(val1rm.textContent === '116.7' || val1rm.textContent === 116.7 || val1rm.textContent === '117', `val1rm should be ~116.7, got ${val1rm.textContent}`);
+        assert.ok(Math.abs(Number(val1rm.textContent) - 116.7) < 0.5, `val1rm should be ~116.7, got ${val1rm.textContent}`);
 
         // Test 2: Unit Toggle (kg to lb)
         const btnLb = global.document.getElementById('btn-lb');

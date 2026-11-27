@@ -268,31 +268,31 @@ test('Calculator - calculateRIR', async (t) => {
         assert.strictEqual(result.est1RM, 123.3);
         assert.strictEqual(result.nextWeight, 95);
     });
+
+    await t.test('calculates est1RM and nextWeight correctly (kg and lb)', () => {
+        // weight=100, reps=5, rir=1 -> failure at 6 reps -> 100 * (1 + 6/30) = 120
+        // targetReps=3, targetRIR=1 -> failure at 4 reps -> 1 + 4/30 = 34/30
+        // nextWeight = 120 / (34/30) = 105.882... -> roundWeight(105.882, 'kg') -> 105
+        assert.deepEqual(
+            Calculator.calculateRIR(100, 5, 1, 3, 1, 'kg'),
+            { est1RM: 120, nextWeight: 105 }
+        );
+
+        // 120 * (1 + 6/30) = 144
+        // nextWeight = 144 / (34/30) = 127.058... -> roundWeight(127.058, 'lb') -> 125
+        assert.deepEqual(
+            Calculator.calculateRIR(120, 5, 1, 3, 1, 'lb'),
+            { est1RM: 144, nextWeight: 125 }
+        );
+    });
+
+    await t.test('handles string inputs by parsing them to numbers', () => {
+        assert.deepEqual(
+            Calculator.calculateRIR("100", "5", "1", "3", "1", 'kg'),
+            { est1RM: 120, nextWeight: 105 }
+        );
+    });
 });
-console.log("Running Calculator.calculateRIR tests...");
-console.log("- It calculates est1RM and nextWeight correctly (kg)");
-// weight=100, reps=5, rir=1 -> failure at 6 reps -> 100 * (1 + 6/30) = 120
-// targetReps=3, targetRIR=1 -> failure at 4 reps -> 1 + 4/30 = 34/30
-// nextWeight = 120 / (34/30) = 105.882... -> roundWeight(105.882, 'kg') -> 105
-assert.deepEqual(
-    Calculator.calculateRIR(100, 5, 1, 3, 1, 'kg'),
-    { est1RM: 120, nextWeight: 105 }
-);
-
-console.log("- It calculates est1RM and nextWeight correctly (lb)");
-// 120 * (1 + 6/30) = 144
-// nextWeight = 144 / (34/30) = 127.058... -> roundWeight(127.058, 'lb') -> 125
-assert.deepEqual(
-    Calculator.calculateRIR(120, 5, 1, 3, 1, 'lb'),
-    { est1RM: 144, nextWeight: 125 }
-);
-
-// 2. Parsing string inputs
-console.log("- It handles string inputs by parsing them to numbers");
-assert.deepEqual(
-    Calculator.calculateRIR("100", "5", "1", "3", "1", 'kg'),
-    { est1RM: 120, nextWeight: 105 }
-);
 
 // 3. Invalid inputs
 console.log("- It handles missing, zero, or negative inputs");
