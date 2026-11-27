@@ -1,4 +1,4 @@
-const CACHE_NAME = 'peakloads-cache-1.0.54c22b9';
+const CACHE_NAME = 'peakloads-cache-1.0.21d965a';
 const urlsToCache = [
     '/',
     '/css/style.css',
